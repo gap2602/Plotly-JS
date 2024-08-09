@@ -1,0 +1,137 @@
+.page-3-trend-pv {
+    border-radius: 15px;
+    border: solid 2px #0d6abf;
+    background-color: #f0f1f3;
+}
+
+.page-3-trend-pv .section-name {
+    display: flex;
+    background-color: #0874b0;
+    color: white;
+    font-weight: 600;
+    height: 50px;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    border-radius: 10px;
+    box-sizing: border-box;
+}
+
+.page-3-trend-pv .tabs-trend {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 100px;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+
+.page-3-trend-pv #tab1-trend-pv, .page-3-trend-pv #tab2-trend-pv, .page-3-trend-pv #tab3-trend-pv {
+    display: flex;
+    width: 32%;
+    color: #0d6abf;
+    margin: 5px 5px 5px 5px;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;  
+    box-sizing: border-box;
+}
+
+.page-3-trend-pv .tab-name-trend {
+    font-size: 20px;
+}
+
+.page-3-trend-pv .tab-pic-trend {
+    height: 80%;
+    aspect-ratio: 1;
+    margin-top: 10px;
+    margin-right: 10px;
+    margin-left: 5px;
+}
+
+.page-3-trend-pv .filter-and-content-block {
+    display: flex;
+    flex-direction: row;
+    height: 500px;
+    box-sizing: border-box;
+}
+
+.page-3-trend-pv #filter-panel-trend-pv {
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+    background-color: #ebebeb;
+    margin: 0 10px 10px 10px;
+    box-sizing: border-box;
+    border: solid 3px #808080;
+}
+
+.page-3-trend-pv .filter-panel-name {
+    display: flex;
+    height: 40px;
+    font-size: 20px;
+    font-weight: 700;
+    color: white;
+    background-color: #808080;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.page-3-trend-pv .filter{
+    margin: 10px 10px 10px 10px;
+    padding: 5px 5px 5px 5px;
+    color: white;
+    font-size: 14px;
+    background-color: #1aa3b7;
+    box-sizing: border-box;
+}
+
+.page-3-trend-pv #pv-dd-trend-pv, .page-3-trend-pv #type-dd-trend-pv, .page-3-trend-pv #sex-dd-trend-pv {
+    color: black;
+}
+
+.page-3-trend-pv #pv-dd-trend-pv{
+    height: 100px;
+}
+
+.page-3-trend-pv #reset-pv {
+    font-family: 'IBM Plex Sans Thai';
+    font-weight: bold;
+    color: white;
+    font-size: 14px;
+    height: 40px;
+    margin-top: auto;
+    margin-bottom: 20px;
+    border: none;
+    width: 91%;
+}
+
+.page-3-trend-pv .filter-name {
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+.page-3-trend-pv .line-chart-block {
+    display: flex;
+    flex-direction: row;
+    width: 80%;
+    box-sizing: border-box;
+}
+
+.page-3-trend-pv #le-trend-pv, .page-3-trend-pv #hale-trend-pv {
+    width: 50%;
+    border: solid 2px #0874b0;
+    margin: 0 10px 10px 5px;
+    box-sizing: border-box;
+}
+
+.Select-multi-value-wrapper  {
+    max-height: 80px;
+    overflow-y: auto;
+    width: 100%;
+}
+
+
+

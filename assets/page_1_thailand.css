@@ -1,0 +1,191 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@100;200;300;400;500;600;700&display=swap');
+
+.page-1 body {
+    font-family: 'IBM Plex Sans Thai';
+}
+
+.page-1 {
+    width: 100%;
+    border-radius: 15px;
+    background-color: #f0f1f3;
+    box-sizing: border-box;
+}
+
+.page-1 .section-name {
+    display: flex;
+    background-color: #0874b0;
+    color: white;
+    font-weight: 600;
+    height: 50px;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    border-radius: 10px;
+    box-sizing: border-box;
+}
+
+.page-1 .content-block {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.page-1 #filter-and-type {
+    display: block;
+    width: 19%;
+    box-sizing: border-box;
+}
+
+.page-1 #year-filter-th {
+    width: 70%;
+    margin: 5px auto;
+    border: solid 2px #6ca2d5;
+    border-radius: 10px;
+    background-color: #dadee7;
+    box-sizing: border-box;
+    height: 150px;
+}
+
+.page-1 #year-dd-th {
+    display: block;
+    width: 80%;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+.page-1 #year-filter-title-th {
+    color: #0874b0;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.page-1 #at-birth-name, .page-1 #at-60-name {
+    display: flex;
+    height: 240px;
+    box-sizing: border-box;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    font-weight: 700;
+    border-radius: 0 30px 30px 0;
+    background-color: #0874b0;
+    color: white;
+    margin-bottom: 5px;
+}
+
+.page-1 #at-60-name {
+    margin-bottom: 10px;
+}
+
+.page-1 #both-section,.page-1  #male-section,.page-1  #female-section {
+    width: 27%;
+    box-sizing: border-box;
+}
+
+.page-1 .section-name-frame {
+    display: flex;
+    flex-direction: row;
+    height: 100px;
+    border: solid 2px#9ec1e0;
+    border-radius: 20px 20px 0 0;
+    background-color: #ffffff;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: center;
+    margin: 55px 10% 0 10%;
+}
+
+.page-1 .sex-pic-frame {
+    display: flex;
+    box-sizing: border-box;
+}
+
+.page-1 .sex-pic {
+    height: 70px;
+    width: 70px;
+    box-sizing: border-box;
+}
+
+.page-1 .sex-type {
+    font-size: 20px;
+    font-weight: 600;
+    color: #006cbe;
+    box-sizing: border-box;
+}
+
+.page-1 .type-block {
+    box-sizing: border-box;
+    border: solid 2px #e0e0e0;
+    background-color: #f7f8f8;
+    margin-top: 5px;
+}
+
+.page-1 #both-at-birth, .page-1 #both-at-60, .page-1 #male-at-birth, 
+.page-1 #male-at-60, .page-1 #female-at-birth, .page-1 #female-at-60 {
+    height: 150px;
+    width: 85%;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+.page-1 .numbers{
+    display: flex;
+    flex-direction: row;
+    box-sizing: border-box;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.page-1 .card-box-left{
+    border: solid 2px #e0e0e0;
+    height: 80px;
+    width: 120px;
+    border-radius: 10px 0 0 10px ;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+    box-sizing: border-box;
+    border-right: 5px;
+    margin-bottom: 5px;
+    background-color: white;
+}
+
+.page-1 .card-box-right{
+    border: solid 2px #e0e0e0;
+    height: 80px;
+    width: 120px;
+    border-radius: 0 10px 10px 0;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+    box-sizing: border-box;
+    margin-bottom: 5px;
+    background-color: white;
+}
+
+.page-1 #both-at-birth-le, .page-1 #both-at-birth-hale, .page-1 #both-at-60-le, 
+.page-1 #both-at-60-hale, .page-1 #male-at-birth-le, .page-1 #male-at-birth-hale, 
+.page-1 #male-at-60-le, .page-1 #male-at-60-hale, .page-1 #female-at-birth-le, 
+.page-1 #female-at-birth-hale, .page-1 #female-at-60-le, .page-1 #female-at-60-hale {
+    font-size: 20px;
+    font-weight: 700;
+    box-sizing: border-box;
+}
+
+.page-1 #both-birth-block, .page-1 #both-60-block {
+    border-radius: 30px 0 0 30px;
+    border-right: 0;
+}
+
+.page-1 #male-birth-block, .page-1 #male-60-block {
+    border-left: 0;
+    border-right: 0;
+}
+
+.page-1 #female-birth-block, .page-1 #female-60-block {
+    border-radius: 0 30px 30px 0;
+    border-left: 0;
+}
+
+

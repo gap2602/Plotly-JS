@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>อายุคาดเฉลี่ย และอายุคาดเฉลี่ยของการมีสุขภาวะของประชากรไทย</title>
+    <link rel="stylesheet" href="css/index.css"> </head>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    
+</head>
+<body>
+    <h1 class="header">อายุคาดเฉลี่ย และอายุคาดเฉลี่ยของการมีสุขภาวะของประชากรไทย พ.ศ. - ระดับประเทศและจังหวัด</h1>
+    <div id="section-block">
+        <div id="nav-panel">
+            <div id="menu-panel"> 
+                <div class="menu-name" id="menu-topic">รายละเอียด</div>
+                <div class="pic-frame" id="thai-map-frame" style="background-color: #0874b0;">
+                    <a href="index.html" class="menu-link">
+                        <img class="menu-pic" id="thai-icon" src="assets/Menu - Thailand.png" alt="country-level">
+                    </a>
+                </div>
+                <H4 class="menu-name">LE และ HALE<br>ระดับประเทศ</H4>
+                <div class="pic-frame" id="province-frame" style="background-color: gray;">
+                    <a href="district-province/district.html" class="menu-link">
+                        <img class="menu-pic" id="dt-icon" src="assets/Menu - Province.png" alt="distric-province-level">
+                    </a>
+                </div>
+                <H4 class="menu-name">LE และ HALE<br>เขตสุขภาพและจังหวัด</H4>
+                <div class="pic-frame" id="trend-frame" style="background-color: gray;">
+                    <a href="trend/trend-country.html" class="menu-link">
+                        <img class="menu-pic" id="trend-icon" src="assets/Menu - Trend.png" alt="trend">
+                    </a>
+                </div>
+                <H4 class="menu-name">แนวโน้ม LE และ HALE</H4>
+            </div>
+        </div>
+        <div class="content">
+            <h2 class="section-name" id="section-name-thailand">อายุคาดเฉลี่ย (LE) และอายุคาดเฉลี่ยของการมีสุขภาวะ (HALE) ระดับประเทศปี พ.ศ. 2562 (หน่วย: ปี)</H2>
+            <div class="content-block">
+                <div id="filter-and-type">
+                    <div id="year-filter-th">
+                        <b id="year-filter-title-th">เลือกปี พ.ศ.</b>
+                        <select id="year-dd-th"></select>
+                    </div>
+                </div>
+            </div>
+
+
+            <!--
+            html.H2(children='อายุคาดเฉลี่ย (LE) และอายุคาดเฉลี่ยของการมีสุขภาวะ (HALE) ระดับประเทศปี พ.ศ. 2562 (หน่วย: ปี)', className="section-name", id="section-name-thailand"),
+            html.Div(children=[
+                html.Div(children=[
+                    html.Div(children=[
+                        html.H3(children='เลือกปี พ.ศ.', id="year-filter-title-th"),
+                        dcc.Dropdown([], clearable=False, id="year-dd-th")   
+                    ], id="year-filter-th"),
+                    html.Div(children=["เมื่อแรกเกิด (at birth)"], id="at-birth-name"),
+                    html.Div(children=["เมื่ออายุ 60 ปี"], id="at-60-name"),
+                ], id="filter-and-type"),
+                html.Div(children=[
+                    html.Div([
+                        html.Div([
+                            html.Img(src=dash.get_asset_url("Page1 - Both-sex.png"), className="sex-pic")
+                        ], className="sex-pic-frame"),
+                        html.Div(children=["รวมเพศ"], className="sex-type"),
+                    ], className="section-name-frame"),
+                    html.Div([
+                        html.Div(children=[dcc.Graph(id="both-at-birth", config={'displayModeBar': False})]),
+                        html.Div(children=[
+                            html.Div(children=["LE", html.Br(), html.Div(id='both-at-birth-le')], className="card-box-left"),
+                            html.Div(children=["HALE", html.Br(), html.Div(id='both-at-birth-hale')], className="card-box-right"),
+                        ], className="numbers")
+                    ], className="type-block", id="both-birth-block"),
+                    html.Div([
+                        html.Div(children=[dcc.Graph(id="both-at-60", config={'displayModeBar': False})]),
+                        html.Div(children=[
+                            html.Div(children=["LE", html.Br(), html.Div(id='both-at-60-le')], className="card-box-left"),
+                            html.Div(children=["HALE", html.Br(), html.Div(id='both-at-60-hale')], className="card-box-right")
+                        ], className="numbers")
+                    ], className="type-block", id="both-60-block"),   
+                ], id="both-section"),
+                html.Div(children=[
+                    html.Div([
+                        html.Div([
+                            html.Img(src=dash.get_asset_url("Page1 - Male.png"), className="sex-pic")
+                        ], className="sex-pic-frame"),
+                        html.Div(children=["เพศชาย"], className="sex-type"),
+                    ], className="section-name-frame"),
+                    html.Div([
+                        html.Div(children=[dcc.Graph(id="male-at-birth", config={'displayModeBar': False})]),
+                        html.Div(children=[
+                            html.Div(children=["LE", html.Br(), html.Div(id='male-at-birth-le')], className="card-box-left"),
+                            html.Div(children=["HALE", html.Br(), html.Div(id='male-at-birth-hale')], className="card-box-right"),
+                        ], className="numbers"),
+                    ], className="type-block", id="male-birth-block"),          
+                    html.Div([
+                        html.Div(children=[dcc.Graph(id="male-at-60", config={'displayModeBar': False})]),
+                        html.Div(children=[
+                            html.Div(children=["LE", html.Br(), html.Div(id='male-at-60-le')], className="card-box-left"),
+                            html.Div(children=["HALE", html.Br(), html.Div(id='male-at-60-hale')], className="card-box-right")
+                        ], className="numbers"),
+                    ], className="type-block", id="male-60-block"),   
+                ], id="male-section"),
+                html.Div(children=[
+                    html.Div([
+                        html.Div([
+                            html.Img(src=dash.get_asset_url("Page1 - Female.png"), className="sex-pic")
+                        ], className="sex-pic-frame"),
+                        html.Div(children=["เพศหญิง"], className="sex-type"),
+                    ], className="section-name-frame"),
+                    html.Div([
+                        html.Div(children=[dcc.Graph(id="female-at-birth", config={'displayModeBar': False})]),
+                        html.Div(children=[
+                            html.Div(children=["LE", html.Br(), html.Div(id='female-at-birth-le')], className="card-box-left"),
+                            html.Div(children=["HALE", html.Br(), html.Div(id='female-at-birth-hale')], className="card-box-right"),
+                        ], className="numbers")
+                    ], className="type-block", id="female-birth-block"),
+                    html.Div([
+                        html.Div(children=[dcc.Graph(id="female-at-60", config={'displayModeBar': False})]),
+                        html.Div(children=[
+                            html.Div(children=["LE", html.Br(), html.Div(id='female-at-60-le')], className="card-box-left"),
+                            html.Div(children=["HALE", html.Br(), html.Div(id='female-at-60-hale')], className="card-box-right")
+                        ], className="numbers")
+                    ], className="type-block", id="female-60-block"),          
+                ], id="female-section")          
+            ], className="content-block")
+            -->
+        </div>
+    </div>
+    <div class="remark">
+        <p class="remark-topic">หมายเหตุ:</p>
+        <div class="cal-type">อายุคาดเฉลี่ย (Life Expectancy: LE) <span class="info-icon" id="info-1">i</span>      
+            <span class="tooltip" id="tooltip-1">• อายุคาดเฉลี่ยเมื่อแรกเกิด (Life Expectancy at birth) หมายถึง ค่าเฉลี่ยของจำนวนปีที่คาดว่าประชากรจะมีชีวิตอยู่ตั้งแต่แรกเกิดจนกระทั่งเสียชีวิต
+                                                    <br><br>
+                                                    • อายุคาดเฉลี่ยเมื่ออายุ 60 ปี (Life expectancy at age 60 years) หมายถึง ค่าเฉลี่ยของจำนวนปีที่คาดว่าประชากรจะมีชีวิตอยู่เมื่ออายุ 60 ปี จนกระทั่งเสียชีวิต
+            </span>
+        </div> 
+        <p class="meaning">หมายถึง ค่าเฉลี่ยของจำนวนปีที่คาดว่าประชากรจะมีชีวิตอยู่จนกระทั่งเสียชีวิต</p>
+        <div class="cal-type">
+            <span class="cal-name">อายุคาดเฉลี่ยของการมีสุขภาวะ (Health-Adjusted Life Expectancy: HALE)</span>
+            <span class="info-icon" id="info-2">i</span>
+            <span class="tooltip" id="tooltip-2">• อายุคาดเฉลี่ยของการมีสุขภาวะที่เมื่อแรกเกิด (Health-Adjusted Life Expectancy at birth) 
+                                                   หมายถึง ค่าเฉลี่ยของจำนวนปีที่คาดว่าประชากรจะมีชีวิตอยู่อย่างมีสุขภาพที่สมบูรณ์ตั้งแต่แรกเกิดจนกระทั่งเสียชีวิต
+                                                    <br><br>
+                                                 • อายุคาดเฉลี่ยของการมีสุขภาวะที่ปรับด้วยสุขภาพเมื่ออายุ 60 ปี (Health-Adjusted Life Expectancy at age 60 years) 
+                                                   หมายถึง ค่าเฉลี่ยของจำนวนปีที่คาดว่าประชากรจะมีชีวิตอยู่อย่างมีสุขภาพที่สมบูรณ์อยู่เมื่ออายุ 60 ปี จนกระทั่งเสียชีวิต
+            </span>
+        </div> 
+        <p class="meaning">หมายถึง ค่าเฉลี่ยของจำนวนปีที่คาดว่าประชากรจะมีชีวิตอยู่อย่างมีสุขภาพที่สมบูรณ์จนกระทั่งเสียชีวิต</p>
+        <p class="remark-topic">อ้างอิง:</p>
+        <p id="ref-text">รายงานอายุคาดเฉลี่ย (Life Expectancy: LE) และอายุคาดเฉลี่ยของการมีสุขภาวะ (Health Adjusted Life Expectancy: HALE) ของประชากรไทย พ.ศ. 2562-2565 สํานักงานพัฒนานโยบายสุขภาพระหว่างประเทศ กลุ่มงานพัฒนาดัชนีภาระโรคแห่งประเทศไทย</p>
+    </div>
+    <div id="footer">
+        <div id="footer-text">
+            <b class="footer-text-1">จัดทำเนื้อหา โดย</b>
+            <p class="footer-text-2">สํานักงานพัฒนานโยบายสุขภาพระหว่างประเทศ กลุ่มงานพัฒนาดัชนีภาระโรคแห่งประเทศไทย</p>
+            <b class="footer-text-1">สนับสนุน โดย</b>
+            <p class="footer-text-2">สำนักงานคณะกรรมการส่งเสริมวิทยาศาสตร์ วิจัยและนวัตกรรม (สกสว.)</p>
+        </div>
+        <div id="footer-logo-frame">
+            <img class="footer-logo" src="assets/IHPP.png" alt="IHPP">
+            <img class="footer-logo" src="assets/BOD.png" alt="BOD">
+            <img class="footer-logo" src="assets/MOPH.png" alt="MOPH">
+            <img class="footer-logo" src="assets/TSRI.png" alt="TSRI">
+            <img class="footer-logo" src="assets/ThaiHealth.png" alt="ThaiHealth">
+        </div>
+    </div>
+    <script src="scripts/th.js"></script>
+</body>
+</html>

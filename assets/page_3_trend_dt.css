@@ -1,0 +1,126 @@
+.page-3-trend-dt {
+    border-radius: 15px;
+    border: solid 2px #0d6abf;
+    background-color: #f0f1f3;
+}
+
+.page-3-trend-dt .section-name {
+    display: flex;
+    background-color: #0874b0;
+    color: white;
+    font-weight: 600;
+    height: 50px;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    border-radius: 10px;
+    box-sizing: border-box;
+}
+
+.page-3-trend-dt .tabs-trend {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 100px;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+
+.page-3-trend-dt #tab1-trend-dt, .page-3-trend-dt #tab2-trend-dt, .page-3-trend-dt #tab3-trend-dt {
+    display: flex;
+    width: 32%;
+    color: #0d6abf;
+    margin: 5px 5px 5px 5px;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;  
+    box-sizing: border-box;
+}
+
+.page-3-trend-dt .tab-name-trend {
+    font-size: 20px;
+}
+
+.page-3-trend-dt .tab-pic-trend {
+    height: 80%;
+    aspect-ratio: 1;
+    margin-top: 10px;
+    margin-right: 10px;
+    margin-left: 5px;
+}
+
+.page-3-trend-dt .filter-and-content-block {
+    display: flex;
+    flex-direction: row;
+    height: 500px;
+    box-sizing: border-box;
+}
+
+.page-3-trend-dt #filter-panel-trend-dt {
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+    background-color: #ebebeb;
+    margin: 0 10px 10px 10px;
+    box-sizing: border-box;
+    border: solid 3px #808080;
+}
+
+.page-3-trend-dt .filter-panel-name {
+    display: flex;
+    height: 40px;
+    font-size: 20px;
+    font-weight: 700;
+    color: white;
+    background-color: #808080;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.page-3-trend-dt .filter{
+    margin: 20px 10px 20px 10px;
+    padding: 5px 5px 5px 5px;
+    color: white;
+    font-size: 14px;
+    background-color: #1aa3b7;
+    box-sizing: border-box;
+}
+
+.page-3-trend-dt #dt-dd-trend-dt, .page-3-trend-dt #type-dd-trend-dt, .page-3-trend-dt #sex-dd-trend-dt {
+    color: black;
+}
+
+.page-3-trend-dt #reset-dt {
+    font-family: 'IBM Plex Sans Thai';
+    font-weight: bold;
+    color: white;
+    font-size: 14px;
+    height: 40px;
+    margin-top: auto;
+    border: none;
+    width: 91%;
+}
+
+.page-3-trend-dt .filter-name {
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+.page-3-trend-dt .line-chart-block {
+    display: flex;
+    flex-direction: row;
+    width: 80%;
+    box-sizing: border-box;
+}
+
+.page-3-trend-dt #le-trend-dt, .page-3-trend-dt #hale-trend-dt {
+    width: 50%;
+    border: solid 2px #0874b0;
+    margin: 0 10px 10px 5px;
+    box-sizing: border-box;
+}
+
+
+
