@@ -57,6 +57,7 @@ Plotly.d3.csv(ct_path, function(data) {
       font: {
         family: 'IBM Plex Sans Thai', // Assuming you have this font loaded in your HTML
       },
+      hovermode: 'closest',
       hoverlabel: {
         font: {
           color: 'black',
@@ -73,7 +74,7 @@ Plotly.d3.csv(ct_path, function(data) {
 
   function updateCardValue(data, year, type, sex, metric, color, selector) {
     const filteredData = data.filter(d => d.year == year && d.type == type && d.sex == sex); 
-    document.getElementById(selector).innerHTML = filteredData[0][metric];
+    document.getElementById(selector).innerHTML = parseFloat(filteredData[0][metric]).toFixed(1);
     document.getElementById(selector).style.color = color;
   };
 

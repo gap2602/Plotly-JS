@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="../scripts/xlsx.full.min.js"></script>
 </head>
 <body>
@@ -34,6 +35,7 @@
                 </div>
                 <H4 class="menu-name">แนวโน้ม LE และ HALE</H4>
             </div>
+            <button id="captureButton">Capture</button>
         </div>
         <!---->
         <div class="content">
@@ -82,7 +84,7 @@
                             </div>
                             <div class="dt-bar-chart">
                                 <div class="bar-chart" id="dt-male-at-birth"></div>
-                                <div id="dt-male-at-60"></div>
+                                <div class="bar-chart" id="dt-male-at-60"></div>
                             </div>
                             <div class="dt-type-name">
                                 <div class="dt-type-name-value">เมื่อแรกเกิด (at birth)</div>
@@ -91,22 +93,18 @@
                             <div class="dt-value">
                                 <div class="card-box-left">
                                     <div>LE</div>
-                                    <br>
                                     <div id="dt-male-at-birth-le"></div>
                                 </div>
                                 <div class="card-box-right">
                                     <div>HALE</div>
-                                    <br>
                                     <div id="dt-male-at-birth-hale"></div>
                                 </div>
                                 <div class="card-box-left">
                                     <div>LE</div>
-                                    <br>
                                     <div id="dt-male-at-60-le"></div>
                                 </div>
                                 <div class="card-box-right">
                                     <div>HALE</div>
-                                    <br>
                                     <div id="dt-male-at-60-hale"></div>
                                 </div>
                             </div>
@@ -116,8 +114,8 @@
                                 <div class="sex-female">เพศหญิง</div>
                             </div>
                             <div class="dt-bar-chart">
-                                <div id="dt-female-at-birth"></div>
-                                <div id="dt-female-at-60"></div>
+                                <div class="bar-chart" id="dt-female-at-birth"></div>
+                                <div class="bar-chart" id="dt-female-at-60"></div>
                             </div>
                             <div class="dt-type-name">
                                 <div class="dt-type-name-value">เมื่อแรกเกิด (at birth)</div>
@@ -126,22 +124,18 @@
                             <div class="dt-value">
                                 <div class="card-box-left">
                                     <div>LE</div>
-                                    <br>
                                     <div id="dt-female-at-birth-le"></div>
                                 </div>
                                 <div class="card-box-right">
                                     <div>HALE</div>
-                                    <br>
                                     <div id="dt-female-at-birth-hale"></div>
                                 </div>
                                 <div class="card-box-left">
                                     <div>LE</div>
-                                    <br>
                                     <div id="dt-female-at-60-le"></div>
                                 </div>
                                 <div class="card-box-right">
                                     <div>HALE</div>
-                                    <br>
                                     <div id="dt-female-at-60-hale"></div>
                                 </div>
                             </div>

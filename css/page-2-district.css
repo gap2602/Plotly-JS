@@ -359,6 +359,7 @@ select {
 #dt-block, #pv-block {
     width: 37%;
     margin-left: 5px;
+    background-color: #f0f1f3;
     box-sizing: border-box;
 }
 
@@ -447,6 +448,7 @@ select {
 }
 
 .card-box-left {
+    display: block;
     width: 25%;
     text-align: center;
     font-size: 16px;
@@ -461,6 +463,7 @@ select {
 }
 
 .card-box-right {
+    display: block;
     width: 25%;
     text-align: center;
     font-size: 16px;
