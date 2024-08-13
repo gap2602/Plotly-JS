@@ -2,40 +2,72 @@
 <html>
 <head>
     <title>อายุคาดเฉลี่ย และอายุคาดเฉลี่ยของการมีสุขภาวะของประชากรไทย</title>
-    <link rel="stylesheet" href="../css/index.css"> </head>
+    <link rel="stylesheet" href="../css/page-3-country.css"> </head>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
 </head>
 <body>
-    <H1 class="header">อายุคาดเฉลี่ย และอายุคาดเฉลี่ยของการมีสุขภาวะของประชากรไทย พ.ศ. - ระดับประเทศและจังหวัด</H1>
+    <h1 class="header">อายุคาดเฉลี่ย และอายุคาดเฉลี่ยของการมีสุขภาวะของประชากรไทย พ.ศ. - ระดับประเทศและจังหวัด</h1>
     <div id="section-block">
         <div id="nav-panel">
             <div id="menu-panel"> 
                 <div class="menu-name" id="menu-topic">รายละเอียด</div>
                 <div class="pic-frame" id="thai-map-frame" style="background-color: gray;">
                     <a href="../index.html" class="menu-link">
-                        <img class="menu-pic" id="thai-icon" src="../assets/Menu - Thailand.png">
+                        <img class="menu-pic" id="thai-icon" src="../assets/Menu - Thailand.png" alt="country-level">
                     </a>
                 </div>
                 <H4 class="menu-name">LE และ HALE<br>ระดับประเทศ</H4>
                 <div class="pic-frame" id="province-frame" style="background-color: gray;">
                     <a href="../district-province/district.html" class="menu-link">
-                        <img class="menu-pic" id="dt-icon" src="../assets/Menu - Province.png">
+                        <img class="menu-pic" id="dt-icon" src="../assets/Menu - Province.png" alt="distric-province-level">
                     </a>
                 </div>
                 <H4 class="menu-name">LE และ HALE<br>เขตสุขภาพและจังหวัด</H4>
                 <div class="pic-frame" id="trend-frame" style="background-color: #0874b0;">
                     <a href="../trend/trend-country.html" class="menu-link">
-                        <img class="menu-pic" id="trend-icon" src="../assets/Menu - Trend.png">
+                        <img class="menu-pic" id="trend-icon" src="../assets/Menu - Trend.png" alt="trend">
                     </a>
                 </div>
                 <H4 class="menu-name">แนวโน้ม LE และ HALE</H4>
             </div>
         </div>
-        <div>
-            content
+        <!---->
+        <div class="content">
+            <h2 class="section-name" id="section-name-dt">แนวโน้มอายุคาดเฉลี่ย (LE) และอายุคาดเฉลี่ยของการมีสุขภาวะ (HALE) (หน่วย: ปี)</h2>
+            <div class="tabs-trend">
+                <a class="tab-frame" style="background-color: #bbdee4; border:solid 3px #1aa2b6;" 
+                href="../trend/trend-country.html">
+                    <img class="tab-pic" src="../assets/Page3 - Thailand Trend.png" alt="page3-overview">
+                    <h3 class="tab-name-trend">ภาพรวมประเทศ</h3>
+                </a>
+                <a class="tab-frame" style="background-color: #dadee7; border:solid 3px #aeb2b7;" 
+                href="../trend/trend-district.html">
+                    <img class="tab-pic" src="../assets/Page3 - Health Region.png" alt="page3-district">
+                    <h3 class="tab-name-trend">ระดับเขตสุขภาพ</h3>
+                </a>
+                <a class="tab-frame" style="background-color: #dadee7; border:solid 3px #aeb2b7;" 
+                href="../trend/trend-province.html">
+                    <img class="tab-pic" src="../assets/Page3 - Province.png" alt="page3-province">
+                    <h3 class="tab-name-trend">ระดับจังหวัด</h3>
+                </a>   
+            </div>
+            <div class="filter-and-content-block">
+                <div id="filter-panel-trend-ct">
+                    <div class="filter-panel-name">เลือก</div>
+                    <div class="filter" id="type-filter-trend-ct">
+                        <h4 class="filter-name">การคำนวณ</h4>
+                        <div id="type-dd-trend-ct"></div>
+                    </div>
+                </div>
+                <div class="line-chart-block">
+                    <div id="le-trend-ct"></div>
+                    <div id="hale-trend-ct"></div>
+                </div>
+            </div>
         </div>
+        <!---->
     </div>
     <div class="remark">
         <p class="remark-topic">หมายเหตุ:</p>
@@ -75,8 +107,5 @@
             <img class="footer-logo" src="../assets/ThaiHealth.png" alt="ThaiHealth">
         </div>
     </div>
-<!--
-
--->
 </body>
 </html>

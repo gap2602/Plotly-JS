@@ -2,12 +2,10 @@
 <html>
 <head>
     <title>อายุคาดเฉลี่ย และอายุคาดเฉลี่ยของการมีสุขภาวะของประชากรไทย</title>
-    <link rel="stylesheet" href="../css/page-2-district.css"> </head>
+    <link rel="stylesheet" href="../css/page-2-table.css"> </head>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script src="../scripts/xlsx.full.min.js"></script>
 </head>
 <body>
     <h1 class="header">อายุคาดเฉลี่ย และอายุคาดเฉลี่ยของการมีสุขภาวะของประชากรไทย พ.ศ. - ระดับประเทศและจังหวัด</h1>
@@ -37,13 +35,10 @@
         </div>
         <!---->
         <div class="content">
-            <h2 class="section-name" id="section-name-dt">อายุคาดเฉลี่ย (LE) และอายุคาดเฉลี่ยของการมีสุขภาวะ (HALE) ระดับเขตสุขภาพปี พ.ศ. 2562 (หน่วย: ปี)</h2>
+            <h2 class="section-name" id="section-name-dt">อายุคาดเฉลี่ย (LE) และอายุคาดเฉลี่ยของการมีสุขภาวะ (HALE) (หน่วย: ปี)</h2>
             <div class="year-filter-and-tabs">
-                <div class="year-filter">
-                    <b class="year-filter-title">เลือกปี พ.ศ.</b>
-                    <select class="filter" id="year-dd-dt"></select>
-                </div>
-                <a class="tab-frame" style="background-color: #bbdee4; border:solid 3px #1aa2b6;" 
+                <div class="year-filter"></div>
+                <a class="tab-frame" style="background-color: #dadee7; border:solid 3px #aeb2b7;" 
                 href="../district-province/district.html">
                     <img class="tab-pic" src="../assets/Page2 - Overview.png" alt="page2-overview">
                     <h3 class="tab-name">ข้อมูลภาพรวม</h3>
@@ -53,129 +48,29 @@
                     <img class="tab-pic" src="../assets/Page2 - map.png" alt="page2-map">
                     <h3 class="tab-name">ข้อมูลแผนที่</h3>
                 </a>
-                <a class="tab-frame" style="background-color: #dadee7; border:solid 3px #aeb2b7;" 
+                <a class="tab-frame" style="background-color: #bbdee4; border:solid 3px #1aa2b6;" 
                 href="../district-province/table.html">
                     <img class="tab-pic" src="../assets/Page2 - Table.png" alt="page2-table">
                     <h3 class="tab-name">ข้อมูลภาพรวม</h3>
                 </a>   
             </div>
             <div class="filter-and-content-block">
-                <div id="filter-panel">
+                <div id="filter-panel-table">
                     <div class="filter-panel-name">เลือก</div>
-                    <a href="../district-province/district.html" style="background-color: #1aa3b7;" class="level-tab">ระดับเขตสุขภาพ</a>
-                    <a href="../district-province/province.html" style="background-color: #b3b3b3;" class="level-tab">ระดับจังหวัด</a>
-                    <div id="dt-filter">
+                    <div id="year-filter-table">
+                        <h4 class="filter-name">เลือกปี พ.ศ.</h4>
+                        <div id="year-dd-table"></div>
+                    </div>
+                    <div id="dt-filter-table">
                         <h4 class="filter-name">เขตสุขภาพ</h4>
-                        <select class="filter" id="dt-dd"></select>
+                        <div id="dt-dd-table"></div>
                     </div>
-                    <div id="dt-filter">
-                        <h4 class="filter-name">การคำนวณ</h4>
-                        <select class="filter" id="type-dd"></select>
-                    </div>
-                </div>
-                <div id="dt-block">
-                    <div id="content-name-1-dt">ภาพรวมเขตสุขภาพ 1</div>
-                    <div id="dt-content">
-                        <div id="dt-male">
-                            <div class="dt-header">
-                                <div class="sex-male">เพศชาย</div>
-                            </div>
-                            <div class="dt-bar-chart">
-                                <div class="bar-chart" id="dt-male-at-birth"></div>
-                                <div id="dt-male-at-60"></div>
-                            </div>
-                            <div class="dt-type-name">
-                                <div class="dt-type-name-value">เมื่อแรกเกิด (at birth)</div>
-                                <div class="dt-type-name-value">เมื่ออายุ 60 ปี</div>
-                            </div>
-                            <div class="dt-value">
-                                <div class="card-box-left">
-                                    <div>LE</div>
-                                    <br>
-                                    <div id="dt-male-at-birth-le"></div>
-                                </div>
-                                <div class="card-box-right">
-                                    <div>HALE</div>
-                                    <br>
-                                    <div id="dt-male-at-birth-hale"></div>
-                                </div>
-                                <div class="card-box-left">
-                                    <div>LE</div>
-                                    <br>
-                                    <div id="dt-male-at-60-le"></div>
-                                </div>
-                                <div class="card-box-right">
-                                    <div>HALE</div>
-                                    <br>
-                                    <div id="dt-male-at-60-hale"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="dt-female">
-                            <div class="dt-header">
-                                <div class="sex-female">เพศหญิง</div>
-                            </div>
-                            <div class="dt-bar-chart">
-                                <div id="dt-female-at-birth"></div>
-                                <div id="dt-female-at-60"></div>
-                            </div>
-                            <div class="dt-type-name">
-                                <div class="dt-type-name-value">เมื่อแรกเกิด (at birth)</div>
-                                <div class="dt-type-name-value">เมื่ออายุ 60 ปี</div>
-                            </div>
-                            <div class="dt-value">
-                                <div class="card-box-left">
-                                    <div>LE</div>
-                                    <br>
-                                    <div id="dt-female-at-birth-le"></div>
-                                </div>
-                                <div class="card-box-right">
-                                    <div>HALE</div>
-                                    <br>
-                                    <div id="dt-female-at-birth-hale"></div>
-                                </div>
-                                <div class="card-box-left">
-                                    <div>LE</div>
-                                    <br>
-                                    <div id="dt-female-at-60-le"></div>
-                                </div>
-                                <div class="card-box-right">
-                                    <div>HALE</div>
-                                    <br>
-                                    <div id="dt-female-at-60-hale"></div>
-                                </div>
-                            </div>
-                        </div>
+                    <div id="pv-filter-table">
+                        <h4 class="filter-name">จังหวัด</h4>
+                        <div id="pv-dd-table"></div>
                     </div>
                 </div>
-                <div id="pv-block">
-                    <div id="content-name-2-dt">เปรียบเทียบจังหวัดภายในเขตสุขภาพ</div>
-                    <div id="pv-content">
-                        <div id="pv-male">
-                            <div class="pv-header">
-                                <div class="sex-male">เพศชาย</div>
-                            </div>
-                            <div class="hbar-chart" id="pv-male-dt"></div>
-                            <div class="hbar-chart" id="pv-male-pv"></div>
-                        </div>
-                        <div id="pv-female">
-                            <div class="pv-header">
-                                <div class="sex-female">เพศหญิง</div>
-                            </div>
-                            <div class="hbar-chart" id="pv-female-dt"></div>
-                            <div class="hbar-chart" id="pv-female-pv"></div>
-                        </div>
-                    </div>
-                    <div id="legend">
-                        <div id="legend-le-m" style="background-color:#1a84b8;"></div>
-                        <div class="legend-name">LE เพศชาย</div>
-                        <div id="legend-hale-m" style="background-color:#25a3e0;"></div>
-                        <div class="legend-name">HALE เพศชาย</div>
-                        <div id="legend-le-fm" style="background-color:#b81a84;"></div>
-                        <div class="legend-name">LE เพศหญิง</div>
-                        <div id="legend-hale-fm" style="background-color:#e025a3;"></div>
-                        <div class="legend-name">HALE เพศหญิง</div>
-                    </div>
+                <div id="table-block">
                 </div>
             </div>
         </div>
@@ -219,6 +114,5 @@
             <img class="footer-logo" src="../assets/ThaiHealth.png" alt="ThaiHealth">
         </div>
     </div>
-    <script src="../scripts/dt.js"></script>
 </body>
 </html>

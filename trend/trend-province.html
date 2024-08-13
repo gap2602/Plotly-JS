@@ -2,12 +2,10 @@
 <html>
 <head>
     <title>อายุคาดเฉลี่ย และอายุคาดเฉลี่ยของการมีสุขภาวะของประชากรไทย</title>
-    <link rel="stylesheet" href="css/index.css"> </head>
+    <link rel="stylesheet" href="../css/page-3-province.css"> </head>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script src="scripts/xlsx.full.min.js"></script>
 </head>
 <body>
     <h1 class="header">อายุคาดเฉลี่ย และอายุคาดเฉลี่ยของการมีสุขภาวะของประชากรไทย พ.ศ. - ระดับประเทศและจังหวัด</h1>
@@ -15,108 +13,69 @@
         <div id="nav-panel">
             <div id="menu-panel"> 
                 <div class="menu-name" id="menu-topic">รายละเอียด</div>
-                <div class="pic-frame" id="thai-map-frame" style="background-color: #0874b0;">
-                    <a href="index.html" class="menu-link">
-                        <img class="menu-pic" id="thai-icon" src="assets/Menu - Thailand.png" alt="country-level">
+                <div class="pic-frame" id="thai-map-frame" style="background-color: gray;">
+                    <a href="../index.html" class="menu-link">
+                        <img class="menu-pic" id="thai-icon" src="../assets/Menu - Thailand.png" alt="country-level">
                     </a>
                 </div>
                 <H4 class="menu-name">LE และ HALE<br>ระดับประเทศ</H4>
                 <div class="pic-frame" id="province-frame" style="background-color: gray;">
-                    <a href="district-province/district.html" class="menu-link">
-                        <img class="menu-pic" id="dt-icon" src="assets/Menu - Province.png" alt="distric-province-level">
+                    <a href="../district-province/district.html" class="menu-link">
+                        <img class="menu-pic" id="dt-icon" src="../assets/Menu - Province.png" alt="distric-province-level">
                     </a>
                 </div>
                 <H4 class="menu-name">LE และ HALE<br>เขตสุขภาพและจังหวัด</H4>
-                <div class="pic-frame" id="trend-frame" style="background-color: gray;">
-                    <a href="trend/trend-country.html" class="menu-link">
-                        <img class="menu-pic" id="trend-icon" src="assets/Menu - Trend.png" alt="trend">
+                <div class="pic-frame" id="trend-frame" style="background-color: #0874b0;">
+                    <a href="../trend/trend-country.html" class="menu-link">
+                        <img class="menu-pic" id="trend-icon" src="../assets/Menu - Trend.png" alt="trend">
                     </a>
                 </div>
                 <H4 class="menu-name">แนวโน้ม LE และ HALE</H4>
             </div>
-            <button id="xport">Export</button>
         </div>
         <!---->
         <div class="content">
-            <h2 class="section-name" id="section-name-thailand">อายุคาดเฉลี่ย (LE) และอายุคาดเฉลี่ยของการมีสุขภาวะ (HALE) ระดับประเทศปี พ.ศ. 2562 (หน่วย: ปี)</H2>
-            <div class="content-block">
-                <div id="filter-and-type">
-                    <div id="year-filter-th">
-                        <b id="year-filter-title-th">เลือกปี พ.ศ.</b>
-                        <select id="year-dd-th"></select>
+            <h2 class="section-name" id="section-name-dt">แนวโน้มอายุคาดเฉลี่ย (LE) และอายุคาดเฉลี่ยของการมีสุขภาวะ (HALE) (หน่วย: ปี)</h2>
+            <div class="tabs-trend">
+                <a class="tab-frame" style="background-color: #dadee7; border:solid 3px #aeb2b7;" 
+                href="../trend/trend-country.html">
+                    <img class="tab-pic" src="../assets/Page3 - Thailand Trend.png" alt="page3-overview">
+                    <h3 class="tab-name-trend">ภาพรวมประเทศ</h3>
+                </a>
+                <a class="tab-frame" style="background-color: #dadee7; border:solid 3px #aeb2b7;" 
+                href="../trend/trend-district.html">
+                    <img class="tab-pic" src="../assets/Page3 - Health Region.png" alt="page3-district">
+                    <h3 class="tab-name-trend">ระดับเขตสุขภาพ</h3>
+                </a>
+                <a class="tab-frame" style="background-color: #bbdee4; border:solid 3px #1aa2b6;" 
+                href="../trend/trend-province.html">
+                    <img class="tab-pic" src="../assets/Page3 - Province.png" alt="page3-province">
+                    <h3 class="tab-name-trend">ระดับจังหวัด</h3>
+                </a>   
+            </div>
+            <div class="filter-and-content-block">
+                <div id="filter-panel-trend-pv">
+                    <div class="filter-panel-name">เลือก</div>
+                    <div class="filter" id="pv-filter-trend-pv">
+                        <h4 class="filter-name">จังหวัด</h4>
+                        <div id="pv-dd-trend-pv"></div>
                     </div>
-                    <div id="at-birth-name">เมื่อแรกเกิด (at birth)</div>
-                    <div id="at-60-name">เมื่ออายุ 60 ปี</div>
-                </div>
-                <div id="both-section">
-                    <div class="section-name-frame">
-                        <div class="sex-pic-frame" id="both-pic-frame">
-                            <img src="assets\Page1 - Both-sex.png" alt="both-sex" class="sex-pic">
-                        </div>
-                        <div class="sex-type">รวมเพศ</div>
+                    <div class="filter" id="type-filter-trend-pv">
+                        <h4 class="filter-name">การคำนวณ</h4>
+                        <div id="type-dd-trend-pv"></div>
                     </div>
-                    <div class="type-block" id="both-birth-block">
-                        <div class="bar-chart" id="both-at-birth"></div>
-                        <div class="numbers">
-                            <div class="card-box-left">LE<br><div id="both-at-birth-le"></div></div>
-                            <div class="card-box-right">HALE<br><div id="both-at-birth-hale"></div></div>
-                        </div>
-                    </div>
-                    <div class="type-block" id="both-60-block">
-                        <div id="both-at-60"></div>
-                        <div class="numbers">
-                            <div class="card-box-left">LE<br><div id="both-at-60-le"></div></div>
-                            <div class="card-box-right">HALE<br><div id="both-at-60-hale"></div></div>
-                        </div>
-                    </div>
-                </div>
-                <div id="male-section">
-                    <div class="section-name-frame">
-                        <div class="sex-pic-frame">
-                            <img src="assets\Page1 - Male.png" alt="male-sex" class="sex-pic">
-                        </div>
-                        <div class="sex-type">เพศชาย</div>
-                    </div>
-                    <div class="type-block" id="male-birth-block">
-                        <div id="male-at-birth"></div>
-                        <div class="numbers">
-                            <div class="card-box-left">LE<br><div id="male-at-birth-le"></div></div>
-                            <div class="card-box-right">HALE<br><div id="male-at-birth-hale"></div></div>
-                        </div>
-                    </div>
-                    <div class="type-block" id="male-60-block">
-                        <div id="male-at-60"></div>
-                        <div class="numbers">
-                            <div class="card-box-left">LE<br><div id="male-at-60-le"></div></div>
-                            <div class="card-box-right">HALE<br><div id="male-at-60-hale"></div></div>
-                        </div>
+                    <div class="filter" id="sex-filter-trend-pv">
+                        <h4 class="filter-name">เพศ</h4>
+                        <div id="sex-dd-trend-pv"></div>
                     </div>
                 </div>
-                <div id="female-section">
-                    <div class="section-name-frame">
-                        <div class="sex-pic-frame">
-                            <img src="assets\Page1 - Female.png" alt="female-sex" class="sex-pic">
-                        </div>
-                        <div class="sex-type">เพศหญิง</div>
-                    </div>
-                    <div class="type-block" id="female-birth-block">
-                        <div id="female-at-birth"></div>
-                        <div class="numbers">
-                            <div class="card-box-left">LE<br><div id="female-at-birth-le"></div></div>
-                            <div class="card-box-right">HALE<br><div id="female-at-birth-hale"></div></div>
-                        </div>
-                    </div>
-                    <div class="type-block" id="female-60-block">
-                        <div id="female-at-60"></div>
-                        <div class="numbers">
-                            <div class="card-box-left">LE<br><div id="female-at-60-le"></div></div>
-                            <div class="card-box-right">HALE<br><div id="female-at-60-hale"></div></div>
-                        </div>
-                    </div>
+                <div class="line-chart-block">
+                    <div id="le-trend-pv"></div>
+                    <div id="hale-trend-pv"></div>
                 </div>
             </div>
-            <!---->
         </div>
+        <!---->
     </div>
     <div class="remark">
         <p class="remark-topic">หมายเหตุ:</p>
@@ -149,13 +108,12 @@
             <p class="footer-text-2">สำนักงานคณะกรรมการส่งเสริมวิทยาศาสตร์ วิจัยและนวัตกรรม (สกสว.)</p>
         </div>
         <div id="footer-logo-frame">
-            <img class="footer-logo" src="assets/IHPP.png" alt="IHPP">
-            <img class="footer-logo" src="assets/BOD.png" alt="BOD">
-            <img class="footer-logo" src="assets/MOPH.png" alt="MOPH">
-            <img class="footer-logo" src="assets/TSRI.png" alt="TSRI">
-            <img class="footer-logo" src="assets/ThaiHealth.png" alt="ThaiHealth">
+            <img class="footer-logo" src="../assets/IHPP.png" alt="IHPP">
+            <img class="footer-logo" src="../assets/BOD.png" alt="BOD">
+            <img class="footer-logo" src="../assets/MOPH.png" alt="MOPH">
+            <img class="footer-logo" src="../assets/TSRI.png" alt="TSRI">
+            <img class="footer-logo" src="../assets/ThaiHealth.png" alt="ThaiHealth">
         </div>
     </div>
-    <script src="scripts/th.js"></script>
 </body>
 </html>

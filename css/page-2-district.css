@@ -225,6 +225,8 @@ body {
     border-radius: 15px;
     background-color: #f0f1f3;
     margin-left: 10px;
+    border-radius: 15px;
+    border: solid 2px #0d6abf;
     box-sizing: border-box;
 }
 
@@ -242,36 +244,30 @@ body {
     box-sizing: border-box;
 }
 
-.content-block {
+.year-filter-and-tabs {
     display: flex;
     flex-direction: row;
     width: 100%;
-    box-sizing: border-box;
-}
-
-#filter-and-type {
-    display: block;
-    width: 19%;
-    box-sizing: border-box;
-}
-
-#year-filter-th {
-    width: 70%;
-    margin: 5px auto;
-    border: solid 2px #6ca2d5;
-    border-radius: 10px;
-    background-color: #dadee7;
-    box-sizing: border-box;
     height: 80px;
-}
-
-#year-filter-title-th {
-    color: #0874b0;
-    text-align: center;
     box-sizing: border-box;
 }
 
-#year-dd-th {
+.year-filter {
+    width: 20%;
+    margin: 5px 0px 5px 5px;
+    background-color: #dadee7;
+    border-radius: 5px;
+    box-sizing: border-box;
+    border: solid 2px #0d6abf;
+}
+
+.year-filter-title {
+    margin: 5px auto;
+    color: #0d6abf;
+    box-sizing: border-box;
+}
+
+.filter {
     display: block;
     height: 30px;
     width: 80%;
@@ -284,138 +280,243 @@ select {
     font-family: 'IBM Plex Sans Thai';
 }
 
-#at-birth-name, #at-60-name {
+.tab-frame {
     display: flex;
-    height: 240px;
-    box-sizing: border-box;
+    width: 25%;
+    color: #0d6abf;
+    margin: 5px 5px 5px 5px;
     justify-content: center;
     align-items: center;
-    text-align: center;
-    font-size: 24px;
-    font-weight: 700;
-    border-radius: 0 30px 30px 0;
-    background-color: #0874b0;
-    color: white;
-    margin-bottom: 5px;
-}
-
-#at-60-name {
-    height: 235px;
-    margin-bottom: 10px;
-}
-
-#both-section, #male-section, #female-section {
-    width: 27%;
+    text-decoration: none;  
     box-sizing: border-box;
+    border: solid black;
 }
 
-.section-name-frame {
-    display: flex;
-    flex-direction: row;
-    height: 80px;
-    border: solid 2px#9ec1e0;
-    border-radius: 20px 20px 0 0;
-    background-color: #ffffff;
-    box-sizing: border-box;
-    align-items: center;
-    justify-content: center;
-    margin: 5px 10% 0 10%;
-}
-
-.sex-pic-frame {
-    display: flex;
-    box-sizing: border-box;
-}
-
-#both-pic-frame {
+.tab-pic {
+    height: 60%;
+    aspect-ratio: 1;
     margin-right: 10px;
 }
 
-.sex-pic {
-    height: 50px;
-    width: 50px;
+.filter-and-content-block {
+    display: flex;
+    flex-direction: row;
+    height: 500px;
     box-sizing: border-box;
 }
 
-.sex-type {
+#filter-panel {
+    width: 20%;
+    background-color: #ebebeb;
+    margin: 0 0 10px 5px;
+    box-sizing: border-box;
+    border: solid 3px #808080;
+}
+
+.filter-panel-name {
+    display: flex;
+    height: 40px;
     font-size: 20px;
+    font-weight: 700;
+    color: white;
+    background-color: #808080;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.level-tab {
+    display: flex;
+    height: 40px;
+    font-size: 16px;
     font-weight: 600;
-    color: #006cbe;
+    margin: 10px 10px 10px 10px;
+    color: white;
+    text-decoration: none;
+    align-items: center;
+    justify-content: center;
     box-sizing: border-box;
 }
 
-.type-block {
+#dt-filter, #type-filter {
+    margin: 10px 10px 10px 10px;
+    padding: 5px 5px 5px 5px;
+    font-size: 14px;
+    color: white;
+    background-color: #1aa3b7;
     box-sizing: border-box;
-    border: solid 2px #e0e0e0;
-    background-color: #f7f8f8;
-    margin-top: 5px;
 }
 
-#both-at-birth, #both-at-60, #male-at-birth, 
-#male-at-60, #female-at-birth, #female-at-60 {
-    height: 150px;
-    width: 85%;
+#dt-dd, #type-dd {
+    color: black;
+}
+
+.filter-name {
     margin: 0 auto;
     box-sizing: border-box;
 }
 
-.numbers{
+#dt-block, #pv-block {
+    width: 37%;
+    margin-left: 5px;
+    box-sizing: border-box;
+}
+
+#content-name-1-dt, #content-name-2-dt {
+    display: flex;
+    height: 40px;
+    font-size: 18px;
+    font-weight: 600;
+    color: white;
+    align-items: center;
+    justify-content: center;
+    background-color: #3c94c7;
+}
+
+#dt-content {
     display: flex;
     flex-direction: row;
+    margin-top: 5px;
     box-sizing: border-box;
+    border: solid 4px #0d6abf;
+}
+
+#dt-male, #dt-female,  #pv-male, #pv-female{
+    width: 50%;
+    box-sizing: border-box;
+}
+
+.dt-header, .pv-header{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     justify-content: center;
     box-sizing: border-box;
 }
 
-.card-box-left{
-    border: solid 2px #e0e0e0;
-    height: 80px;
-    width: 120px;
-    border-radius: 10px 0 0 10px ;
-    font-size: 14px;
+.sex-male, .sex-female {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
     font-weight: 600;
-    text-align: center;
+    height: 100px;
+    background-color: #f0f1f3;
     box-sizing: border-box;
-    border-right: 5px;
-    margin-bottom: 5px;
-    background-color: white;
 }
 
-.card-box-right{
-    border: solid 2px #e0e0e0;
-    height: 80px;
-    width: 120px;
-    border-radius: 0 10px 10px 0;
-    font-size: 14px;
+.sex-male {
+    color: #1a84b8;
+}
+
+.sex-female {
+    color: #e025a3;
+}
+
+.dt-type-name {
+    display: flex;
+    flex-direction: row;
+    box-sizing: border-box;
+}
+
+.dt-type-name-value {
+    width: 50%;
+    font-size: 12px;
+    text-align: center;
+    background-color: #e6e6e6;
+    box-sizing: border-box;
+    border: solid 2px #cccccc;
+}
+
+.dt-bar-chart {
+    display: flex;
+    flex-direction: row;
+    box-sizing: border-box;
+}
+
+.bar-chart {
+    width: 50%;
+    height: 220px;
+    box-sizing: border-box;
+}
+
+.dt-value {
+    display: flex;
+    flex-direction: row;
+    box-sizing: border-box;
+}
+
+.card-box-left {
+    width: 25%;
+    text-align: center;
+    font-size: 16px;
     font-weight: 600;
-    text-align: center;
-    box-sizing: border-box;
-    margin-bottom: 5px;
+    border-radius: 5px 0 0 5px;
+    border-right: 1px;
+    margin-top: 15px;
+    margin-left: 5px;
     background-color: white;
+    box-sizing: border-box;
+    border: solid 2px #cccccc;
 }
 
-#both-at-birth-le, #both-at-birth-hale, #both-at-60-le, 
-#both-at-60-hale, #male-at-birth-le, #male-at-birth-hale, 
-#male-at-60-le, #male-at-60-hale, #female-at-birth-le, 
-#female-at-birth-hale, #female-at-60-le, #female-at-60-hale {
-    font-size: 20px;
-    font-weight: 700;
+.card-box-right {
+    width: 25%;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 0 5px 5px 0;
+    border-left: 1px;
+    margin-top: 15px;
+    margin-right: 5px;
+    background-color: white;
+    box-sizing: border-box;
+    border: solid 2px #cccccc;
+}
+
+#pv-block {
+    width: 40%;
+    margin: 0 10px 0 10px;
     box-sizing: border-box;
 }
 
-#both-birth-block, #both-60-block {
-    border-radius: 15px 0 0 15px;
-    border-right: 0;
+#pv-content {
+    display: flex;
+    flex-direction: row;
+    box-sizing: border-box;
 }
 
-#male-birth-block, #male-60-block {
-    border-left: 0;
-    border-right: 0;
+#pv-male-dt, #pv-female-dt {
+    height: 50px;
+    box-sizing: border-box;
+    border-bottom: solid 3px#0d6abf;
 }
 
-#female-birth-block, #female-60-block {
-    border-radius: 0 15px 15px 0;
-    border-left: 0;
+#pv-male-pv, #pv-female-pv {
+    height: 270px;
+    box-sizing: border-box;
+}
+
+#legend {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: right;
+    margin-top: 5px;
+    box-sizing: border-box;
+}
+
+#legend-le-m, #legend-hale-m,
+#legend-le-fm, #legend-hale-fm {
+    height: 10px;
+    width: 20px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.legend-name {
+    font-size: 12px;
+    font-weight: 600;
 }
 
 
@@ -439,14 +540,6 @@ select {
 
     .footer-logo {
         height: 60px;
-    }
-
-    #both-birth-block, #both-60-block {
-        border-radius: 30px 0 0 30px;
-    }
-
-    #female-birth-block, #female-60-block {
-        border-radius: 0 30px 30px 0;
     }
 }
 
