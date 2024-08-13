@@ -173,30 +173,26 @@ Plotly.d3.csv(ct_path, function(data) {
 
 });
 
-// Plotly.d3.csv("https://raw.githubusercontent.com/gap2602/Plotly-JS/main/data/province.csv").then(pvData => {
-//     Plotly.d3.csv("https://raw.githubusercontent.com/gap2602/Plotly-JS/main/data/area%20code.csv").then(codeData => {
-//       // Create a map of data from file1 indexed by 'name'
-//       const pvMap = {};
-//       pvData.forEach(d => {
-//         pvMap[d.eng_province] = d;
-//       });
+Plotly.d3.csv("https://raw.githubusercontent.com/gap2602/Plotly-JS/main/data/province.csv").then(pvData => {
+    Plotly.d3.csv("https://raw.githubusercontent.com/gap2602/Plotly-JS/main/data/area%20code.csv").then(codeData => {
+
+      const pvMap = {};
+      pvData.forEach(d => {
+        pvMap[d.eng_province] = d;
+      });
   
-//       // Join data from file2 with data1
-//       const joinedData = codeData.map(d2 => {
-//         const d1 = pvMap[d2.eng_province];
-//         return {
-//           // Combine properties from both objects
-//           name: d2.eng_province,
-//           // Add other properties as needed
-//           propertyFromData1: d1 ? d1.propertyFromData1 : null,
-//           propertyFromData2: d2.propertyFromData2
-//         };
-//       });
+      const joinedData = codeData.map(d2 => {
+        const d1 = pvMap[d2.eng_province];
+        return {
+            eng_province: d2.eng_province,
+            propertyFromData1: d1 ? d1.propertyFromData1 : null,
+            propertyFromData2: d2.propertyFromData2
+        };
+      });
   
-//       // Now you have the joined data in the 'joinedData' array
-//       console.log(joinedData);
-//     });
-//   });
+      console.log(joinedData);
+    });
+  });
 
 document.getElementById('captureButton').addEventListener('click', function() {
     html2canvas(document.getElementById('dt-block')).then(function(canvas) {
