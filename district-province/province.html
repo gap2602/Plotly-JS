@@ -8,6 +8,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="../scripts/xlsx.full.min.js"></script>
+    <script src="../scripts/multiselect-dropdown.js"></script>
 </head>
 <body>
     <h1 class="header">อายุคาดเฉลี่ย และอายุคาดเฉลี่ยของการมีสุขภาวะของประชากรไทย พ.ศ. - ระดับประเทศและจังหวัด</h1>
@@ -70,7 +73,8 @@
                     </div>
                     <div id="pv-cp-filter">
                         <h4 class="filter-name">จังหวัดเปรียบเทียบ (ไม่เกิน 5 จังหวัด)</h4>
-                        <select class="filter" id="pv-cp-dd"></select>
+                        <select class="filter" id="pv-cp-dd" multiple multiselect-search="true" 
+                        multiselect-max-item="5"></select>
                     </div>
                     <div id="type-filter-pv">
                         <h4 class="filter-name">การคำนวณ</h4>

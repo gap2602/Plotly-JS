@@ -1,26 +1,28 @@
 const pvData = JSON.parse(sessionStorage.getItem("pvData"));
 
 const filters = {
-    dt: 1,
+    pv: ['น่าน'],
     ageType: 0,
     sex: 'male'
   };
 
-function createDropdownDt(data, default_value, selector) {
-    const uniqueDts = [...new Set(data.map(d => d.area_code))];
-    const sortDts = uniqueDts.map(Number).sort(function(a, b){return a-b});
+  function createDropdownPV(data, default_value, selector) {
+    const uniquePV = [...new Set(data.map(d => d.th_province))];
+    const sortPV = uniquePV.sort();
     const dropdown = document.getElementById(selector);
     const defaultValue = default_value;
-    sortDts.forEach(dt => {
+    sortPV.forEach(pv => {
     const option = document.createElement('option');
-    option.value = dt;
-    option.text = "เขตสุขภาพที่ " + dt;
-    if (dt == defaultValue) {
+    option.value = pv;
+    option.text = pv;
+
+    if (pv == defaultValue) {
         option.selected = true;
     }
     dropdown.appendChild(option);
     });
 };
+
 
 function createDropdownType(data, default_value, selector) {
     const uniqueTypes = [...new Set(data.map(d => d.type))];
@@ -52,9 +54,36 @@ function createDropdownSex(default_value, selector) {
     });
 };
 
-function createLineChart(data, dt, type, sex, metric, selector) {
-    
-    const filteredData = data.filter(d => d.area_code == dt && d.type == type && d.sex == sex);
+function createLineChart(data, pv, type, sex, metric, selector) {
+    if (typeof pv === 'string') {
+        var pv = [pv];
+    }
+
+    if (pv.length === 0) {
+        var data = [{
+            x: [],
+            y: [],
+            type: 'scatter'
+        }];
+        
+        var layout = {
+            xaxis: {
+                showgrid: false,
+                visible: false,
+            },
+            yaxis: {
+                showgrid: false,
+                visible: false,
+            },
+            plot_bgcolor: '#f0f1f3',
+            paper_bgcolor: '#f0f1f3',
+        };
+        
+        Plotly.newPlot(selector, data, layout, {displayModeBar: false});
+        return;
+    }
+
+    const filteredData = data.filter(d => pv.includes(d.th_province) && d.type == type && d.sex == sex);
     const yrange = type == 0 ? [60,90] : [0,30];
 
     let traceData = [];
@@ -72,7 +101,7 @@ function createLineChart(data, dt, type, sex, metric, selector) {
         });
     });
 
-    const layout = {
+    var layout = {
         title: '<b>แนวโน้มอายุคาดเฉลี่ย ('+metric+')</b>',
         yaxis: {
           range: yrange,
@@ -108,26 +137,27 @@ function createLineChart(data, dt, type, sex, metric, selector) {
     Plotly.newPlot(selector, traceData, layout, {displayModeBar: false});
 };
 
-createDropdownDt(pvData, filters.dt, 'dt-dd-trend-dt');
-createDropdownType(pvData, filters.ageType, 'type-dd-trend-dt');
-createDropdownSex(filters.sex, 'sex-dd-trend-dt');
-createLineChart(pvData, filters.dt, filters.ageType, filters.sex, 'LE', 'le-trend-dt');
-createLineChart(pvData, filters.dt, filters.ageType, filters.sex, 'HALE', 'hale-trend-dt');
+createDropdownPV(pvData, filters.pv, 'pv-dd-trend-pv');
+createDropdownType(pvData, filters.ageType, 'type-dd-trend-pv');
+createDropdownSex(filters.sex, 'sex-dd-trend-pv');
+createLineChart(pvData, filters.pv, filters.ageType, filters.sex, 'LE', 'le-trend-pv');
+createLineChart(pvData, filters.pv, filters.ageType, filters.sex, 'HALE', 'hale-trend-pv');
 
-document.getElementById('dt-dd-trend-dt').addEventListener('change', (event) => {
-    filters.dt = event.target.value;
-    createLineChart(pvData, filters.dt, filters.ageType, filters.sex, 'LE', 'le-trend-dt');
-    createLineChart(pvData, filters.dt, filters.ageType, filters.sex, 'HALE', 'hale-trend-dt');
+const selectElement = document.getElementById('pv-dd-trend-pv');
+selectElement.addEventListener('change', (event) => {
+    filters.pv = Array.from(selectElement.selectedOptions).map(option => option.value);
+    createLineChart(pvData, filters.pv, filters.ageType, filters.sex, 'LE', 'le-trend-pv');
+    createLineChart(pvData, filters.pv, filters.ageType, filters.sex, 'HALE', 'hale-trend-pv');
 });
 
-document.getElementById('type-dd-trend-dt').addEventListener('change', (event) => {
+document.getElementById('type-dd-trend-pv').addEventListener('change', (event) => {
     filters.ageType = event.target.value;
-    createLineChart(pvData, filters.dt, filters.ageType, filters.sex, 'LE', 'le-trend-dt');
-    createLineChart(pvData, filters.dt, filters.ageType, filters.sex, 'HALE', 'hale-trend-dt');
+    createLineChart(pvData, filters.pv, filters.ageType, filters.sex, 'LE', 'le-trend-pv');
+    createLineChart(pvData, filters.pv, filters.ageType, filters.sex, 'HALE', 'hale-trend-pv');
 });
 
-document.getElementById('sex-dd-trend-dt').addEventListener('change', (event) => {
+document.getElementById('sex-dd-trend-pv').addEventListener('change', (event) => {
     filters.sex = event.target.value;
-    createLineChart(pvData, filters.dt, filters.ageType, filters.sex, 'LE', 'le-trend-dt');
-    createLineChart(pvData, filters.dt, filters.ageType, filters.sex, 'HALE', 'hale-trend-dt');
+    createLineChart(pvData, filters.pv, filters.ageType, filters.sex, 'LE', 'le-trend-pv');
+    createLineChart(pvData, filters.pv, filters.ageType, filters.sex, 'HALE', 'hale-trend-pv');
 });

@@ -300,15 +300,41 @@ body {
 .filter {
     margin: 20px 10px 20px 10px;
     padding: 5px 5px 5px 5px;
-    color: white;
+    font-size: 14px;
+    background-color: #1aa3b7;
+    box-sizing: border-box;
+}
+
+#pv-filter-trend-pv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px 10px 10px 10px;
+    padding: 5px 5px 5px 5px;
+    height: 260px;
     font-size: 14px;
     background-color: #1aa3b7;
     box-sizing: border-box;
 }
 
 .filter-name {
+    width: 100%;
+    margin: 0 auto;
+    color: white;
+    box-sizing: border-box;
+}
+
+.filter-dd {
+    display: block;
+    height: 30px;
+    width: 80%;
     margin: 0 auto;
     box-sizing: border-box;
+}
+
+select {
+    font-size: 16px;
+    font-family: 'IBM Plex Sans Thai';
 }
 
 .line-chart-block {

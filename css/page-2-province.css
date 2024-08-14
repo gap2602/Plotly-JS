@@ -338,25 +338,30 @@ select {
     box-sizing: border-box;
 }
 
-#pv-filter, #pv-cp-filter, #type-filter-pv {
+#pv-filter, #type-filter-pv {
     margin: 10px 10px 10px 10px;
     padding: 5px 5px 5px 5px;
-    color: white;
     font-size: 14px;
     background-color: #1aa3b7;
     box-sizing: border-box;
 }
 
 #pv-cp-filter {
-    height: 150px;
-}
-
-#pv-cp-dd, option {
-    color: black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px 10px 10px 10px;
+    padding: 5px 5px 5px 5px;
+    height: 170px;
+    font-size: 14px;
+    background-color: #1aa3b7;
+    box-sizing: border-box;
 }
 
 .filter-name {
+    width: 100%;
     margin: 0 auto;
+    color: white;
     box-sizing: border-box;
 }
 

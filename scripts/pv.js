@@ -114,11 +114,12 @@ function updateBarChart(data, year, pv, type, sex, colorLeft, colorRight, select
 };
 
 function updateHBarChartPV(data, year, pv, type, sex, colorLE, colorHALE, selector) {
+
     const filteredData = data.filter(d => d.year == year && d.th_province == pv && d.type == type && d.sex == sex); 
 
     const trace1 = {
-        x: [filteredData[0].HALE],
-        y: [pv],
+        x: filteredData.map(d => d.HALE),
+        y: filteredData.map(d => d.th_province),
         type: 'bar',
         orientation: 'h',
         text: ['<b>'+parseFloat(filteredData[0].HALE).toFixed(1)+'</b>'], 
@@ -126,18 +127,18 @@ function updateHBarChartPV(data, year, pv, type, sex, colorLE, colorHALE, select
         textangle: 0,
         textfont: {
             size: 14,
-            color: [colorHALE],
+            color: colorHALE,
         },
         marker: {
-            color: [colorHALE],
+            color: colorHALE,
             lineWidth: 0,
         },
         hovertemplate: '%{y}: %{x:.1f}<extra></extra>'
     };
 
     const trace2 = {
-        x: [filteredData[0].LE],
-        y: [pv],
+        x: filteredData.map(d => d.LE),
+        y: filteredData.map(d => d.th_province),
         type: 'bar',
         orientation: 'h',
         text: ['<b>'+parseFloat(filteredData[0].LE).toFixed(1)+'</b>'], 
@@ -145,16 +146,16 @@ function updateHBarChartPV(data, year, pv, type, sex, colorLE, colorHALE, select
         textangle: 0,
         textfont: {
             size: 14,
-            color: [colorLE],
+            color: colorLE,
         },
         marker: {
-            color: [colorLE],
+            color: colorLE,
             lineWidth: 0,
         },
         hovertemplate: '%{y}: %{x:.1f}<extra></extra>'
     };
 
-    const layout = {
+    var layout = {
     xaxis: {
         range: [0, 100],
         fixedrange: true,
@@ -189,6 +190,126 @@ function updateHBarChartPV(data, year, pv, type, sex, colorLE, colorHALE, select
     Plotly.newPlot(selector, [trace1,trace2], layout, {displayModeBar: false});
 };
 
+function updateHBarChartPVCP(data, year, pv, type, sex, colorLE, colorHALE, selector) {
+
+    if (typeof pv === 'string') {
+        var pv = [pv];
+    }
+
+    if (pv.length === 0) {
+        var data = [{
+            x: [],
+            y: [],
+            type: 'scatter'
+        }];
+        
+        var layout = {
+            xaxis: {
+                showgrid: false,
+                visible: false,
+            },
+            yaxis: {
+                showgrid: false,
+                visible: false,
+            },
+            plot_bgcolor: '#f0f1f3',
+            paper_bgcolor: '#f0f1f3',
+        };
+        
+        Plotly.newPlot(selector, data, layout, {displayModeBar: false});
+        return;
+    }
+
+    const filteredData = data.filter(d => d.year == year && pv.includes(d.th_province) && d.type == type && d.sex == sex); 
+
+    const trace1 = {
+        x: filteredData.map(d => d.HALE),
+        y: filteredData.map(d => d.th_province),
+        type: 'bar',
+        orientation: 'h',
+        text: '<b>'+parseFloat(filteredData[0].HALE).toFixed(1)+'</b>', 
+        textposition: 'outside',
+        textangle: 0,
+        textfont: {
+            size: 14,
+            color: colorHALE,
+        },
+        marker: {
+            color: colorHALE,
+            lineWidth: 0,
+        },
+        hovertemplate: '%{y}: %{x:.1f}<extra></extra>'
+    };
+
+    const trace2 = {
+        x: filteredData.map(d => d.LE),
+        y: filteredData.map(d => d.th_province),
+        type: 'bar',
+        orientation: 'h',
+        text: '<b>'+parseFloat(filteredData[0].LE).toFixed(1)+'</b>', 
+        textposition: 'outside',
+        textangle: 0,
+        textfont: {
+            size: 14,
+            color: colorLE,
+        },
+        marker: {
+            color: colorLE,
+            lineWidth: 0,
+        },
+        hovertemplate: '%{y}: %{x:.1f}<extra></extra>'
+    };
+
+    var layout = {
+    xaxis: {
+        range: [0, 100],
+        fixedrange: true,
+        showticklabels: false,
+        showgrid: false,
+        title: ''
+    },
+    yaxis: {
+        showgrid: false,
+        visible: true,
+        fixedrange: true
+    },
+    margin: {l: 90, r: 0, t: 0, b: 0},
+    bargap: 0,
+    font: {
+        family: 'IBM Plex Sans Thai', // Assuming you have this font loaded in your HTML
+    },
+    hovermode: 'closest',
+    hoverlabel: {
+        font: {
+        color: 'black',
+        family: 'IBM Plex Sans Thai',
+        },
+        bordercolor: 'black',
+    },
+    plot_bgcolor: '#f0f1f3',
+    paper_bgcolor: '#f0f1f3',
+    showlegend: false
+    };
+
+    Plotly.newPlot(selector, [trace1,trace2], layout, {displayModeBar: false});
+};
+
+function limitOption(selector) {
+    var cpEle = document.getElementById(selector);
+    var cpValue = Array.from(cpEle.selectedOptions).map(option => option.value);
+    
+    if (cpValue.length == 5) {
+        for (let i = 0; i < cpEle.options.length; i++) {
+            
+            if (cpEle.options[i].selected) {
+            } else {
+                cpEle.options[i].disabled = true;
+            }
+          } 
+    }
+};
+
+
 function updateCardValue(data, year, pv, type, sex, metric, color, selector) {
     const filteredData = data.filter(d => d.year == year && d.type == type && d.sex == sex && d.th_province == pv); 
     document.getElementById(selector).innerHTML = parseFloat(filteredData[0][metric]).toFixed(1);
@@ -197,7 +318,7 @@ function updateCardValue(data, year, pv, type, sex, metric, color, selector) {
 
 createDropdownYear(pvData, filters.year, 'year-dd-pv');
 createDropdownPV(pvData, filters.intPV, 'pv-dd');
-createDropdownPV(pvData, filters.intPV, 'pv-cp-dd');
+createDropdownPV(pvData, filters.cpPV, 'pv-cp-dd');
 createDropdownType(filters.ageType, 'type-dd-pv')
 
 updateBarChart(pvData, filters.year, filters.intPV, 0, 'male', m_cl_dark, m_cl_light, "pv-1-male-at-birth");
@@ -214,6 +335,8 @@ updateCardValue(pvData, filters.year, filters.intPV, 60, 'female', 'LE', fm_cl_d
 updateCardValue(pvData, filters.year, filters.intPV, 60, 'female', 'HALE', fm_cl_light, "pv-1-female-at-60-hale");
 updateHBarChartPV(pvData, filters.year, filters.intPV, filters.ageType, 'male', m_cl_dark, m_cl_light, 'pv-1-male-pv');
 updateHBarChartPV(pvData, filters.year, filters.intPV, filters.ageType, 'female', fm_cl_dark, fm_cl_light, 'pv-1-female-pv');
+updateHBarChartPVCP(pvData, filters.year, filters.cpPV, filters.ageType, 'male', m_cl_dark, m_cl_light, 'pv-cp-male-pv');
+updateHBarChartPVCP(pvData, filters.year, filters.cpPV, filters.ageType, 'female', fm_cl_dark, fm_cl_light, 'pv-cp-female-pv');
 
 document.getElementById('year-dd-pv').addEventListener('change', (event) => {
     filters.year = event.target.value;
@@ -232,6 +355,8 @@ document.getElementById('year-dd-pv').addEventListener('change', (event) => {
     updateCardValue(pvData, filters.year, filters.intPV, 60, 'female', 'HALE', fm_cl_light, "pv-1-female-at-60-hale");
     updateHBarChartPV(pvData, filters.year, filters.intPV, filters.ageType, 'male', m_cl_dark, m_cl_light, 'pv-1-male-pv');
     updateHBarChartPV(pvData, filters.year, filters.intPV, filters.ageType, 'female', fm_cl_dark, fm_cl_light, 'pv-1-female-pv');
+    updateHBarChartPVCP(pvData, filters.year, filters.cpPV, filters.ageType, 'male', m_cl_dark, m_cl_light, 'pv-cp-male-pv');
+    updateHBarChartPVCP(pvData, filters.year, filters.cpPV, filters.ageType, 'female', fm_cl_dark, fm_cl_light, 'pv-cp-female-pv');
 });
 
 document.getElementById('pv-dd').addEventListener('change', (event) => {
@@ -253,9 +378,30 @@ document.getElementById('pv-dd').addEventListener('change', (event) => {
     updateHBarChartPV(pvData, filters.year, filters.intPV, filters.ageType, 'female', fm_cl_dark, fm_cl_light, 'pv-1-female-pv');
 });
 
+const selectElement = document.getElementById('pv-cp-dd');
+selectElement.addEventListener('change', (event) => {
+    filters.cpPV = Array.from(selectElement.selectedOptions).map(option => option.value);
+    limitOption('pv-cp-dd');
+    updateHBarChartPVCP(pvData, filters.year, filters.cpPV, filters.ageType, 'male', m_cl_dark, m_cl_light, 'pv-cp-male-pv');
+    updateHBarChartPVCP(pvData, filters.year, filters.cpPV, filters.ageType, 'female', fm_cl_dark, fm_cl_light, 'pv-cp-female-pv');
+});
+
 document.getElementById('type-dd-pv').addEventListener('change', (event) => {
     filters.ageType = event.target.value;
     document.getElementById("content-name-2-pv").innerHTML = "เปรียบเทียบระหว่างจังหวัด - " + event.target.options[event.target.selectedIndex].text;
     updateHBarChartPV(pvData, filters.year, filters.intPV, filters.ageType, 'male', m_cl_dark, m_cl_light, 'pv-1-male-pv');
     updateHBarChartPV(pvData, filters.year, filters.intPV, filters.ageType, 'female', fm_cl_dark, fm_cl_light, 'pv-1-female-pv');
+    updateHBarChartPVCP(pvData, filters.year, filters.cpPV, filters.ageType, 'male', m_cl_dark, m_cl_light, 'pv-cp-male-pv');
+    updateHBarChartPVCP(pvData, filters.year, filters.cpPV, filters.ageType, 'female', fm_cl_dark, fm_cl_light, 'pv-cp-female-pv');
 });
+
+
+
+var test = document.getElementById("pv-cp-dd");
+for (let i = 0; i < test.options.length; i++) {       
+    if (test.options[i].value == 'น่าน') {
+        console.log(test.options[i].value);
+        test.options[i].disabled = true;
+    } else {
+    }
+  } 
