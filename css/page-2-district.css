@@ -401,7 +401,7 @@ select {
     justify-content: center;
     font-size: 18px;
     font-weight: 600;
-    height: 100px;
+    height: 50px;
     background-color: #f0f1f3;
     box-sizing: border-box;
 }
@@ -437,7 +437,7 @@ select {
 
 .bar-chart {
     width: 50%;
-    height: 220px;
+    height: 270px;
     box-sizing: border-box;
 }
 
@@ -490,13 +490,14 @@ select {
 }
 
 #pv-male-dt, #pv-female-dt {
-    height: 50px;
+    height: 70px;
     box-sizing: border-box;
     border-bottom: solid 3px#0d6abf;
+    padding: 5px;
 }
 
 #pv-male-pv, #pv-female-pv {
-    height: 270px;
+    height: 300px;
     box-sizing: border-box;
 }
 

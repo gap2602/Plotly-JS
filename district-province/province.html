@@ -4,8 +4,10 @@
     <title>อายุคาดเฉลี่ย และอายุคาดเฉลี่ยของการมีสุขภาวะของประชากรไทย</title>
     <link rel="stylesheet" href="../css/page-2-province.css"> </head>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.1.0/dist/css/multi-select-tag.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body>
     <h1 class="header">อายุคาดเฉลี่ย และอายุคาดเฉลี่ยของการมีสุขภาวะของประชากรไทย พ.ศ. - ระดับประเทศและจังหวัด</h1>
@@ -35,11 +37,11 @@
         </div>
         <!---->
         <div class="content">
-            <h2 class="section-name" id="section-name-dt">อายุคาดเฉลี่ย (LE) และอายุคาดเฉลี่ยของการมีสุขภาวะ (HALE) ระดับจังหวัดปี พ.ศ. 2562 (หน่วย: ปี)</h2>
+            <h2 class="section-name" id="section-name-pv">อายุคาดเฉลี่ย (LE) และอายุคาดเฉลี่ยของการมีสุขภาวะ (HALE) ระดับจังหวัดปี พ.ศ. 2562 (หน่วย: ปี)</h2>
             <div class="year-filter-and-tabs">
                 <div class="year-filter">
-                    <h3 class="year-filter-title">เลือกปี พ.ศ.</h3>
-                    <div id="year-dd-dt"></div>
+                    <b class="year-filter-title">เลือกปี พ.ศ.</b>
+                    <select class="filter" id="year-dd-pv"></select>
                 </div>
                 <a class="tab-frame" style="background-color: #bbdee4; border:solid 3px #1aa2b6;" 
                 href="../district-province/district.html">
@@ -64,15 +66,15 @@
                     <a href="../district-province/province.html" style="background-color: #1aa3b7;" class="level-tab">ระดับจังหวัด</a>
                     <div id="pv-filter">
                         <h4 class="filter-name">จังหวัดที่สนใจ</h4>
-                        <div id="pv-dd"></div>
+                        <select class="filter" id="pv-dd"></select>
                     </div>
                     <div id="pv-cp-filter">
-                        <h4 class="filter-name">จังหวัดเปรียบเทียบ</h4>
-                        <div id="pv-cp-dd"></div>
+                        <h4 class="filter-name">จังหวัดเปรียบเทียบ (ไม่เกิน 5 จังหวัด)</h4>
+                        <select class="filter" id="pv-cp-dd"></select>
                     </div>
                     <div id="type-filter-pv">
                         <h4 class="filter-name">การคำนวณ</h4>
-                        <div id="type-dd-pv"></div>
+                        <select class="filter" id="type-dd-pv"></select>
                     </div>
                 </div>
                 <div id="pv-1-block">
@@ -82,9 +84,9 @@
                             <div class="pv-1-header">
                                 <div class="sex-male">เพศชาย</div>
                             </div>
-                            <div class="pv-bar-chart">
-                                <div id="pv-male-at-birth"></div>
-                                <div id="pv-male-at-60"></div>
+                            <div class="pv-1-bar-chart">
+                                <div class="bar-chart" id="pv-1-male-at-birth"></div>
+                                <div class="bar-chart" id="pv-1-male-at-60"></div>
                             </div>
                             <div class="pv-type-name">
                                 <div class="pv-type-name-value">เมื่อแรกเกิด (at birth)</div>
@@ -93,22 +95,18 @@
                             <div class="pv-value">
                                 <div class="card-box-left">
                                     <div>LE</div>
-                                    <br>
                                     <div id="pv-1-male-at-birth-le"></div>
                                 </div>
                                 <div class="card-box-right">
                                     <div>HALE</div>
-                                    <br>
                                     <div id="pv-1-male-at-birth-hale"></div>
                                 </div>
                                 <div class="card-box-left">
                                     <div>LE</div>
-                                    <br>
                                     <div id="pv-1-male-at-60-le"></div>
                                 </div>
                                 <div class="card-box-right">
                                     <div>HALE</div>
-                                    <br>
                                     <div id="pv-1-male-at-60-hale"></div>
                                 </div>
                             </div>
@@ -118,8 +116,8 @@
                                 <div class="sex-female">เพศหญิง</div>
                             </div>
                             <div class="pv-1-bar-chart">
-                                <div id="pv-1-female-at-birth"></div>
-                                <div id="pv-1-female-at-60"></div>
+                                <div class="bar-chart" id="pv-1-female-at-birth"></div>
+                                <div class="bar-chart" id="pv-1-female-at-60"></div>
                             </div>
                             <div class="pv-type-name">
                                 <div class="pv-type-name-value">เมื่อแรกเกิด (at birth)</div>
@@ -128,22 +126,18 @@
                             <div class="pv-value">
                                 <div class="card-box-left">
                                     <div>LE</div>
-                                    <br>
                                     <div id="pv-1-female-at-birth-le"></div>
                                 </div>
                                 <div class="card-box-right">
                                     <div>HALE</div>
-                                    <br>
                                     <div id="pv-1-female-at-birth-hale"></div>
                                 </div>
                                 <div class="card-box-left">
                                     <div>LE</div>
-                                    <br>
                                     <div id="pv-1-female-at-60-le"></div>
                                 </div>
                                 <div class="card-box-right">
                                     <div>HALE</div>
-                                    <br>
                                     <div id="pv-1-female-at-60-hale"></div>
                                 </div>
                             </div>
@@ -221,5 +215,6 @@
             <img class="footer-logo" src="../assets/ThaiHealth.png" alt="ThaiHealth">
         </div>
     </div>
+    <script src="../scripts/pv.js"></script>
 </body>
 </html>

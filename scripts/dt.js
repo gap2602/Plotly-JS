@@ -1,59 +1,66 @@
-var ct_path = "https://raw.githubusercontent.com/gap2602/Plotly-JS/main/data/district.csv";
+const dtData = JSON.parse(sessionStorage.getItem("dtData"));
+const pvData = JSON.parse(sessionStorage.getItem("pvData"));
 
-Plotly.d3.csv(ct_path, function(data) {
+const filters = {
+    year: '2562',
+    dt: 1,
+    ageType: 0
+  };
 
-  const m_cl_dark = "#1a84b8";
-  const m_cl_light = "#25a3e0";
-  const fm_cl_dark = "#b81a84";
-  const fm_cl_light = "#e025a3";
+const m_cl_dark = "#1a84b8";
+const m_cl_light = "#25a3e0";
+const fm_cl_dark = "#b81a84";
+const fm_cl_light = "#e025a3";
 
-  function createDropdownYear(data, default_value, selector) {
+function createDropdownYear(data, default_value, selector) {
     const uniqueYears = [...new Set(data.map(d => d.year))];
+    const sortYear = uniqueYears.map(Number).sort(function(a, b){return a-b});
     const dropdown = document.getElementById(selector);
     const defaultValue = default_value;
-    uniqueYears.forEach(year => {
-      const option = document.createElement('option');
-      option.value = year;
-      option.text = year;
+    sortYear.forEach(year => {
+    const option = document.createElement('option');
+    option.value = year;
+    option.text = year;
 
-      if (year == defaultValue) {
+    if (year == defaultValue) {
         option.selected = true;
-      }
-      dropdown.appendChild(option);
+    }
+    dropdown.appendChild(option);
     });
-  }
+};
 
-  function createDropdownDt(data, default_value, selector) {
+function createDropdownDt(data, default_value, selector) {
     const uniqueDts = [...new Set(data.map(d => d.dt_num))];
+    const sortDts = uniqueDts.map(Number).sort(function(a, b){return a-b});
     const dropdown = document.getElementById(selector);
     const defaultValue = default_value;
-    uniqueDts.forEach(dt => {
-      const option = document.createElement('option');
-      option.value = dt;
-      option.text = "เขตสุขภาพที่ " + dt;
-      if (dt == defaultValue) {
+    sortDts.forEach(dt => {
+    const option = document.createElement('option');
+    option.value = dt;
+    option.text = "เขตสุขภาพที่ " + dt;
+    if (dt == defaultValue) {
         option.selected = true;
-      }
-      dropdown.appendChild(option);
+    }
+    dropdown.appendChild(option);
     });
-  }
+};
 
-  function createDropdownType(data, default_value, selector) {
-    const uniqueTypes = [...new Set(data.map(d => d.type))];
+function createDropdownType(default_value, selector) {
+    const uniqueTypes = [0, 60];
     const dropdown = document.getElementById(selector);
     const defaultValue = default_value;
     uniqueTypes.forEach(type => {
-      const option = document.createElement('option');
-      option.value = type;
-      option.text = type == 0 ? "เมื่อแรกเกิด (at birth)" : "เมื่ออายุ 60 ปี";
-      if (type == defaultValue) {
+    const option = document.createElement('option');
+    option.value = type;
+    option.text = type == 0 ? "เมื่อแรกเกิด (at birth)" : "เมื่ออายุ 60 ปี";
+    if (type == defaultValue) {
         option.selected = true;
-      }
-      dropdown.appendChild(option);
+    }
+    dropdown.appendChild(option);
     });
-  }
+}
 
-  function updateBarChart(data, year, dt, type, sex, colorLeft, colorRight, selector) {
+function updateBarChart(data, year, dt, type, sex, colorLeft, colorRight, selector) {
     const sexLabel = sex === 'male' ? "ชาย" : sex === 'female' ? "หญิง" : "รวมเพศ";
     const filteredData = data.filter(d => d.year == year && d.type == type && d.sex == sex && d.dt_num == dt); 
 
@@ -65,139 +72,290 @@ Plotly.d3.csv(ct_path, function(data) {
     textposition: 'outside',
     textangle: 0,
     textfont: {
-      size: 14,
-      color: [colorLeft, colorRight],
+    size: 14,
+    color: [colorLeft, colorRight],
     },
     marker: {
-      color: [colorLeft, colorRight],
-      lineWidth: 0,
+    color: [colorLeft, colorRight],
+    lineWidth: 0,
     },
     hoverinfo: 'y',
     hovertemplate: '<b>เพศ</b>: ' + sexLabel + '<br><b>%{x}</b>: %{y:.1f}<extra></extra>'
-  };
-  
+};
+
     const layout = {
-      xaxis: {
+    xaxis: {
         fixedrange: true
-      },
-      yaxis: {
+    },
+    yaxis: {
         showgrid: false,
         visible: false,
         fixedrange: true,
         range: [0, 100], // Set y-axis range
-      },
-      margin: {l: 20, r: 20, t: 20, b: 20},
-      bargap: 0,
-      font: {
+    },
+    margin: {l: 20, r: 20, t: 20, b: 20},
+    bargap: 0,
+    font: {
         family: 'IBM Plex Sans Thai', // Assuming you have this font loaded in your HTML
-      },
-      hovermode: 'closest',
-      hoverlabel: {
+    },
+    hovermode: 'closest',
+    hoverlabel: {
         font: {
-          color: 'black',
-          family: 'IBM Plex Sans Thai',
+        color: 'black',
+        family: 'IBM Plex Sans Thai',
         },
-        borderColor: 'black',
-      },
-      plot_bgcolor: '#f0f1f3',
-      paper_bgcolor: '#f0f1f3',
+        bordercolor: 'black',
+    },
+    plot_bgcolor: '#f0f1f3',
+    paper_bgcolor: '#f0f1f3',
     };
-  
-    Plotly.newPlot(selector, [trace], layout, {displayModeBar: false});
-  };
 
-  function updateCardValue(data, year, dt, type, sex, metric, color, selector) {
+    Plotly.newPlot(selector, [trace], layout, {displayModeBar: false});
+};
+
+function updateHBarChart(data, year, dt, type, sex, colorLE, colorHALE, selector) {
+    const filteredData = data.filter(d => d.year == year && d.dt_num == dt && d.type == type && d.sex == sex); 
+
+    const trace1 = {
+        x: [filteredData[0].HALE],
+        y: ["เขตสุขภาพ " + dt],
+        type: 'bar',
+        orientation: 'h',
+        text: ['<b>'+parseFloat(filteredData[0].HALE).toFixed(1)+'</b>'], 
+        textposition: 'outside',
+        textangle: 0,
+        textfont: {
+            size: 14,
+            color: [colorHALE],
+        },
+        marker: {
+            color: [colorHALE],
+            lineWidth: 0,
+        },
+        hovertemplate: '%{y}: %{x:.1f}<extra></extra>'
+    };
+
+    const trace2 = {
+        x: [filteredData[0].LE],
+        y: ["เขตสุขภาพ " + dt],
+        type: 'bar',
+        orientation: 'h',
+        text: ['<b>'+parseFloat(filteredData[0].LE).toFixed(1)+'</b>'], 
+        textposition: 'outside',
+        textangle: 0,
+        textfont: {
+            size: 14,
+            color: [colorLE],
+        },
+        marker: {
+            color: [colorLE],
+            lineWidth: 0,
+        },
+        hovertemplate: '%{y}: %{x:.1f}<extra></extra>'
+    };
+
+    const layout = {
+    xaxis: {
+        range: [0, 100],
+        fixedrange: true,
+        showticklabels: false,
+        showgrid: false,
+        title: ''
+    },
+    yaxis: {
+        showgrid: false,
+        visible: true,
+        fixedrange: true
+    },
+    margin: {l: 70, r: 0, t: 0, b: 0},
+    bargap: 0,
+    font: {
+        family: 'IBM Plex Sans Thai', // Assuming you have this font loaded in your HTML
+    },
+    hovermode: 'closest',
+    hoverlabel: {
+        font: {
+        color: 'black',
+        family: 'IBM Plex Sans Thai',
+        },
+        bordercolor: 'black',
+    },
+    plot_bgcolor: '#f0f1f3',
+    paper_bgcolor: '#f0f1f3',
+    height: 60,
+    showlegend: false
+    };
+
+    Plotly.newPlot(selector, [trace1,trace2], layout, {displayModeBar: false});
+};
+
+function updateHBarChartPV(data, year, dt, type, sex, colorLE, colorHALE, selector) {
+    const filteredData = data.filter(d => d.year == year && d.area_code == dt && d.type == type && d.sex == sex); 
+
+    const trace1 = {
+        x: filteredData.map(d => d.HALE),
+        y: filteredData.map(d => d.th_province),
+        type: 'bar',
+        orientation: 'h',
+        text: '<b>'+parseFloat(filteredData[0].HALE).toFixed(1)+'</b>', 
+        textposition: 'outside',
+        textangle: 0,
+        textfont: {
+            size: 14,
+            color: colorHALE,
+        },
+        marker: {
+            color: colorHALE,
+            lineWidth: 0,
+        },
+        width: 0.5,
+        hovertemplate: '%{y}: %{x:.1f}<extra></extra>'
+    };
+
+    const trace2 = {
+        x: filteredData.map(d => d.LE),
+        y: filteredData.map(d => d.th_province),
+        type: 'bar',
+        orientation: 'h',
+        text: '<b>'+parseFloat(filteredData[0].LE).toFixed(1)+'</b>', 
+        textposition: 'outside',
+        textangle: 0,
+        textfont: {
+            size: 14,
+            color: colorLE,
+        },
+        marker: {
+            color: colorLE,
+            lineWidth: 0,
+        },
+        width: 0.5,
+        hovertemplate: '%{y}: %{x:.1f}<extra></extra>'
+    };
+    
+    var space = 0;
+    if (filteredData.length == 1) {
+        space = 60;
+    }
+
+    const layout = {
+    xaxis: {
+        range: [0, 100],
+        fixedrange: true,
+        showticklabels: false,
+        showgrid: false,
+        zeroline: false
+    },
+    yaxis: {
+        showgrid: false,
+        visible: true,
+        fixedrange: true,
+    },
+    margin: {l: 100, r: 0, t: space, b: space},
+    bargap: 0,
+    font: {
+        family: 'IBM Plex Sans Thai', // Assuming you have this font loaded in your HTML
+    },
+    hovermode: 'closest',
+    hoverlabel: {
+        font: {
+        color: 'black',
+        family: 'IBM Plex Sans Thai',
+        },
+        bordercolor: 'black',
+    },
+    plot_bgcolor: '#f0f1f3',
+    paper_bgcolor: '#f0f1f3',
+    showlegend: false,
+    barmode: 'group',
+    bargap: 0.20,
+    bargroupgap: 0.0,
+    autosize: true,
+    };
+
+    Plotly.newPlot(selector, [trace1,trace2], layout, {displayModeBar: false});
+};
+
+function updateCardValue(data, year, dt, type, sex, metric, color, selector) {
     const filteredData = data.filter(d => d.year == year && d.type == type && d.sex == sex && d.dt_num == dt); 
     document.getElementById(selector).innerHTML = parseFloat(filteredData[0][metric]).toFixed(1);
     document.getElementById(selector).style.color = color;
-  };
+};
 
-  
+createDropdownYear(dtData, 2562, 'year-dd-dt');
+createDropdownDt(dtData, 1, 'dt-dd');
+createDropdownType(0, 'type-dd');
 
-  createDropdownYear(data, 2562, 'year-dd-dt');
-  createDropdownDt(data, 1, 'dt-dd');
-  createDropdownType(data, 0, 'type-dd');
+updateBarChart(dtData, filters.year, filters.dt, 0, 'male', m_cl_dark, m_cl_light, "dt-male-at-birth");
+updateBarChart(dtData, filters.year, filters.dt, 60, 'male', m_cl_dark, m_cl_light, "dt-male-at-60");
+updateBarChart(dtData, filters.year, filters.dt, 0, 'female', fm_cl_dark, fm_cl_light, "dt-female-at-birth");
+updateBarChart(dtData, filters.year, filters.dt, 60, 'female', fm_cl_dark, fm_cl_light, "dt-female-at-60");
+updateCardValue(dtData, filters.year, filters.dt, 0, 'male', 'LE', m_cl_dark, "dt-male-at-birth-le");
+updateCardValue(dtData, filters.year, filters.dt, 0, 'male', 'HALE', m_cl_light, "dt-male-at-birth-hale");
+updateCardValue(dtData, filters.year, filters.dt, 60, 'male', 'LE', m_cl_dark, "dt-male-at-60-le");
+updateCardValue(dtData, filters.year, filters.dt, 60, 'male', 'HALE', m_cl_light, "dt-male-at-60-hale");
+updateCardValue(dtData, filters.year, filters.dt, 0, 'female', 'LE', fm_cl_dark, "dt-female-at-birth-le");
+updateCardValue(dtData, filters.year, filters.dt, 0, 'female', 'HALE', fm_cl_light, "dt-female-at-birth-hale");
+updateCardValue(dtData, filters.year, filters.dt, 60, 'female', 'LE', fm_cl_dark, "dt-female-at-60-le");
+updateCardValue(dtData, filters.year, filters.dt, 60, 'female', 'HALE', fm_cl_light, "dt-female-at-60-hale");
+updateHBarChart(dtData, filters.year, filters.dt, filters.ageType, 'male', m_cl_dark, m_cl_light, 'pv-male-dt');
+updateHBarChart(dtData, filters.year, filters.dt, filters.ageType, 'female', fm_cl_dark, fm_cl_light, 'pv-female-dt');
+updateHBarChartPV(pvData, filters.year, filters.dt, filters.ageType, 'male', m_cl_dark, m_cl_light, 'pv-male-pv');
+updateHBarChartPV(pvData, filters.year, filters.dt, filters.ageType, 'female', fm_cl_dark, fm_cl_light, 'pv-female-pv');
 
-  const year = document.getElementById('year-dd-dt').value;
-  const dt = document.getElementById('dt-dd').value;
-  const ageType = document.getElementById('type-dd').value;
-
-  updateBarChart(data, year, dt, 0, 'male', m_cl_dark, m_cl_light, "dt-male-at-birth");
-  updateBarChart(data, year, dt, 60, 'male', m_cl_dark, m_cl_light, "dt-male-at-60");
-  updateBarChart(data, year, dt, 0, 'female', fm_cl_dark, fm_cl_light, "dt-female-at-birth");
-  updateBarChart(data, year, dt, 60, 'female', fm_cl_dark, fm_cl_light, "dt-female-at-60");
-  updateCardValue(data, year, dt, 0, 'male', 'LE', m_cl_dark, "dt-male-at-birth-le");
-  updateCardValue(data, year, dt, 0, 'male', 'HALE', m_cl_light, "dt-male-at-birth-hale");
-  updateCardValue(data, year, dt, 60, 'male', 'LE', m_cl_dark, "dt-male-at-60-le");
-  updateCardValue(data, year, dt, 60, 'male', 'HALE', m_cl_light, "dt-male-at-60-hale");
-  updateCardValue(data, year, dt, 0, 'female', 'LE', fm_cl_dark, "dt-female-at-birth-le");
-  updateCardValue(data, year, dt, 0, 'female', 'HALE', fm_cl_light, "dt-female-at-birth-hale");
-  updateCardValue(data, year, dt, 60, 'female', 'LE', fm_cl_dark, "dt-female-at-60-le");
-  updateCardValue(data, year, dt, 60, 'female', 'HALE', fm_cl_light, "dt-female-at-60-hale");
-  
-  document.getElementById('year-dd-dt').addEventListener('change', (event) => {
+document.getElementById('year-dd-dt').addEventListener('change', (event) => {
+    filters.year = event.target.value;
     document.getElementById("section-name-dt").innerHTML = "อายุคาดเฉลี่ย (LE) และอายุคาดเฉลี่ยของการมีสุขภาวะ (HALE) ระดับประเทศปี พ.ศ. " + event.target.value + " (หน่วย: ปี)";
-    updateBarChart(data, event.target.value, dt, 0, 'male', m_cl_dark, m_cl_light, "dt-male-at-birth");
-    updateBarChart(data, event.target.value, dt, 60, 'male', m_cl_dark, m_cl_light, "dt-male-at-60");
-    updateBarChart(data, event.target.value, dt, 0, 'female', fm_cl_dark, fm_cl_light, "dt-female-at-birth");
-    updateBarChart(data, event.target.value, dt, 60, 'female', fm_cl_dark, fm_cl_light, "dt-female-at-60");
-    updateCardValue(data, event.target.value, dt, 0, 'male', 'LE', m_cl_dark, "dt-male-at-birth-le");
-    updateCardValue(data, event.target.value, dt, 0, 'male', 'HALE', m_cl_light, "dt-male-at-birth-hale");
-    updateCardValue(data, event.target.value, dt, 60, 'male', 'LE', m_cl_dark, "dt-male-at-60-le");
-    updateCardValue(data, event.target.value, dt, 60, 'male', 'HALE', m_cl_light, "dt-male-at-60-hale");
-    updateCardValue(data, event.target.value, dt, 0, 'female', 'LE', fm_cl_dark, "dt-female-at-birth-le");
-    updateCardValue(data, event.target.value, dt, 0, 'female', 'HALE', fm_cl_light, "dt-female-at-birth-hale");
-    updateCardValue(data, event.target.value, dt, 60, 'female', 'LE', fm_cl_dark, "dt-female-at-60-le");
-    updateCardValue(data, event.target.value, dt, 60, 'female', 'HALE', fm_cl_light, "dt-female-at-60-hale");
-  });
-
-  document.getElementById('dt-dd').addEventListener('change', (event) => {
-    document.getElementById("content-name-1-dt").innerHTML = "ภาพรวมเขตสุขภาพ " + event.target.value;
-    updateBarChart(data, year, event.target.value, 0, 'male', m_cl_dark, m_cl_light, "dt-male-at-birth");
-    updateBarChart(data, year, event.target.value, 60, 'male', m_cl_dark, m_cl_light, "dt-male-at-60");
-    updateBarChart(data, year, event.target.value, 0, 'female', fm_cl_dark, fm_cl_light, "dt-female-at-birth");
-    updateBarChart(data, year, event.target.value, 60, 'female', fm_cl_dark, fm_cl_light, "dt-female-at-60");
-    updateCardValue(data, year, event.target.value, 0, 'male', 'LE', m_cl_dark, "dt-male-at-birth-le");
-    updateCardValue(data, year, event.target.value, 0, 'male', 'HALE', m_cl_light, "dt-male-at-birth-hale");
-    updateCardValue(data, year, event.target.value, 60, 'male', 'LE', m_cl_dark, "dt-male-at-60-le");
-    updateCardValue(data, year, event.target.value, 60, 'male', 'HALE', m_cl_light, "dt-male-at-60-hale");
-    updateCardValue(data, year, event.target.value, 0, 'female', 'LE', fm_cl_dark, "dt-female-at-birth-le");
-    updateCardValue(data, year, event.target.value, 0, 'female', 'HALE', fm_cl_light, "dt-female-at-birth-hale");
-    updateCardValue(data, year, event.target.value, 60, 'female', 'LE', fm_cl_dark, "dt-female-at-60-le");
-    updateCardValue(data, year, event.target.value, 60, 'female', 'HALE', fm_cl_light, "dt-female-at-60-hale");
-  });
-
-  document.getElementById('type-dd').addEventListener('change', (event) => {
-
-  });
-
+    updateBarChart(dtData, filters.year, filters.dt, 0, 'male', m_cl_dark, m_cl_light, "dt-male-at-birth");
+    updateBarChart(dtData, filters.year, filters.dt, 60, 'male', m_cl_dark, m_cl_light, "dt-male-at-60");
+    updateBarChart(dtData, filters.year, filters.dt, 0, 'female', fm_cl_dark, fm_cl_light, "dt-female-at-birth");
+    updateBarChart(dtData, filters.year, filters.dt, 60, 'female', fm_cl_dark, fm_cl_light, "dt-female-at-60");
+    updateCardValue(dtData, filters.year, filters.dt, 0, 'male', 'LE', m_cl_dark, "dt-male-at-birth-le");
+    updateCardValue(dtData, filters.year, filters.dt, 0, 'male', 'HALE', m_cl_light, "dt-male-at-birth-hale");
+    updateCardValue(dtData, filters.year, filters.dt, 60, 'male', 'LE', m_cl_dark, "dt-male-at-60-le");
+    updateCardValue(dtData, filters.year, filters.dt, 60, 'male', 'HALE', m_cl_light, "dt-male-at-60-hale");
+    updateCardValue(dtData, filters.year, filters.dt, 0, 'female', 'LE', fm_cl_dark, "dt-female-at-birth-le");
+    updateCardValue(dtData, filters.year, filters.dt, 0, 'female', 'HALE', fm_cl_light, "dt-female-at-birth-hale");
+    updateCardValue(dtData, filters.year, filters.dt, 60, 'female', 'LE', fm_cl_dark, "dt-female-at-60-le");
+    updateCardValue(dtData, filters.year, filters.dt, 60, 'female', 'HALE', fm_cl_light, "dt-female-at-60-hale");
+    updateHBarChart(dtData, filters.year, filters.dt, filters.ageType, 'male', m_cl_dark, m_cl_light, 'pv-male-dt');
+    updateHBarChart(dtData, filters.year, filters.dt, filters.ageType, 'female', fm_cl_dark, fm_cl_light, 'pv-female-dt');
+    updateHBarChartPV(pvData, filters.year, filters.dt, filters.ageType, 'male', m_cl_dark, m_cl_light, 'pv-male-pv');
+    updateHBarChartPV(pvData, filters.year, filters.dt, filters.ageType, 'female', fm_cl_dark, fm_cl_light, 'pv-female-pv');
 });
 
-Plotly.d3.csv("https://raw.githubusercontent.com/gap2602/Plotly-JS/main/data/province.csv").then(pvData => {
-    Plotly.d3.csv("https://raw.githubusercontent.com/gap2602/Plotly-JS/main/data/area%20code.csv").then(codeData => {
+document.getElementById('dt-dd').addEventListener('change', (event) => {
+    filters.dt = event.target.value;
+    document.getElementById("content-name-1-dt").innerHTML = "ภาพรวมเขตสุขภาพ " + event.target.value;
+    updateBarChart(dtData, filters.year, filters.dt, 0, 'male', m_cl_dark, m_cl_light, "dt-male-at-birth");
+    updateBarChart(dtData, filters.year, filters.dt, 60, 'male', m_cl_dark, m_cl_light, "dt-male-at-60");
+    updateBarChart(dtData, filters.year, filters.dt, 0, 'female', fm_cl_dark, fm_cl_light, "dt-female-at-birth");
+    updateBarChart(dtData, filters.year, filters.dt, 60, 'female', fm_cl_dark, fm_cl_light, "dt-female-at-60");
+    updateCardValue(dtData, filters.year, filters.dt, 0, 'male', 'LE', m_cl_dark, "dt-male-at-birth-le");
+    updateCardValue(dtData, filters.year, filters.dt, 0, 'male', 'HALE', m_cl_light, "dt-male-at-birth-hale");
+    updateCardValue(dtData, filters.year, filters.dt, 60, 'male', 'LE', m_cl_dark, "dt-male-at-60-le");
+    updateCardValue(dtData, filters.year, filters.dt, 60, 'male', 'HALE', m_cl_light, "dt-male-at-60-hale");
+    updateCardValue(dtData, filters.year, filters.dt, 0, 'female', 'LE', fm_cl_dark, "dt-female-at-birth-le");
+    updateCardValue(dtData, filters.year, filters.dt, 0, 'female', 'HALE', fm_cl_light, "dt-female-at-birth-hale");
+    updateCardValue(dtData, filters.year, filters.dt, 60, 'female', 'LE', fm_cl_dark, "dt-female-at-60-le");
+    updateCardValue(dtData, filters.year, filters.dt, 60, 'female', 'HALE', fm_cl_light, "dt-female-at-60-hale");
+    updateHBarChart(dtData, filters.year, filters.dt, filters.ageType, 'male', m_cl_dark, m_cl_light, 'pv-male-dt');
+    updateHBarChart(dtData, filters.year, filters.dt, filters.ageType, 'female', fm_cl_dark, fm_cl_light, 'pv-female-dt');
+    updateHBarChartPV(pvData, filters.year, filters.dt, filters.ageType, 'male', m_cl_dark, m_cl_light, 'pv-male-pv');
+    updateHBarChartPV(pvData, filters.year, filters.dt, filters.ageType, 'female', fm_cl_dark, fm_cl_light, 'pv-female-pv');
+});
 
-      const pvMap = {};
-      pvData.forEach(d => {
-        pvMap[d.eng_province] = d;
-      });
-  
-      const joinedData = codeData.map(d2 => {
-        const d1 = pvMap[d2.eng_province];
-        return {
-            eng_province: d2.eng_province,
-            propertyFromData1: d1 ? d1.propertyFromData1 : null,
-            propertyFromData2: d2.propertyFromData2
-        };
-      });
-  
-      console.log(joinedData);
-    });
-  });
+document.getElementById('type-dd').addEventListener('change', (event) => {
+    filters.ageType = event.target.value;
+    document.getElementById("content-name-2-dt").innerHTML = "เปรียบเทียบจังหวัดภายในเขตสุขภาพ - " + event.target.options[event.target.selectedIndex].text;
+    updateHBarChart(dtData, filters.year, filters.dt, filters.ageType, 'male', m_cl_dark, m_cl_light, 'pv-male-dt');
+    updateHBarChart(dtData, filters.year, filters.dt, filters.ageType, 'female', fm_cl_dark, fm_cl_light, 'pv-female-dt');
+    updateHBarChartPV(pvData, filters.year, filters.dt, filters.ageType, 'male', m_cl_dark, m_cl_light, 'pv-male-pv');
+    updateHBarChartPV(pvData, filters.year, filters.dt, filters.ageType, 'female', fm_cl_dark, fm_cl_light, 'pv-female-pv');
+});
 
 document.getElementById('captureButton').addEventListener('click', function() {
     html2canvas(document.getElementById('dt-block')).then(function(canvas) {
         var imgData = canvas.toDataURL('image/png');
-
         var link = document.createElement('a');
         link.download = 'captured_image.png';
         link.href = imgData;

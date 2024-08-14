@@ -35,11 +35,11 @@
         </div>
         <!---->
         <div class="content">
-            <h2 class="section-name" id="section-name-dt">อายุคาดเฉลี่ย (LE) และอายุคาดเฉลี่ยของการมีสุขภาวะ (HALE) ปี พ.ศ. 2562 (หน่วย: ปี)</h2>
+            <h2 class="section-name" id="section-name-map">อายุคาดเฉลี่ย (LE) และอายุคาดเฉลี่ยของการมีสุขภาวะ (HALE) ปี พ.ศ. 2562 (หน่วย: ปี)</h2>
             <div class="year-filter-and-tabs">
                 <div class="year-filter">
-                    <h3 class="year-filter-title">เลือกปี พ.ศ.</h3>
-                    <div id="year-dd-dt"></div>
+                    <b class="year-filter-title">เลือกปี พ.ศ.</b>
+                    <select class="filter" id="year-dd-map"></select>
                 </div>
                 <a class="tab-frame" style="background-color: #dadee7; border:solid 3px #aeb2b7;" 
                 href="../district-province/district.html">
@@ -62,19 +62,19 @@
                     <div class="filter-panel-name">เลือก</div>
                     <div id="dt-filter-map">
                         <h4 class="filter-name">เขตสุขภาพ</h4>
-                        <div id="dt-dd-map"></div>
+                        <select class="filter" id="dt-dd-map"></select>
                     </div>
                     <div id="metric-filter-map">
                         <h4 class="filter-name">อายุคาดเฉลี่ย</h4>
-                        <div id="metric-dd-map"></div>
+                        <select class="filter" id="metric-dd-map"></select>
                     </div>
                     <div id="type-filter-map">
                         <h4 class="filter-name">การคำนวณ</h4>
-                        <div id="type-dd-map"></div>
+                        <select class="filter" id="type-dd-map"></select>
                     </div>
                     <div id="sex-filter-map">
                         <h4 class="filter-name">เพศ</h4>
-                        <div id="sex-dd-map"></div>
+                        <select class="filter" id="sex-dd-map"></select>
                     </div>
                 </div>
                 <div id="map-block">
@@ -123,5 +123,6 @@
             <img class="footer-logo" src="../assets/ThaiHealth.png" alt="ThaiHealth">
         </div>
     </div>
+    <script src="../scripts/map.js"></script>
 </body>
 </html>

@@ -267,6 +267,19 @@ body {
     box-sizing: border-box;
 }
 
+.filter {
+    display: block;
+    height: 30px;
+    width: 80%;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+select {
+    font-size: 16px;
+    font-family: 'IBM Plex Sans Thai';
+}
+
 .tab-frame {
     display: flex;
     width: 25%;
@@ -335,7 +348,11 @@ body {
 }
 
 #pv-cp-filter {
-    height: 200px;
+    height: 150px;
+}
+
+#pv-cp-dd, option {
+    color: black;
 }
 
 .filter-name {
@@ -387,7 +404,7 @@ body {
     justify-content: center;
     font-size: 18px;
     font-weight: 600;
-    height: 100px;
+    height: 50px;
     background-color: #f0f1f3;
     box-sizing: border-box;
 }
@@ -415,7 +432,7 @@ body {
     border: solid 2px #cccccc;
 }
 
-.pv-bar-chart {
+.pv-1-bar-chart {
     display: flex;
     flex-direction: row;
     box-sizing: border-box;
@@ -474,9 +491,10 @@ body {
 }
 
 #pv-1-male-pv, #pv-1-female-pv {
-    height: 50px;
+    height: 70px;
     box-sizing: border-box;
     border-bottom: solid 3px#0d6abf;
+    padding: 5px;
 }
 
 #pv-cp-male-pv, #pv-cp-female-pv {
