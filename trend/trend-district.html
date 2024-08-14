@@ -6,6 +6,9 @@
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="../scripts/xlsx.full.min.js"></script>
 </head>
 <body>
     <h1 class="header">อายุคาดเฉลี่ย และอายุคาดเฉลี่ยของการมีสุขภาวะของประชากรไทย พ.ศ. - ระดับประเทศและจังหวัด</h1>
@@ -58,15 +61,15 @@
                     <div class="filter-panel-name">เลือก</div>
                     <div class="filter" id="dt-filter-trend-dt">
                         <h4 class="filter-name">เขตสุขภาพ</h4>
-                        <div id="dt-dd-trend-dt"></div>
+                        <select class="filter-dd" id="dt-dd-trend-dt"></select>
                     </div>
                     <div class="filter" id="type-filter-trend-dt">
                         <h4 class="filter-name">การคำนวณ</h4>
-                        <div id="type-dd-trend-dt"></div>
+                        <select class="filter-dd" id="type-dd-trend-dt"></select>
                     </div>
                     <div class="filter" id="sex-filter-trend-dt">
                         <h4 class="filter-name">เพศ</h4>
-                        <div id="sex-dd-trend-dt"></div>
+                        <select class="filter-dd" id="sex-dd-trend-dt"></select>
                     </div>
                 </div>
                 <div class="line-chart-block">
@@ -115,5 +118,6 @@
             <img class="footer-logo" src="../assets/ThaiHealth.png" alt="ThaiHealth">
         </div>
     </div>
+    <script src="../scripts/trend-dt.js"></script>
 </body>
 </html>

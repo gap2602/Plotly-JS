@@ -311,10 +311,24 @@ body {
     box-sizing: border-box;
 }
 
+.filter-dd {
+    display: block;
+    height: 30px;
+    width: 80%;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+select {
+    font-size: 16px;
+    font-family: 'IBM Plex Sans Thai';
+}
+
 .line-chart-block {
     display: flex;
     flex-direction: row;
     width: 77%;
+    height: 500px;
     margin-left: 5px;
     box-sizing: border-box;
 }

@@ -352,17 +352,18 @@ select {
 }
 
 #map {
-    width: 70%;
+    width: 60%;
     background-color: #f0f1f3;
     box-sizing: border-box;
 }
 
-#map-table {
-    width: 26%;
+#map-table-container {
+    width: 35%;
     height: 365px;
     margin: 10px 10px 10px 10px;
     background-color: #f0f1f3;
     box-sizing: border-box;
+    overflow-y: auto;
 }
 
 @media only screen and (min-width: 800px) {
