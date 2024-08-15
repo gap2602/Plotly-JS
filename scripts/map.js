@@ -248,68 +248,57 @@ function updateTable(data, year, dt, metric, type, sex, selector) {
     const filteredData = dt == 0
     ? data.filter((d) => d.year == year && d.type == type && d.sex === sex)
     : data.filter((d) => d.year == year && d.area_code == dt && d.type == type && d.sex == sex);
+    const sortData = filteredData.sort((a,b)=> (parseInt(a.area_code) - parseInt(b.area_code) || 
+                                                a.th_province.localeCompare(b.th_province)));
 
-    let values;
-
-    if (dt != 0) {
-        var col1 = filteredData.map((d) => d.th_province);
-        var col2 = filteredData.map((d) => parseFloat(d[metric]).toFixed(1));
-        col1.unshift("<b>เขตสุขภาพ "+dt+"</b>");
-        col2.unshift("");
-        values = [col1, col2];
-    } else {
-        var sortData = filteredData.sort((a, b) => a.area_code - b.area_code);
-        var col1 = [];
-        var col2 = [];
-        var checkDT = 0;
-        for (let i = 0; i < sortData.length; i++) {
-            if (sortData[i].area_code != checkDT) {
-                col1.push("<b>เขตสุขภาพ "+sortData[i].area_code+"</b>");
-                col2.push("");
-                col1.push(sortData[i].th_province);
-                col2.push(parseFloat(sortData[i][metric]).toFixed(1));
-                checkDT += 1;
-            } else {
-                col1.push(sortData[i].th_province);
-                col2.push(parseFloat(sortData[i][metric]).toFixed(1));
-            }
-        };
-        values = [col1, col2];
+    var checkDT = '0';
+    var pvList = [];
+    var valueList = [];
+    for (let row = 0; row < sortData.length; row++) {
+        if (sortData[row]['area_code'] != checkDT) {
+            pvList.push('เขตสุขภาพ ' + sortData[row]['area_code']);
+            valueList.push('');
+            checkDT = sortData[row]['area_code'];
+        }
+        pvList.push(sortData[row]['th_province']);
+        valueList.push(parseFloat(sortData[row][metric]).toFixed(1));
     }
 
-    var data = [{
-        type: 'table',
-        columnwidth: [0.55, 0.45],
-        header: {
-            values: [["<b>จังหวัดในเขตสุขภาพ</b>"], [ "<b>"+metric+" (หน่วย: ปี)</b>"]],
-            align: ['center', 'center'],
-            line: { width: 1, color: 'black' },
-            fill: { color: '#808080' },
-            font: { color: 'white', size: 16, family: 'IBM Plex Sans Thai' }
-        },
-        cells: {
-            values: values,
-            align: ['left', 'center'],
-            line: { color: 'black', width: 1 },
-            font: { size: 16, family: 'IBM Plex Sans Thai' },
-            height: 30
-        }
-      }];
+    const keyText = ['จังหวัดในเขตสุขภาพ', metric +' (หน่วย: ปี)'];
+    const table = document.createElement('table');
+    const thead = document.createElement('thead');
+    const tbody = document.createElement('tbody');
+    const headerRow = document.createElement('tr');
+    keyText.forEach(key => {
+        const th = document.createElement('th');
+        th.textContent = key;
+        headerRow.appendChild(th);
+      });
+    thead.appendChild(headerRow);
 
-    const layout = {
-        height: 365,
-        autosize: true, // Adjust width to container
-        margin: {
-          l: 0,
-          r: 0,
-          b: 0,
-          t: 0
-        },
-        plot_bgcolor: '#f0f1f3',
-        paper_bgcolor: '#f0f1f3',
-    };
-      
-    Plotly.newPlot(selector, data, layout, {displayModeBar: false});
+    for (let i = 0; i < pvList.length; i++) {
+        const row = document.createElement('tr');
+        const cell1 = document.createElement('td');
+        const cell2 = document.createElement('td');
+        cell1.textContent = pvList[i];
+        cell2.textContent = valueList[i];
+        if (valueList[i] == '') {
+            row.classList.add('indented-row');
+        }
+        row.appendChild(cell1);
+        row.appendChild(cell2);
+        tbody.appendChild(row);    
+    }
+
+    table.appendChild(thead);
+    table.appendChild(tbody); 
+
+    const oldTable = document.getElementById(selector).querySelector('table');
+    if (oldTable) {
+        document.getElementById(selector).removeChild(oldTable);
+    }
+    
+    document.getElementById(selector).appendChild(table);
 }
 
 createDropdownYear(pvData, 2562, 'year-dd-map');

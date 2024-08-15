@@ -6,6 +6,10 @@
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="../scripts/xlsx.full.min.js"></script>
+    <script src="../scripts/multiselect-dropdown.js"></script>
 </head>
 <body>
     <h1 class="header">อายุคาดเฉลี่ย และอายุคาดเฉลี่ยของการมีสุขภาวะของประชากรไทย พ.ศ. - ระดับประเทศและจังหวัด</h1>
@@ -37,7 +41,10 @@
         <div class="content">
             <h2 class="section-name" id="section-name-dt">อายุคาดเฉลี่ย (LE) และอายุคาดเฉลี่ยของการมีสุขภาวะ (HALE) (หน่วย: ปี)</h2>
             <div class="year-filter-and-tabs">
-                <div class="year-filter"></div>
+                <div class="year-filter">
+                    <b class="year-filter-title">เลือกปี พ.ศ.</b>
+                    <select class="filter" id="year-dd-table"></select>
+                </div>
                 <a class="tab-frame" style="background-color: #dadee7; border:solid 3px #aeb2b7;" 
                 href="../district-province/district.html">
                     <img class="tab-pic" src="../assets/Page2 - Overview.png" alt="page2-overview">
@@ -57,17 +64,15 @@
             <div class="filter-and-content-block">
                 <div id="filter-panel-table">
                     <div class="filter-panel-name">เลือก</div>
-                    <div id="year-filter-table">
-                        <h4 class="filter-name">เลือกปี พ.ศ.</h4>
-                        <div id="year-dd-table"></div>
-                    </div>
                     <div id="dt-filter-table">
                         <h4 class="filter-name">เขตสุขภาพ</h4>
-                        <div id="dt-dd-table"></div>
+                        <select class="filter" id="dt-dd-table" multiple multiselect-search="true" 
+                        multiselect-max-item="5"></select>
                     </div>
                     <div id="pv-filter-table">
                         <h4 class="filter-name">จังหวัด</h4>
-                        <div id="pv-dd-table"></div>
+                        <select class="filter" id="pv-dd-table" multiple multiselect-search="true" 
+                        multiselect-max-item="5"></select>
                     </div>
                 </div>
                 <div id="table-block">
@@ -114,5 +119,6 @@
             <img class="footer-logo" src="../assets/ThaiHealth.png" alt="ThaiHealth">
         </div>
     </div>
+    <script src="../scripts/table.js"></script>
 </body>
 </html>

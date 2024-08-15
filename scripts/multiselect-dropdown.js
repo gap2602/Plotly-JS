@@ -80,7 +80,7 @@ style.innerHTML = `
 .multiselect-dropdown-list div:hover{
   background-color: #ced4da;
 }
-.multiselect-dropdown span.maxselected {width:100%;}
+.multiselect-dropdown span.maxselected {width:70%;}
 .multiselect-dropdown-all-selector {border-bottom:solid 1px #999;}
 `;
 document.head.appendChild(style);
@@ -119,7 +119,7 @@ function MultiselectDropdown(options){
     el.parentNode.insertBefore(div,el.nextSibling);
     var listWrap=newEl('div',{class:'multiselect-dropdown-list-wrapper'});
     var list=newEl('div',{class:'multiselect-dropdown-list',style:{height:config.height}});
-    var search=newEl('input',{class:['multiselect-dropdown-search'].concat([config.searchInput?.class??'form-control']),style:{width:'100%',display:el.attributes['multiselect-search']?.value==='true'?'block':'none'},placeholder:config.txtSearch});
+    var search=newEl('input',{class:['multiselect-dropdown-search'].concat([config.searchInput?.class??'form-control']),style:{width:'90%',display:el.attributes['multiselect-search']?.value==='true'?'block':'none'},placeholder:config.txtSearch});
     listWrap.appendChild(search);
     div.appendChild(listWrap);
     listWrap.appendChild(list);
@@ -173,7 +173,7 @@ function MultiselectDropdown(options){
       div.refresh=()=>{
         div.querySelectorAll('span.optext, span.placeholder').forEach(t=>div.removeChild(t));
         var sels=Array.from(el.selectedOptions);
-        if(sels.length>(el.attributes['multiselect-max-items']?.value??10)){
+        if(sels.length>(el.attributes['multiselect-max-items']?.value??5)){
           div.appendChild(newEl('span',{class:['optext','maxselected'],text:sels.length+' '+config.txtSelected}));          
         }
         else{

@@ -357,13 +357,47 @@ select {
     box-sizing: border-box;
 }
 
-#map-table-container {
+#map-table {
     width: 35%;
     height: 365px;
     margin: 10px 10px 10px 10px;
     background-color: #f0f1f3;
     box-sizing: border-box;
+    border: solid black;
     overflow-y: auto;
+}
+
+#map-table thead th { 
+    position: sticky; 
+    top: 0; 
+} 
+
+
+table, tbody, thead, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+th { 
+    background: #1aa3b7; 
+  } 
+
+table {
+    width: 100%; /* Optional: Set table width */
+}
+  
+td:first-child {
+    width: 60%;
+    font-weight: 500;
+}
+
+td:nth-child(2) {
+    width: 30%;
+    text-align: center;
+}
+
+.indented-row {
+    text-indent: 10px;
 }
 
 @media only screen and (min-width: 800px) {

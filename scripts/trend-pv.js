@@ -1,7 +1,7 @@
 const pvData = JSON.parse(sessionStorage.getItem("pvData"));
 
 const filters = {
-    pv: ['น่าน'],
+    pv: ['กรุงเทพมหานคร'],
     ageType: 0,
     sex: 'male'
   };
