@@ -168,81 +168,81 @@ function createDropdownSex(default_value, selector) {
     });
 };
 
-// function updateMap(data, year, dt, metric, type, sex, selector) {
-//     const filteredData = dt == 0
-//     ? data.filter((d) => d.year == year && d.type == type && d.sex === sex)
-//     : data.filter((d) => d.year == year && d.area_code == dt && d.type == type && d.sex == sex);
+function updateMap(data, year, dt, metric, type, sex, selector) {
+    const filteredData = dt == 0
+    ? data.filter((d) => d.year == year && d.type == type && d.sex === sex)
+    : data.filter((d) => d.year == year && d.area_code == dt && d.type == type && d.sex == sex);
 
-//     const dataLookup = {};
-//     filteredData.forEach(d => dataLookup[d.post_code] = d);
+    const dataLookup = {};
+    filteredData.forEach(d => dataLookup[d.post_code] = d);
 
-//     function processGeoJSON(geojson) {
-//         geojson.features.forEach(feature => {
-//           const id = feature.properties.id;
-//           if (dataLookup[id]) {
-//             feature.properties.value = dataLookup[id].LE;
-//           } else {
-//             feature.properties.value = 0;
-//           }
-//         });
-//         return geojson;
-//     };
+    function processGeoJSON(geojson) {
+        geojson.features.forEach(feature => {
+          const id = feature.properties.id;
+          if (dataLookup[id]) {
+            feature.properties.value = dataLookup[id].LE;
+          } else {
+            feature.properties.value = 0;
+          }
+        });
+        return geojson;
+    };
 
-//     console.log(processGeoJSON(mapData));
-//     const dataGeo = [
-//         {
-//             type: 'choropleth',
-//             geojson: processGeoJSON(mapData),
-//             locations: mapData.features.map(d => d.properties.id),
-//             z: mapData.features.map(d => d.properties.value),
-//             coloraxis: 'coloraxis',
-//             // color: metric,
-//             // coloraxis: {
-//             //   min: Math.min(filteredData[metric]),
-//             //   max: Math.max(filteredData[metric]),
-//             //   cmin: '#EFE9F4',
-//             //   cmax: '#5078F2' 
-//             // },
-//             // colorbar: {
-//             //   len: 0.7,
-//             //   xanchor: 'right',
-//             //   x: 0.93,
-//             //   yanchor: 'middle',
-//             //   y: 0.5,
-//             //   thickness: 20,
-//             //   title: {
-//             //     text: metric, // Replace with actual metric name
-//             //     font: { weight: 'bold' }
-//             //   }
-//             // },
-//             // customdata: ['th_province'], // Assuming your data has a `th_province` column
-//             // hovertemplate: 'จังหวัด: %{customdata[0]}<br>' + metric + ': %{z:.1f}'
-//         }
-// ];
+    const dataGeo = [
+        {
+            type: 'choropleth',
+            geojson: mapData,
+            locations: filteredData.map(d => parseInt(d.area_code)),
+            z: filteredData.map(d => parseFloat(d[metric])),
+            locationmode: 'geojson-id',
+            colorscale: 'Viridis',
+            // color: metric,
+            // coloraxis: {
+            //   min: Math.min(filteredData[metric]),
+            //   max: Math.max(filteredData[metric]),
+            //   cmin: '#EFE9F4',
+            //   cmax: '#5078F2' 
+            // },
+            // colorbar: {
+            //   len: 0.7,
+            //   xanchor: 'right',
+            //   x: 0.93,
+            //   yanchor: 'middle',
+            //   y: 0.5,
+            //   thickness: 20,
+            //   title: {
+            //     text: metric, // Replace with actual metric name
+            //     font: { weight: 'bold' }
+            //   }
+            // },
+            // customdata: ['th_province'], // Assuming your data has a `th_province` column
+            // hovertemplate: 'จังหวัด: %{customdata[0]}<br>' + metric + ': %{z:.1f}'
+        }
+];
     
 
-//     const layout = {
-//     margin: { r: 0, t: 0, l: 0, b: 0 },
-//     font: { family: 'IBM Plex Sans Thai', size: 16 },
-//     paper_bgcolor: '#f0f1f3',
-//       geo: { fitbounds: 'locations', visible: true }
-//     };
+    const layout = {
+    margin: { r: 0, t: 0, l: 0, b: 0 },
+    font: { family: 'IBM Plex Sans Thai', size: 16 },
+    paper_bgcolor: '#f0f1f3',
+      geo: { fitbounds: 'locations', visible: true }
+    };
 
-//     // if (dt != 0) {
-//     //   const textData = filteredData.map((row) => `<b>${row.th_province}</b>`);
-//     //   const trace2 = ({
-//     //     lat: filteredData['lat'],
-//     //     lon: filteredData['lon'],
-//     //     mode: 'text',
-//     //     text: textData,
-//     //     textfont: { family: 'IBM Plex Sans Thai', size: 14, color: 'black' },
-//     //     hoverinfo: 'skip'
-//     //   });
-//     //   dataGeo.push(trace2);
-//     // }
+    // if (dt != 0) {
+    //   const textData = filteredData.map((row) => `<b>${row.th_province}</b>`);
+    //   const trace2 = ({
+    //     lat: filteredData['lat'],
+    //     lon: filteredData['lon'],
+    //     mode: 'text',
+    //     text: textData,
+    //     textfont: { family: 'IBM Plex Sans Thai', size: 14, color: 'black' },
+    //     hoverinfo: 'skip'
+    //   });
+    //   dataGeo.push(trace2);
+    // }
 
-//     Plotly.newPlot(selector, dataGeo, layout, {displayModeBar: false});
-// };
+    Plotly.newPlot(selector, dataGeo, layout, {displayModeBar: false});
+};
 
 function updateTable(data, year, dt, metric, type, sex, selector) {
     const filteredData = dt == 0
@@ -307,7 +307,7 @@ createDropdownMetric('LE', 'metric-dd-map');
 createDropdownType(pvData, 0, 'type-dd-map');
 createDropdownSex('male', 'sex-dd-map');
 
-// updateMap(pvData, filters.year, filters.dt, filters.metric, filters.ageType, filters.sex, 'map');
+updateMap(pvData, filters.year, filters.dt, filters.metric, filters.ageType, filters.sex, 'map');
 updateTable(pvData, filters.year, filters.dt, filters.metric, filters.ageType, filters.sex, 'map-table');
 
 document.getElementById('year-dd-map').addEventListener('change', (event) => {
