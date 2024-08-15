@@ -3,7 +3,7 @@ const dt_path = "https://raw.githubusercontent.com/gap2602/Plotly-JS/main/data/d
 const pv_path = "https://raw.githubusercontent.com/gap2602/Plotly-JS/main/data/province.csv";
 const ac_path = "https://raw.githubusercontent.com/gap2602/Plotly-JS/main/data/area%20code.csv";
 const ll_path = "https://raw.githubusercontent.com/gap2602/Plotly-JS/main/data/province_lat_lon.csv";
-const pv_map = "https://raw.githubusercontent.com/gap2602/Plotly-JS/main/data/thailand_map.json";
+const pv_map = "https://raw.githubusercontent.com/gap2602/Plotly-JS/main/data/thailand_map.geojson";
 
 Plotly.d3.csv(dt_path, function(dtData) {
   Plotly.d3.csv(pv_path, function(pvData) {
@@ -28,6 +28,10 @@ Plotly.d3.csv(dt_path, function(dtData) {
       });
     });
   });    
+});
+
+Plotly.d3.json(pv_map, function(mapData) {
+  sessionStorage.setItem('mapData', JSON.stringify(mapData));
 });
 
 Plotly.d3.csv(ct_path, function(ctData) {
@@ -169,5 +173,3 @@ document.getElementById('xport').addEventListener("click", async() => {
   XLSX.utils.book_append_sheet(wb, ws, "test");
   XLSX.writeFile(wb, "SheetJSESMTest.xlsx");
 });
-
-
