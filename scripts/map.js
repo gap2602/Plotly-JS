@@ -86,65 +86,164 @@ function createDropdownSex(default_value, selector) {
     });
 };
 
-function updateMap(data, year, dt, metric, type, sex, selector) {
+function interpolateColor(value, valueMin, valueMax, colorMin, colorMax) {
+    // Ensure value is within the range
+    value = Math.max(valueMin, Math.min(value, valueMax));
+  
+    // Calculate the factor (0 to 1) based on where the value falls in the range
+    if (value == valueMin) {
+        var factor = 1;
+    } else {
+        var factor = (value - valueMin) / (valueMax - valueMin);
+    }
+  
+    // Convert hex colors to RGB
+    const rgbMin = hexToRgb(colorMin);
+    const rgbMax = hexToRgb(colorMax);
+  
+    // Interpolate between the colors
+    const r = Math.round(rgbMin[0] + factor * (rgbMax[0] - rgbMin[0]));
+    const g = Math.round(rgbMin[1] + factor * (rgbMax[1] - rgbMin[1]));
+    const b = Math.round(rgbMin[2] + factor * (rgbMax[2] - rgbMin[2]));
+  
+    // Convert back to hex
+    return rgbToHex(r, g, b);
+};
+  
+function hexToRgb(hex) {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? [
+        parseInt(result[1], 16),
+        parseInt(result[2], 16),
+        parseInt(result[3], 16)
+    ] : null;
+};
+  
+function rgbToHex(r, g, b) {
+    return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+};
+
+function createColorBar(selector, valueMin, valueMax, colorMin, colorMax, step) {
+    const targetElement = document.querySelector(selector);
+    if (!targetElement) {
+        console.error(`Element with selector "${selector}" not found`);
+        return;
+    }
+
+    const container = document.createElement('div');
+    container.style.display = 'flex';
+    container.style.alignItems = 'stretch';
+    container.style.justifyContent = 'flex-end';
+
+    const colorBar = document.createElement('div');
+    colorBar.style.width = '30px';
+    colorBar.style.height = '400px';
+    colorBar.style.background = `linear-gradient(to top, ${colorMin}, ${colorMax})`;
+
+    const labelsContainer = document.createElement('div');
+    labelsContainer.style.display = 'flex';
+    labelsContainer.style.flexDirection = 'column';
+    labelsContainer.style.justifyContent = 'flex-start';
+    labelsContainer.style.marginRight = '5px';
+    labelsContainer.style.height = '400px';
+    labelsContainer.style.position = 'relative';
+
+    const range = valueMax - valueMin;
+    const pixelsPerUnit = 400 / range;
+
+    for (let value = valueMin; value <= valueMax; value += step) {
+        if (value > valueMax) break;  // Ensure we don't exceed the max value
+        
+        const label = document.createElement('div');
+        label.style.position = 'absolute';
+        label.style.right = '0';
+        label.style.bottom = `${(value - valueMin) * pixelsPerUnit}px`;
+        label.style.transform = 'translateY(50%)';
+        label.style.fontSize = '12px';
+        label.textContent = value;
+        labelsContainer.appendChild(label);
+    }
+
+    container.appendChild(labelsContainer);
+    container.appendChild(colorBar);
+
+    targetElement.innerHTML = '';
+    targetElement.appendChild(container);
+};
+
+let geojsonLayer;
+let map = null;
+
+function updateLeafletMap(data, year, dt, metric, type, sex, selector) {
     const filteredData = dt == 0
     ? data.filter((d) => d.year == year && d.type == type && d.sex === sex)
     : data.filter((d) => d.year == year && d.area_code == dt && d.type == type && d.sex == sex);
 
-    const dataGeo = [
-        {
-            type: 'choropleth',
-            geojson: mapData,
-            locations: filteredData.map(d => parseInt(d.post_code)),
-            z: filteredData.map(d => parseFloat(d[metric])),
-            locationmode: 'geojson-id',
-            colorscale: 'Viridis',
-            // color: metric,
-            // coloraxis: {
-            //   min: Math.min(filteredData[metric]),
-            //   max: Math.max(filteredData[metric]),
-            //   cmin: '#EFE9F4',
-            //   cmax: '#5078F2' 
-            // },
-            // colorbar: {
-            //   len: 0.7,
-            //   xanchor: 'right',
-            //   x: 0.93,
-            //   yanchor: 'middle',
-            //   y: 0.5,
-            //   thickness: 20,
-            //   title: {
-            //     text: metric, // Replace with actual metric name
-            //     font: { weight: 'bold' }
-            //   }
-            // },
-            // customdata: ['th_province'], // Assuming your data has a `th_province` column
-            // hovertemplate: 'จังหวัด: %{customdata[0]}<br>' + metric + ': %{z:.1f}'
-        }
-];
+    var joinData = [];
+    filteredData.forEach((d) => {
+        var lookupVar = d.post_code;
+        var geoData = mapData.features.filter((d) => d.id == lookupVar);
+        geoData[0]['properties'][metric] = Math.round(parseFloat(d[metric])*10)/10;
+        geoData[0]['properties']['lat'] = parseFloat(d['lat']);
+        geoData[0]['properties']['lon'] = parseFloat(d['lon']);
+        joinData.push(geoData[0]);
+    });
+
+    var minValue = Math.min(...joinData.map(d => d.properties[metric]));
+    var maxValue = Math.max(...joinData.map(d => d.properties[[metric]]));
+
+    if (map !== null) {
+        map.off();
+        map.remove();
+    }
+
+    map = L.map(selector).setView([13,102], 5);  
+    // L.tileLayer.provider('CartoDB.PositronNoLabels').addTo(map);
     
 
-    const layout = {
-    margin: { r: 0, t: 0, l: 0, b: 0 },
-    font: { family: 'IBM Plex Sans Thai', size: 16 },
-    paper_bgcolor: '#f0f1f3',
-      geo: { fitbounds: 'locations', visible: true }
+    function style(feature) {
+        return {
+            fillColor: interpolateColor(feature.properties[metric], minValue, maxValue, '#EFE9F4', '#5078F2'),
+            weight: 2,
+            opacity: 1,
+            color: 'white',
+            dashArray: '1',
+            fillOpacity: 1
+        };
+    }
+
+    geojsonLayer = L.geoJson(joinData, {
+        style: style,
+        onEachFeature: function (feature, layer) {
+            layer.bindPopup("จังหวัด: " + feature.properties.tname + "<br>" + metric + " : " + feature.properties[metric], {
+                className: 'hoverdata'
+              });
+            layer.on({
+                mouseover: function (e) {
+                    this.openPopup();
+                },
+                mouseout: function (e) {
+                    this.closePopup();
+                },
+            });
+          }
+    }).addTo(map);
+
+    if (dt != 0) {
+        joinData.forEach((d) => {
+            var marker = new L.CircleMarker([d.properties.lat, d.properties.lon],{radius: 0, opacity: 0.1});
+            marker.bindTooltip(d.properties.tname,{
+                                                    permanent: true,
+                                                    direction: 'center',
+                                                    className: "labelstyle"
+                                                  });
+            marker.addTo(map);
+        });
     };
 
-    // if (dt != 0) {
-    //   const textData = filteredData.map((row) => `<b>${row.th_province}</b>`);
-    //   const trace2 = ({
-    //     lat: filteredData['lat'],
-    //     lon: filteredData['lon'],
-    //     mode: 'text',
-    //     text: textData,
-    //     textfont: { family: 'IBM Plex Sans Thai', size: 14, color: 'black' },
-    //     hoverinfo: 'skip'
-    //   });
-    //   dataGeo.push(trace2);
-    // }
-
-    Plotly.newPlot(selector, dataGeo, layout, {displayModeBar: false});
+    map.attributionControl.setPrefix(false);
+    map.fitBounds(geojsonLayer.getBounds());
+    createColorBar('#colorbar-container', minValue, maxValue, '#EFE9F4', '#5078F2', 1);
 };
 
 function updateTable(data, year, dt, metric, type, sex, selector) {
@@ -210,98 +309,35 @@ createDropdownMetric('LE', 'metric-dd-map');
 createDropdownType(pvData, 0, 'type-dd-map');
 createDropdownSex('male', 'sex-dd-map');
 
-// updateMap(pvData, filters.year, filters.dt, filters.metric, filters.ageType, filters.sex, 'map');
+updateLeafletMap(pvData, filters.year, filters.dt, filters.metric, filters.ageType, filters.sex, 'map');
 updateTable(pvData, filters.year, filters.dt, filters.metric, filters.ageType, filters.sex, 'map-table');
 
 document.getElementById('year-dd-map').addEventListener('change', (event) => {
     filters.year = event.target.value;
+    updateLeafletMap(pvData, filters.year, filters.dt, filters.metric, filters.ageType, filters.sex, 'map');
     updateTable(pvData, filters.year, filters.dt, filters.metric, filters.ageType, filters.sex, 'map-table');
 });
 
 document.getElementById('dt-dd-map').addEventListener('change', (event) => {
     filters.dt = event.target.value;
+    updateLeafletMap(pvData, filters.year, filters.dt, filters.metric, filters.ageType, filters.sex, 'map');
     updateTable(pvData, filters.year, filters.dt, filters.metric, filters.ageType, filters.sex, 'map-table');
 });
 
 document.getElementById('metric-dd-map').addEventListener('change', (event) => {
     filters.metric = event.target.value;
+    updateLeafletMap(pvData, filters.year, filters.dt, filters.metric, filters.ageType, filters.sex, 'map');
     updateTable(pvData, filters.year, filters.dt, filters.metric, filters.ageType, filters.sex, 'map-table');
 });
 
 document.getElementById('type-dd-map').addEventListener('change', (event) => {
     filters.ageType = event.target.value;
+    updateLeafletMap(pvData, filters.year, filters.dt, filters.metric, filters.ageType, filters.sex, 'map');
     updateTable(pvData, filters.year, filters.dt, filters.metric, filters.ageType, filters.sex, 'map-table');
 });
 
 document.getElementById('sex-dd-map').addEventListener('change', (event) => {
     filters.sex = event.target.value;
+    updateLeafletMap(pvData, filters.year, filters.dt, filters.metric, filters.ageType, filters.sex, 'map');
     updateTable(pvData, filters.year, filters.dt, filters.metric, filters.ageType, filters.sex, 'map-table');
 });
-
-function updateLeafletMap(data, year, dt, metric, type, sex, selector) {
-    const filteredData = dt == 0
-    ? data.filter((d) => d.year == year && d.type == type && d.sex === sex)
-    : data.filter((d) => d.year == year && d.area_code == dt && d.type == type && d.sex == sex);
-
-    var joinData = [];
-    filteredData.forEach((d) => {
-        var lookupVar = d.post_code;
-        var geoData = mapData.features.filter((d) => d.id == lookupVar);
-        geoData[0]['properties'][metric] = parseFloat(d[metric]);
-        geoData[0]['properties']['lat'] = parseFloat(d['lat']);
-        geoData[0]['properties']['lon'] = parseFloat(d['lon']);
-        joinData.push(geoData[0]);
-    }); 
-
-    var map = L.map(selector).setView([13,102], 5);
-            
-    // L.tileLayer.provider('CartoDB.PositronNoLabels').addTo(map);
-
-    var geojsonLayer = L.geoJson(joinData).addTo(map);
-    map.attributionControl.setPrefix(false);
-    map.fitBounds(geojsonLayer.getBounds());
-
-    function getColor(d) {
-        return d > 90 ? '#800026' :
-               d > 80 ? '#BD0026' :
-               d > 70 ? '#E31A1C' :
-               d > 60 ? '#FC4E2A' :
-               d > 50 ? '#FD8D3C' :
-               d > 40 ? '#FEB24C' :
-               d > 30 ? '#FED976' :
-               d > 20 ? '#FFEDA0' :
-               d > 10 ? '#FFFFCC' :
-                        '#FFFFFF';
-    };
-
-    function style(feature) {
-        return {
-            fillColor: getColor(feature.properties.LE),
-            weight: 2,
-            opacity: 1,
-            color: 'white',
-            dashArray: '3',
-            fillOpacity: 0.7
-        };
-    }
-    
-    L.geoJson(joinData, {style: style}).addTo(map);
-    // L.choropleth(joinData, {
-    //     valueProperty: function (feature) {
-    //         return feature.properties.LE
-    //       }, // which property in the features to use
-    //     scale: ['white', 'red'], // chroma.js scale - include as many as you like
-    //     steps: 5, // number of breaks or steps in range
-    //     mode: 'q', // q for quantile, e for equidistant, k for k-means
-    //     style: {
-    //         color: '#fff', // border color
-    //         weight: 2,
-    //         fillOpacity: 0.8
-    //     },
-    //     onEachFeature: function(feature, layer) {
-    //         layer.bindPopup(feature.properties.value)
-    //     }
-    // }).addTo(map)
-};
-
-updateLeafletMap(pvData, filters.year, filters.dt, filters.metric, filters.ageType, filters.sex, 'map');

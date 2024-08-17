@@ -357,7 +357,31 @@ select {
     height: 400px;
     background-color: #f0f1f3;
     box-sizing: border-box;
-    border: solid black;
+}
+
+.leaflet-tooltip.labelstyle {
+    background-color: transparent;
+    font-family: 'IBM Plex Sans Thai';
+    font-size: 40;
+    font-weight: 600;
+    box-shadow: none;
+    border: none;
+}
+
+.hoverdata .leaflet-popup-content-wrapper {
+    font-family: 'IBM Plex Sans Thai';
+    background: #25a3e0;
+    font-weight: 700;
+}
+
+.hoverdata .leaflet-popup-tip {
+    background: #25a3e0;
+}
+
+#colorbar-container {
+    height: 400px;
+    width: 50px;
+    box-sizing: border-box;
 }
 
 #map-table {
@@ -366,7 +390,6 @@ select {
     margin: 10px 10px 10px 10px;
     background-color: #f0f1f3;
     box-sizing: border-box;
-    border: solid black;
     overflow-y: auto;
 }
 
