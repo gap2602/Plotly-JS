@@ -285,16 +285,20 @@ function downloadImage(format, id) {
     const element = document.getElementById(id);
     html2canvas(element, {
         allowTaint: true,
+        backgroundColor: '#f1f1f3',
         onclone: (document) => {
         // Force the cloned document to use the embedded font
         document.body.style.fontFamily = 'IBM Plex Sans Thai';
         document.body.style.fontWeight = '400';
         }
     }).then(canvas => {
-        const dataUrl = canvas.toDataURL('image/'+format);
+        var dataUrl = canvas.toDataURL('image/'+format);
+        if (format.toLowerCase() === 'jpg' && dataUrl.startsWith('data:image/png')) {
+            dataUrl = canvas.toDataURL('image/jpeg');
+        };
         const link = document.createElement('a');
         link.href = dataUrl;
-        link.download = 'อายุคาดเฉลี่ยระดับประเทศ เขตสุขภาพที่ '+filters.dt +'.'+format;
+        link.download = 'อายุคาดเฉลี่ยของเขตสุขภาพที่ '+filters.dt +'.'+format;
         link.click();
         
     }).catch(error => {
@@ -398,7 +402,7 @@ document.getElementById('download-csv').addEventListener('click', function(e) {
     const filteredDtData = dtData.filter(d => d.year == filters.year && d.dt_num == filters.dt);
     const filteredPvData = pvData.filter(d => d.year == filters.year && d.type == filters.ageType && d.area_code == filters.dt); 
     const filteredPvData2 = filteredPvData.map(x => ({ year: x.year, area_code: x.area_code, type: x.type, sex: x.sex, 
-                                                        th_province: x.th_province, LE: x.LE, HALE: x.HALE, 'LE-HALE': x['LE-HALE']}));
+                                                        th_province: x.th_province, LE: x.LE, HALE: x.HALE}));
     
     const columnMapping = {
       'year': 'ปี พ.ศ.',
@@ -438,43 +442,6 @@ document.getElementById('download-csv').addEventListener('click', function(e) {
     const transformedDtData = transformData(filteredDtData, columnMapping, valueMapping);
     const transformedPvData = transformData(filteredPvData2, columnMapping, valueMapping);
 
-    // Function to convert data to CSV format
-    // function jsonToCSV(jsonData) {
-    //   if (jsonData.length === 0) {
-    //       return '';
-    //   }
-    //   // Get headers
-    //   const headers = Object.keys(jsonData[0]);
-    //   // Create CSV rows
-    //   const csvRows = [];
-    //   // Add header row
-    //   csvRows.push(headers.join(','));
-    //   // Add data rows
-    //   for (const row of jsonData) {
-    //       const values = headers.map(header => {
-    //           const escaped = ('' + row[header]).replace(/"/g, '\\"');
-    //           return `"${escaped}"`;
-    //       });
-    //       csvRows.push(values.join(','));
-    //   }
-    //   // Combine CSV rows into a single string
-    //   return csvRows.join('\n');
-    // }
-    // const csv = jsonToCSV(transformedData);
-    // // Create a Blob with the CSV data
-    // const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    
-    // // Create a link element and trigger download
-    // const link = document.createElement('a');
-    // if (link.download !== undefined) {
-    //     const url = URL.createObjectURL(blob);
-    //     link.setAttribute('href', url);
-    //     link.setAttribute('download', 'อายุคาดเฉลี่ย(LE) และอายุคาดเฉลี่ยของการมีสุขภาวะ(HALE) ระดับประเทศปี พ.ศ. '+filters.year+'.csv');
-    //     link.style.visibility = 'hidden';
-    //     document.body.appendChild(link);
-    //     link.click();
-    //     document.body.removeChild(link);
-    // }
     const workbook = XLSX.utils.book_new();
 
   // Convert your data to worksheets

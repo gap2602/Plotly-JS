@@ -4,11 +4,11 @@
     <title>อายุคาดเฉลี่ย และอายุคาดเฉลี่ยของการมีสุขภาวะของประชากรไทย</title>
     <link rel="stylesheet" href="../css/page-2-province.css"> </head>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.1.0/dist/css/multi-select-tag.css">
+    <link rel="stylesheet" href="../css/multi-select-tag.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="../scripts/plotly-2.34.0.min.js"></script>
+    <script src="../scripts/html2canvas.min.js"></script>
     <script src="../scripts/xlsx.full.min.js"></script>
     <script src="../scripts/multiselect-dropdown.js"></script>
 </head>
@@ -39,7 +39,7 @@
             </div>
         </div>
         <!---->
-        <div class="content">
+        <div class="content" id="content">
             <h2 class="section-name" id="section-name-pv">อายุคาดเฉลี่ย (LE) และอายุคาดเฉลี่ยของการมีสุขภาวะ (HALE) ระดับจังหวัดปี พ.ศ. 2562 (หน่วย: ปี)</h2>
             <div class="year-filter-and-tabs">
                 <div class="year-filter">
@@ -61,6 +61,18 @@
                     <img class="tab-pic" src="../assets/Page2 - Table.png" alt="page2-table">
                     <h3 class="tab-name">ข้อมูลภาพรวม</h3>
                 </a>   
+                <Flex data-html2canvas-ignore>
+                <div class="download-container">
+                    <img src="../assets/download icon.png" alt="Download Image" id="download-image">
+                    <div class="download-menu" id="download-dd">
+                        <div class="download-topic">ข้อมูล</div>
+                        <a href="#" id="download-csv">CSV</a>
+                        <div class="download-topic">รูปภาพ</div>
+                        <a href="#" id="capture-button-jpg">JPG</a>
+                        <a href="#" id="capture-button-png">PNG</a>
+                    </div>
+                </div>
+                </Flex>
             </div>
             <div class="filter-and-content-block">
                 <div id="filter-panel">

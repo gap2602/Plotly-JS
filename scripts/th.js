@@ -127,13 +127,17 @@ d3.csv(ct_path).then(function(ctData) {
     const element = document.getElementById(id);
     html2canvas(element, {
       allowTaint: true,
+      backgroundColor: '#f1f1f3',
       onclone: (document) => {
         // Force the cloned document to use the embedded font
         document.body.style.fontFamily = 'IBM Plex Sans Thai';
         document.body.style.fontWeight = '400';
       }
     }).then(canvas => {
-      const dataUrl = canvas.toDataURL('image/'+format);
+      var dataUrl = canvas.toDataURL('image/'+format);
+      if (format.toLowerCase() === 'jpg' && dataUrl.startsWith('data:image/png')) {
+        dataUrl = canvas.toDataURL('image/jpeg');
+      };
       const link = document.createElement('a');
       link.href = dataUrl;
       link.download = 'อายุคาดเฉลี่ยระดับประเทศ.'+format;
@@ -268,7 +272,7 @@ d3.csv(ct_path).then(function(ctData) {
     }
     const csv = jsonToCSV(transformedData);
     // Create a Blob with the CSV data
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const blob = new Blob(["\ufeff" + csv], { type: 'text/csv;charset=utf-8;' });
     
     // Create a link element and trigger download
     const link = document.createElement('a');

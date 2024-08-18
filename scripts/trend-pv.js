@@ -137,6 +137,31 @@ function createLineChart(data, pv, type, sex, metric, selector) {
     Plotly.newPlot(selector, traceData, layout, {displayModeBar: false});
 };
 
+function downloadImage(format, id) {    
+    const element = document.getElementById(id);
+    html2canvas(element, {
+        allowTaint: true,
+        backgroundColor: '#f1f1f3',
+        onclone: (document) => {
+        // Force the cloned document to use the embedded font
+        document.body.style.fontFamily = 'IBM Plex Sans Thai';
+        document.body.style.fontWeight = '400';
+        }
+    }).then(canvas => {
+        var dataUrl = canvas.toDataURL('image/'+format);
+        if (format.toLowerCase() === 'jpg' && dataUrl.startsWith('data:image/png')) {
+          dataUrl = canvas.toDataURL('image/jpeg');
+        };
+        const link = document.createElement('a');
+        link.href = dataUrl;
+        link.download = 'แนวโน้มอายุคาดเฉลี่ยระดับจังหวัด';
+        link.click();
+        
+    }).catch(error => {
+        console.error('Error capturing element:', error);
+    });
+};
+
 createDropdownPV(pvData, filters.pv, 'pv-dd-trend-pv');
 createDropdownType(pvData, filters.ageType, 'type-dd-trend-pv');
 createDropdownSex(filters.sex, 'sex-dd-trend-pv');
@@ -160,4 +185,110 @@ document.getElementById('sex-dd-trend-pv').addEventListener('change', (event) =>
     filters.sex = event.target.value;
     createLineChart(pvData, filters.pv, filters.ageType, filters.sex, 'LE', 'le-trend-pv');
     createLineChart(pvData, filters.pv, filters.ageType, filters.sex, 'HALE', 'hale-trend-pv');
+});
+
+const image = document.getElementById('download-image');
+const dropdown = document.getElementById('download-dd');
+
+image.addEventListener('click', function() {
+      dropdown.classList.toggle('show');
+});
+
+  // Close the dropdown if the user clicks outside of it
+window.addEventListener('click', function(event) {
+    if (!event.target.matches('#download-image')) {
+        if (dropdown.classList.contains('show')) {
+            dropdown.classList.remove('show');
+        }
+    }
+});
+
+document.getElementById('download-csv').addEventListener('click', function(e) {
+  e.preventDefault(); // Prevent the default link behavior
+  
+  const pvData = JSON.parse(sessionStorage.getItem('pvData'));
+  const filteredData = pvData.filter(d => d.type == filters.ageType && filters.pv.includes(d.th_province) && d.sex == filters.sex);
+  const filteredData2 = filteredData.map(x => ({ year: x.year, area_code: x.area_code, type: x.type, sex: x.sex, 
+                                                      th_province: x.th_province, LE: x.LE, HALE: x.HALE}));
+  const columnMapping = {
+    'year': 'ปี พ.ศ.',
+    'sex': 'เพศ',
+    'type': 'การคำนวณ',
+    'dt_num': 'เขตสุขภาพ',
+    'th_province':'จังหวัด',
+    'area_code': 'เขตสุขภาพ'
+    };
+  const valueMapping = {
+        'sex': {
+            'male': 'ชาย',
+            'female': 'หญิง',
+            'bothsex': 'รวมเพศ'
+        },
+        'type': {
+            '0':'เมื่อแรกเกิด',
+            '60':'เมื่ออายุ 60 ปี'
+        }
+    };
+
+    // Function to transform data
+    function transformData(data, columnMapping, valueMapping) {
+        return data.map(item => {
+            const newItem = {};
+            for (const [oldKey, value] of Object.entries(item)) {
+                const newKey = columnMapping[oldKey] || oldKey;
+                const newValue = valueMapping[oldKey] ? 
+                    (valueMapping[oldKey][value] || value) : value;
+                newItem[newKey] = newValue;
+            }
+            return newItem;
+        });
+    };
+
+    // Transform the data
+    const transformedData = transformData(filteredData2, columnMapping, valueMapping);
+
+    // Function to convert data to CSV format
+    function jsonToCSV(jsonData) {
+    if (jsonData.length === 0) {
+        return '';
+    }
+    // Get headers
+    const headers = Object.keys(jsonData[0]);
+    // Create CSV rows
+    const csvRows = [];
+    // Add header row
+    csvRows.push(headers.join(','));
+    // Add data rows
+    for (const row of jsonData) {
+        const values = headers.map(header => {
+            const escaped = ('' + row[header]).replace(/"/g, '\\"');
+            return `"${escaped}"`;
+        });
+        csvRows.push(values.join(','));
+    }
+    // Combine CSV rows into a single string
+    return csvRows.join('\n');
+    }
+    const csv = jsonToCSV(transformedData);
+    // Create a Blob with the CSV data
+    const blob = new Blob(["\ufeff" + csv], { type: 'text/csv;charset=utf-8;' });
+
+    // Create a link element and trigger download
+    const link = document.createElement('a');
+    if (link.download !== undefined) {
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', 'แนวโน้มอายุคาดเฉลี่ยระดับจังหวัด.csv');
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+});
+
+document.getElementById('capture-button-jpg').addEventListener('click', function() {
+downloadImage('jpg', 'line-chart-block');
+});
+document.getElementById('capture-button-png').addEventListener('click', function() {
+downloadImage('png', 'line-chart-block');
 });
