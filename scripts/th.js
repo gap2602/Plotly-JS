@@ -124,7 +124,7 @@ d3.csv(ct_path).then(function(ctData) {
   };
 
   function downloadImage() {    
-    const element = document.getElementById('both-birth-block');
+    const element = document.getElementById('both-section');
     html2canvas(element).then(canvas => {
       console.log("test");
       const dataUrl = canvas.toDataURL(`image/png`);
