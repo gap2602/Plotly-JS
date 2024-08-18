@@ -1,4 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@100;200;300;400;500;600;700&display=swap');
+@font-face {
+    font-family: 'IBM Plex Sans Thai';
+    font-style: normal;
+    font-weight: 400;
+    src: url('fonts/IBMPlexSansThai-Medium.ttf') format('truetype');
+  }
 
 body {
     font-family: 'IBM Plex Sans Thai';
@@ -431,6 +436,7 @@ select {
     padding: 5px auto;
     border: solid black;
     background-color: black;
+    border-radius: 5px;
 }
 
 .download-menu {
@@ -459,6 +465,11 @@ select {
 
 .show {
     display: block;
+}
+
+.download-topic {
+    font-weight: bold;
+    background-color: #C0C0C0;
 }
 
 @media only screen and (min-width: 800px) {

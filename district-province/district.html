@@ -6,7 +6,8 @@
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="../scripts/plotly-2.34.0.min.js"></script>
+    <script src="../scripts/d3.v7.min.js"></script>
     <script src="../scripts/html2canvas.min.js"></script>
     <script src="../scripts/xlsx.full.min.js"></script>
 </head>
@@ -59,7 +60,17 @@
                 href="../district-province/table.html">
                     <img class="tab-pic" src="../assets/Page2 - Table.png" alt="page2-table">
                     <h3 class="tab-name">ข้อมูลภาพรวม</h3>
-                </a>   
+                </a>
+                <div class="download-container">
+                    <img src="../assets/download icon.png" alt="Download Image" id="download-image">
+                    <div class="download-menu" id="download-dd">
+                        <div class="download-topic">ข้อมูล</div>
+                        <a href="#" id="download-csv">CSV</a>
+                        <div class="download-topic">รูปภาพ</div>
+                        <a href="#" id="capture-button-jpg">JPG</a>
+                        <a href="#" id="capture-button-png">PNG</a>
+                    </div>
+                </div>  
             </div>
             <div class="filter-and-content-block">
                 <div id="filter-panel">

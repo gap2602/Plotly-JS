@@ -91,7 +91,7 @@ function interpolateColor(value, valueMin, valueMax, colorMin, colorMax) {
     value = Math.max(valueMin, Math.min(value, valueMax));
   
     // Calculate the factor (0 to 1) based on where the value falls in the range
-    if (value == valueMin) {
+    if (value == valueMin && value == valueMax) {
         var factor = 1;
     } else {
         var factor = (value - valueMin) / (valueMax - valueMin);
@@ -199,7 +199,7 @@ function updateLeafletMap(data, year, dt, metric, type, sex, selector) {
 
     map = L.map(selector).setView([13,102], 5);  
     // L.tileLayer.provider('CartoDB.PositronNoLabels').addTo(map);
-    
+    console.log(interpolateColor(70.9, 70.9, 73.4, '#EFE9F4', '#5078F2'));
 
     function style(feature) {
         return {
@@ -309,7 +309,7 @@ createDropdownMetric('LE', 'metric-dd-map');
 createDropdownType(pvData, 0, 'type-dd-map');
 createDropdownSex('male', 'sex-dd-map');
 
-updateLeafletMap(pvData, filters.year, filters.dt, filters.metric, filters.ageType, filters.sex, 'map');
+updateLeafletMap(pvData, filters.year, 12, filters.metric, filters.ageType, filters.sex, 'map');
 updateTable(pvData, filters.year, filters.dt, filters.metric, filters.ageType, filters.sex, 'map-table');
 
 document.getElementById('year-dd-map').addEventListener('change', (event) => {

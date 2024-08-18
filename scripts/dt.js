@@ -281,6 +281,27 @@ function updateCardValue(data, year, dt, type, sex, metric, color, selector) {
     document.getElementById(selector).style.color = color;
 };
 
+function downloadImage(format, id) {    
+    const element = document.getElementById(id);
+    html2canvas(element, {
+        allowTaint: true,
+        onclone: (document) => {
+        // Force the cloned document to use the embedded font
+        document.body.style.fontFamily = 'IBM Plex Sans Thai';
+        document.body.style.fontWeight = '400';
+        }
+    }).then(canvas => {
+        const dataUrl = canvas.toDataURL('image/'+format);
+        const link = document.createElement('a');
+        link.href = dataUrl;
+        link.download = 'อายุคาดเฉลี่ยระดับประเทศ เขตสุขภาพที่ '+filters.dt +'.'+format;
+        link.click();
+        
+    }).catch(error => {
+        console.error('Error capturing element:', error);
+    });
+};
+
 createDropdownYear(dtData, 2562, 'year-dd-dt');
 createDropdownDt(dtData, 1, 'dt-dd');
 createDropdownType(0, 'type-dd');
@@ -353,12 +374,127 @@ document.getElementById('type-dd').addEventListener('change', (event) => {
     updateHBarChartPV(pvData, filters.year, filters.dt, filters.ageType, 'female', fm_cl_dark, fm_cl_light, 'pv-female-pv');
 });
 
-document.getElementById('captureButton').addEventListener('click', function() {
-    html2canvas(document.getElementById('dt-block')).then(function(canvas) {
-        var imgData = canvas.toDataURL('image/png');
-        var link = document.createElement('a');
-        link.download = 'captured_image.png';
-        link.href = imgData;
-        link.click();
-    });
+const image = document.getElementById('download-image');
+  const dropdown = document.getElementById('download-dd');
+
+  image.addEventListener('click', function() {
+      dropdown.classList.toggle('show');
 });
+
+  // Close the dropdown if the user clicks outside of it
+window.addEventListener('click', function(event) {
+    if (!event.target.matches('#download-image')) {
+        if (dropdown.classList.contains('show')) {
+            dropdown.classList.remove('show');
+        }
+    }
+});
+
+document.getElementById('download-csv').addEventListener('click', function(e) {
+    e.preventDefault(); // Prevent the default link behavior
+    
+    const dtData = JSON.parse(sessionStorage.getItem('dtData'));
+    const pvData = JSON.parse(sessionStorage.getItem('pvData'));
+    const filteredDtData = dtData.filter(d => d.year == filters.year && d.dt_num == filters.dt);
+    const filteredPvData = pvData.filter(d => d.year == filters.year && d.type == filters.ageType && d.area_code == filters.dt); 
+    const filteredPvData2 = filteredPvData.map(x => ({ year: x.year, area_code: x.area_code, type: x.type, sex: x.sex, 
+                                                        th_province: x.th_province, LE: x.LE, HALE: x.HALE, 'LE-HALE': x['LE-HALE']}));
+    
+    const columnMapping = {
+      'year': 'ปี พ.ศ.',
+      'sex': 'เพศ',
+      'type': 'การคำนวณ',
+      'dt_num': 'เขตสุขภาพ',
+      'th_province':'จังหวัด',
+      'area_code': 'เขตสุขภาพ'
+    };
+    const valueMapping = {
+        'sex': {
+            'male': 'ชาย',
+            'female': 'หญิง',
+            'bothsex': 'รวมเพศ'
+        },
+        'type': {
+            '0':'เมื่อแรกเกิด',
+            '60':'เมื่ออายุ 60 ปี'
+        }
+    };
+
+    // Function to transform data
+    function transformData(data, columnMapping, valueMapping) {
+        return data.map(item => {
+            const newItem = {};
+            for (const [oldKey, value] of Object.entries(item)) {
+                const newKey = columnMapping[oldKey] || oldKey;
+                const newValue = valueMapping[oldKey] ? 
+                    (valueMapping[oldKey][value] || value) : value;
+                newItem[newKey] = newValue;
+            }
+            return newItem;
+        });
+    };
+
+    // Transform the data
+    const transformedDtData = transformData(filteredDtData, columnMapping, valueMapping);
+    const transformedPvData = transformData(filteredPvData2, columnMapping, valueMapping);
+
+    // Function to convert data to CSV format
+    // function jsonToCSV(jsonData) {
+    //   if (jsonData.length === 0) {
+    //       return '';
+    //   }
+    //   // Get headers
+    //   const headers = Object.keys(jsonData[0]);
+    //   // Create CSV rows
+    //   const csvRows = [];
+    //   // Add header row
+    //   csvRows.push(headers.join(','));
+    //   // Add data rows
+    //   for (const row of jsonData) {
+    //       const values = headers.map(header => {
+    //           const escaped = ('' + row[header]).replace(/"/g, '\\"');
+    //           return `"${escaped}"`;
+    //       });
+    //       csvRows.push(values.join(','));
+    //   }
+    //   // Combine CSV rows into a single string
+    //   return csvRows.join('\n');
+    // }
+    // const csv = jsonToCSV(transformedData);
+    // // Create a Blob with the CSV data
+    // const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    
+    // // Create a link element and trigger download
+    // const link = document.createElement('a');
+    // if (link.download !== undefined) {
+    //     const url = URL.createObjectURL(blob);
+    //     link.setAttribute('href', url);
+    //     link.setAttribute('download', 'อายุคาดเฉลี่ย(LE) และอายุคาดเฉลี่ยของการมีสุขภาวะ(HALE) ระดับประเทศปี พ.ศ. '+filters.year+'.csv');
+    //     link.style.visibility = 'hidden';
+    //     document.body.appendChild(link);
+    //     link.click();
+    //     document.body.removeChild(link);
+    // }
+    const workbook = XLSX.utils.book_new();
+
+  // Convert your data to worksheets
+    const worksheet1 = XLSX.utils.json_to_sheet(transformedDtData);
+    const worksheet2 = XLSX.utils.json_to_sheet(transformedPvData);
+
+    // Add the worksheets to the workbook
+    XLSX.utils.book_append_sheet(workbook, worksheet1, 'เขตสุขภาพที่ '+filters.dt);
+    XLSX.utils.book_append_sheet(workbook, worksheet2, 'จังหวัด');
+
+    // Generate Excel file and force download
+    XLSX.writeFile(workbook, 'อายุคาดเฉลี่ยในเขตสุขภาพที่ '+filters.dt+' ปี พ.ศ.'+filters.year+'.xlsx' || 'อายุคาดเฉลี่ยในเขตสุขภาพ');
+
+  });
+
+  document.getElementById('capture-button-jpg').addEventListener('click', function() {
+    downloadImage('jpg', 'content');
+  });
+  document.getElementById('capture-button-png').addEventListener('click', function() {
+    downloadImage('png', 'content');
+  });
+
+

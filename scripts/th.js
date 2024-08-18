@@ -123,14 +123,20 @@ d3.csv(ct_path).then(function(ctData) {
     document.getElementById(selector).style.color = color;
   };
 
-  function downloadImage() {    
-    const element = document.getElementById('both-section');
-    html2canvas(element).then(canvas => {
-      console.log("test");
-      const dataUrl = canvas.toDataURL(`image/png`);
+  function downloadImage(format, id) {    
+    const element = document.getElementById(id);
+    html2canvas(element, {
+      allowTaint: true,
+      onclone: (document) => {
+        // Force the cloned document to use the embedded font
+        document.body.style.fontFamily = 'IBM Plex Sans Thai';
+        document.body.style.fontWeight = '400';
+      }
+    }).then(canvas => {
+      const dataUrl = canvas.toDataURL('image/'+format);
       const link = document.createElement('a');
       link.href = dataUrl;
-      link.download = 'อายุคาดเฉลี่ยระดับประเทศ.png';
+      link.download = 'อายุคาดเฉลี่ยระดับประเทศ.'+format;
       link.click();
       
     }).catch(error => {
@@ -182,104 +188,107 @@ d3.csv(ct_path).then(function(ctData) {
   });
 
   const image = document.getElementById('download-image');
-const dropdown = document.getElementById('download-dd');
+  const dropdown = document.getElementById('download-dd');
 
-image.addEventListener('click', function() {
-    dropdown.classList.toggle('show');
-});
+  image.addEventListener('click', function() {
+      dropdown.classList.toggle('show');
+  });
 
-// Close the dropdown if the user clicks outside of it
-window.addEventListener('click', function(event) {
-    if (!event.target.matches('#download-image')) {
-        if (dropdown.classList.contains('show')) {
-            dropdown.classList.remove('show');
-        }
-    }
-});
-
-document.getElementById('download-csv').addEventListener('click', function(e) {
-  e.preventDefault(); // Prevent the default link behavior
-  
-  const data = JSON.parse(sessionStorage.getItem('ctData'));
-  const filteredData = data.filter(d => d.year == filters.year);
-  const columnMapping = {
-    'year': 'ปี พ.ศ.',
-    'sex': 'เพศ',
-    'type': 'การคำนวณ'
-  };
-
-  // Define value mapping
-  const valueMapping = {
-      'sex': {
-          'male': 'ชาย',
-          'female': 'หญิง',
-          'bothsex': 'รวมเพศ'
-      },
-      'type': {
-          '0':'เมื่อแรกเกิด',
-          '60':'เมื่ออายุ 60 ปี'
-      }
-  };
-
-  // Function to transform data
-  function transformData(data, columnMapping, valueMapping) {
-      return data.map(item => {
-          const newItem = {};
-          for (const [oldKey, value] of Object.entries(item)) {
-              const newKey = columnMapping[oldKey] || oldKey;
-              const newValue = valueMapping[oldKey] ? 
-                  (valueMapping[oldKey][value] || value) : value;
-              newItem[newKey] = newValue;
+  // Close the dropdown if the user clicks outside of it
+  window.addEventListener('click', function(event) {
+      if (!event.target.matches('#download-image')) {
+          if (dropdown.classList.contains('show')) {
+              dropdown.classList.remove('show');
           }
-          return newItem;
-      });
-  };
+      }
+  });
 
-  // Transform the data
-  const transformedData = transformData(filteredData, columnMapping, valueMapping);
+  document.getElementById('download-csv').addEventListener('click', function(e) {
+    e.preventDefault(); // Prevent the default link behavior
+    
+    const data = JSON.parse(sessionStorage.getItem('ctData'));
+    const filteredData = data.filter(d => d.year == filters.year);
+    const columnMapping = {
+      'year': 'ปี พ.ศ.',
+      'sex': 'เพศ',
+      'type': 'การคำนวณ'
+    };
 
-  // Function to convert data to CSV format
-  function jsonToCSV(jsonData) {
-    if (jsonData.length === 0) {
-        return '';
-    }
-    // Get headers
-    const headers = Object.keys(jsonData[0]);
-    // Create CSV rows
-    const csvRows = [];
-    // Add header row
-    csvRows.push(headers.join(','));
-    // Add data rows
-    for (const row of jsonData) {
-        const values = headers.map(header => {
-            const escaped = ('' + row[header]).replace(/"/g, '\\"');
-            return `"${escaped}"`;
+    // Define value mapping
+    const valueMapping = {
+        'sex': {
+            'male': 'ชาย',
+            'female': 'หญิง',
+            'bothsex': 'รวมเพศ'
+        },
+        'type': {
+            '0':'เมื่อแรกเกิด',
+            '60':'เมื่ออายุ 60 ปี'
+        }
+    };
+
+    // Function to transform data
+    function transformData(data, columnMapping, valueMapping) {
+        return data.map(item => {
+            const newItem = {};
+            for (const [oldKey, value] of Object.entries(item)) {
+                const newKey = columnMapping[oldKey] || oldKey;
+                const newValue = valueMapping[oldKey] ? 
+                    (valueMapping[oldKey][value] || value) : value;
+                newItem[newKey] = newValue;
+            }
+            return newItem;
         });
-        csvRows.push(values.join(','));
-    }
-    // Combine CSV rows into a single string
-    return csvRows.join('\n');
-  }
-  const csv = jsonToCSV(transformedData);
-  // Create a Blob with the CSV data
-  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-  
-  // Create a link element and trigger download
-  const link = document.createElement('a');
-  if (link.download !== undefined) {
-      const url = URL.createObjectURL(blob);
-      link.setAttribute('href', url);
-      link.setAttribute('download', 'อายุคาดเฉลี่ย(LE) และอายุคาดเฉลี่ยของการมีสุขภาวะ(HALE) ระดับประเทศปี พ.ศ. '+filters.year+'.csv');
-      link.style.visibility = 'hidden';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-  }
-});
+    };
 
-document.getElementById('capture-button').addEventListener('click', function() {
-  downloadImage();
-});
+    // Transform the data
+    const transformedData = transformData(filteredData, columnMapping, valueMapping);
+
+    // Function to convert data to CSV format
+    function jsonToCSV(jsonData) {
+      if (jsonData.length === 0) {
+          return '';
+      }
+      // Get headers
+      const headers = Object.keys(jsonData[0]);
+      // Create CSV rows
+      const csvRows = [];
+      // Add header row
+      csvRows.push(headers.join(','));
+      // Add data rows
+      for (const row of jsonData) {
+          const values = headers.map(header => {
+              const escaped = ('' + row[header]).replace(/"/g, '\\"');
+              return `"${escaped}"`;
+          });
+          csvRows.push(values.join(','));
+      }
+      // Combine CSV rows into a single string
+      return csvRows.join('\n');
+    }
+    const csv = jsonToCSV(transformedData);
+    // Create a Blob with the CSV data
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    
+    // Create a link element and trigger download
+    const link = document.createElement('a');
+    if (link.download !== undefined) {
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', 'อายุคาดเฉลี่ย(LE) และอายุคาดเฉลี่ยของการมีสุขภาวะ(HALE) ระดับประเทศปี พ.ศ. '+filters.year+'.csv');
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+  });
+
+  document.getElementById('capture-button-jpg').addEventListener('click', function() {
+    downloadImage('jpg', 'content');
+  });
+  document.getElementById('capture-button-png').addEventListener('click', function() {
+    downloadImage('png', 'content');
+  });
 
 });
 

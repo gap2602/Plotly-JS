@@ -8,8 +8,7 @@
     <meta charset="UTF-8">
     <script src="scripts/plotly-2.34.0.min.js"></script>
     <script src="scripts/d3.v7.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="scripts/xlsx.full.min.js"></script>
+    <script src="scripts/html2canvas.min.js"></script>
 </head>
 <body>
     <h1 class="header">อายุคาดเฉลี่ย และอายุคาดเฉลี่ยของการมีสุขภาวะของประชากรไทย พ.ศ. - ระดับประเทศและจังหวัด</h1>
@@ -118,10 +117,11 @@
                 <div class="download-container">
                     <img src="assets/download icon.png" alt="Download Image" id="download-image">
                     <div class="download-menu" id="download-dd">
-                        <li>ข้อมูล</li>
+                        <div class="download-topic">ข้อมูล</div>
                         <a href="#" id="download-csv">CSV</a>
-                        <li>รูปภาพ</li>
-                        <a href="#" id="capture-button">PNG</a>
+                        <div class="download-topic">รูปภาพ</div>
+                        <a href="#" id="capture-button-jpg">JPG</a>
+                        <a href="#" id="capture-button-png">PNG</a>
                     </div>
                 </div>
             </div>
