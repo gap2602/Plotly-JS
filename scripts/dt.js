@@ -190,14 +190,14 @@ function updateHBarChart(data, year, dt, type, sex, colorLE, colorHALE, selector
 };
 
 function updateHBarChartPV(data, year, dt, type, sex, colorLE, colorHALE, selector) {
-    const filteredData = data.filter(d => d.year == year && d.area_code == dt && d.type == type && d.sex == sex); 
+    const filteredData = data.filter(d => d.year == year && d.area_code == dt && d.type == type && d.sex == sex);
 
     const trace1 = {
         x: filteredData.map(d => d.HALE),
         y: filteredData.map(d => d.th_province),
         type: 'bar',
         orientation: 'h',
-        text: '<b>'+parseFloat(filteredData[0].HALE).toFixed(1)+'</b>', 
+        text: filteredData.map(d => '<b>' + parseFloat(d.HALE).toFixed(1) + '</b>'), 
         textposition: 'outside',
         textangle: 0,
         textfont: {
@@ -217,7 +217,7 @@ function updateHBarChartPV(data, year, dt, type, sex, colorLE, colorHALE, select
         y: filteredData.map(d => d.th_province),
         type: 'bar',
         orientation: 'h',
-        text: '<b>'+parseFloat(filteredData[0].LE).toFixed(1)+'</b>', 
+        text: filteredData.map(d => '<b>' + parseFloat(d.LE).toFixed(1) + '</b>'), 
         textposition: 'outside',
         textangle: 0,
         textfont: {
@@ -295,7 +295,9 @@ function downloadImage(format, id) {
         const link = document.createElement('a');
         link.href = dataUrl;
         link.download = 'อายุคาดเฉลี่ยระดับประเทศ เขตสุขภาพที่ '+filters.dt +'.'+format;
+        document.getElementById("dropdown-dd").classList.toggle('show');
         link.click();
+        document.getElementById("dropdown-dd").classList.toggle('show');
         
     }).catch(error => {
         console.error('Error capturing element:', error);
@@ -496,5 +498,4 @@ document.getElementById('download-csv').addEventListener('click', function(e) {
   document.getElementById('capture-button-png').addEventListener('click', function() {
     downloadImage('png', 'content');
   });
-
 

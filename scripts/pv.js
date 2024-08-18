@@ -227,7 +227,7 @@ function updateHBarChartPVCP(data, year, pv, type, sex, colorLE, colorHALE, sele
         y: filteredData.map(d => d.th_province),
         type: 'bar',
         orientation: 'h',
-        text: '<b>'+parseFloat(filteredData[0].HALE).toFixed(1)+'</b>', 
+        text: filteredData.map(d => '<b>' + parseFloat(d.HALE).toFixed(1) + '</b>'), 
         textposition: 'outside',
         textangle: 0,
         textfont: {
@@ -246,7 +246,7 @@ function updateHBarChartPVCP(data, year, pv, type, sex, colorLE, colorHALE, sele
         y: filteredData.map(d => d.th_province),
         type: 'bar',
         orientation: 'h',
-        text: '<b>'+parseFloat(filteredData[0].LE).toFixed(1)+'</b>', 
+        text: filteredData.map(d => '<b>' + parseFloat(d.LE).toFixed(1) + '</b>'), 
         textposition: 'outside',
         textangle: 0,
         textfont: {
