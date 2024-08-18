@@ -295,9 +295,7 @@ function downloadImage(format, id) {
         const link = document.createElement('a');
         link.href = dataUrl;
         link.download = 'อายุคาดเฉลี่ยระดับประเทศ เขตสุขภาพที่ '+filters.dt +'.'+format;
-        document.getElementById("dropdown-dd").classList.toggle('show');
         link.click();
-        document.getElementById("dropdown-dd").classList.toggle('show');
         
     }).catch(error => {
         console.error('Error capturing element:', error);
