@@ -5,11 +5,10 @@ const ac_path = "https://raw.githubusercontent.com/gap2602/Plotly-JS/main/data/a
 const ll_path = "https://raw.githubusercontent.com/gap2602/Plotly-JS/main/data/province_lat_lon.csv";
 const pv_map = "https://raw.githubusercontent.com/gap2602/Plotly-JS/main/data/thailand_map.geojson";
 
-Plotly.d3.csv(dt_path, function(dtData) {
-  Plotly.d3.csv(pv_path, function(pvData) {
-    Plotly.d3.csv(ac_path, function(acData) {
-      Plotly.d3.csv(ll_path, function(llData) {
-        
+d3.csv(dt_path).then(function(dtData) {
+  d3.csv(pv_path).then(function(pvData) {
+    d3.csv(ac_path).then(function(acData) {
+      d3.csv(ll_path).then(function(llData) {
         const map1 = new Map(acData.map(d => [d.post_code, d]));
         const map2 = new Map(llData.map(d => [d.post_code, d]));
         // Left join data from file1 and file2
@@ -27,14 +26,15 @@ Plotly.d3.csv(dt_path, function(dtData) {
         sessionStorage.setItem('pvData', JSON.stringify(joinedDataLL));
       });
     });
-  });    
+  });
 });
 
-Plotly.d3.json(pv_map, function(mapData) {
+fetch(pv_map).then(response => response.json()).then(mapData => {
   sessionStorage.setItem('mapData', JSON.stringify(mapData));
-});
+})
 
-Plotly.d3.csv(ct_path, function(ctData) {
+let filters;
+d3.csv(ct_path).then(function(ctData) {
   sessionStorage.setItem('ctData', JSON.stringify(ctData));
 
   const b_cl_dark = "#84b81a";
@@ -44,7 +44,7 @@ Plotly.d3.csv(ct_path, function(ctData) {
   const fm_cl_dark = "#b81a84";
   const fm_cl_light = "#e025a3";
 
-  const filters = { year: 2562};
+  filters = { year: 2562};
 
   const data = JSON.parse(sessionStorage.getItem('ctData'));
 
@@ -123,6 +123,21 @@ Plotly.d3.csv(ct_path, function(ctData) {
     document.getElementById(selector).style.color = color;
   };
 
+  function downloadImage() {    
+    const element = document.getElementById('both-birth-block');
+    html2canvas(element).then(canvas => {
+      console.log("test");
+      const dataUrl = canvas.toDataURL(`image/png`);
+      const link = document.createElement('a');
+      link.href = dataUrl;
+      link.download = 'อายุคาดเฉลี่ยระดับประเทศ.png';
+      link.click();
+      
+    }).catch(error => {
+      console.error('Error capturing element:', error);
+    });
+  };
+
   createDropdown(data, filters.year, 'year-dd-th');
   createBarChart(data, filters.year, 0, 'bothsex', b_cl_dark, b_cl_light,'both-at-birth');
   createBarChart(data, filters.year, 60, 'bothsex', b_cl_dark, b_cl_light,'both-at-60');
@@ -165,11 +180,106 @@ Plotly.d3.csv(ct_path, function(ctData) {
     updateCardValue(data, filters.year, 60, 'female', 'LE', fm_cl_dark, 'female-at-60-le');
     updateCardValue(data, filters.year, 60, 'female', 'HALE', fm_cl_dark, 'female-at-60-hale');
   });
+
+  const image = document.getElementById('download-image');
+const dropdown = document.getElementById('download-dd');
+
+image.addEventListener('click', function() {
+    dropdown.classList.toggle('show');
 });
 
-document.getElementById('xport').addEventListener("click", async() => {
-  const wb = XLSX.utils.book_new();
-  const ws = XLSX.utils.json_to_sheet(data.filter(d => d.year == 2562));
-  XLSX.utils.book_append_sheet(wb, ws, "test");
-  XLSX.writeFile(wb, "SheetJSESMTest.xlsx");
+// Close the dropdown if the user clicks outside of it
+window.addEventListener('click', function(event) {
+    if (!event.target.matches('#download-image')) {
+        if (dropdown.classList.contains('show')) {
+            dropdown.classList.remove('show');
+        }
+    }
 });
+
+document.getElementById('download-csv').addEventListener('click', function(e) {
+  e.preventDefault(); // Prevent the default link behavior
+  
+  const data = JSON.parse(sessionStorage.getItem('ctData'));
+  const filteredData = data.filter(d => d.year == filters.year);
+  const columnMapping = {
+    'year': 'ปี พ.ศ.',
+    'sex': 'เพศ',
+    'type': 'การคำนวณ'
+  };
+
+  // Define value mapping
+  const valueMapping = {
+      'sex': {
+          'male': 'ชาย',
+          'female': 'หญิง',
+          'bothsex': 'รวมเพศ'
+      },
+      'type': {
+          '0':'เมื่อแรกเกิด',
+          '60':'เมื่ออายุ 60 ปี'
+      }
+  };
+
+  // Function to transform data
+  function transformData(data, columnMapping, valueMapping) {
+      return data.map(item => {
+          const newItem = {};
+          for (const [oldKey, value] of Object.entries(item)) {
+              const newKey = columnMapping[oldKey] || oldKey;
+              const newValue = valueMapping[oldKey] ? 
+                  (valueMapping[oldKey][value] || value) : value;
+              newItem[newKey] = newValue;
+          }
+          return newItem;
+      });
+  };
+
+  // Transform the data
+  const transformedData = transformData(filteredData, columnMapping, valueMapping);
+
+  // Function to convert data to CSV format
+  function jsonToCSV(jsonData) {
+    if (jsonData.length === 0) {
+        return '';
+    }
+    // Get headers
+    const headers = Object.keys(jsonData[0]);
+    // Create CSV rows
+    const csvRows = [];
+    // Add header row
+    csvRows.push(headers.join(','));
+    // Add data rows
+    for (const row of jsonData) {
+        const values = headers.map(header => {
+            const escaped = ('' + row[header]).replace(/"/g, '\\"');
+            return `"${escaped}"`;
+        });
+        csvRows.push(values.join(','));
+    }
+    // Combine CSV rows into a single string
+    return csvRows.join('\n');
+  }
+  const csv = jsonToCSV(transformedData);
+  // Create a Blob with the CSV data
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  
+  // Create a link element and trigger download
+  const link = document.createElement('a');
+  if (link.download !== undefined) {
+      const url = URL.createObjectURL(blob);
+      link.setAttribute('href', url);
+      link.setAttribute('download', 'อายุคาดเฉลี่ย(LE) และอายุคาดเฉลี่ยของการมีสุขภาวะ(HALE) ระดับประเทศปี พ.ศ. '+filters.year+'.csv');
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+  }
+});
+
+document.getElementById('capture-button').addEventListener('click', function() {
+  downloadImage();
+});
+
+});
+

@@ -6,7 +6,9 @@
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="scripts/plotly-2.34.0.min.js"></script>
+    <script src="scripts/d3.v7.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="scripts/xlsx.full.min.js"></script>
 </head>
 <body>
@@ -34,10 +36,9 @@
                 </div>
                 <H4 class="menu-name">แนวโน้ม LE และ HALE</H4>
             </div>
-            <button id="xport">Export</button>
         </div>
         <!---->
-        <div class="content">
+        <div class="content", id="content">
             <h2 class="section-name" id="section-name-thailand">อายุคาดเฉลี่ย (LE) และอายุคาดเฉลี่ยของการมีสุขภาวะ (HALE) ระดับประเทศปี พ.ศ. 2562 (หน่วย: ปี)</H2>
             <div class="content-block">
                 <div id="filter-and-type">
@@ -112,6 +113,15 @@
                             <div class="card-box-left">LE<br><div id="female-at-60-le"></div></div>
                             <div class="card-box-right">HALE<br><div id="female-at-60-hale"></div></div>
                         </div>
+                    </div>
+                </div>
+                <div class="download-container">
+                    <img src="assets/download icon.png" alt="Download Image" id="download-image">
+                    <div class="download-menu" id="download-dd">
+                        <li>ข้อมูล</li>
+                        <a href="#" id="download-csv">CSV</a>
+                        <li>รูปภาพ</li>
+                        <a href="#" id="capture-button">PNG</a>
                     </div>
                 </div>
             </div>
