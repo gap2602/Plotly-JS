@@ -11,16 +11,31 @@ const filters = {
     const sortPV = uniquePV.sort();
     const dropdown = document.getElementById(selector);
     const defaultValue = default_value;
+
     sortPV.forEach(pv => {
     const option = document.createElement('option');
     option.value = pv;
     option.text = pv;
-
-    if (pv == defaultValue) {
-        option.selected = true;
-    }
     dropdown.appendChild(option);
     });
+
+    // Initialize Select2
+    $(dropdown).select2({
+        placeholder: 'เลือกจังหวัด',
+        maximumSelectionLength: 7,
+        language: {
+            maximumSelected: function (e) {
+                return "คุณสามารถเลือกได้สูงสุด " + e.maximum + " จังหวัด";
+            }
+        }
+    });
+
+    // Set default value if provided
+    if (default_value) {
+        $(dropdown).val(default_value).trigger('change');
+    }
+
+    
 };
 
 
@@ -32,11 +47,15 @@ function createDropdownType(data, default_value, selector) {
     const option = document.createElement('option');
     option.value = type;
     option.text = type == 0 ? "เมื่อแรกเกิด (at birth)" : "เมื่ออายุ 60 ปี";
-    if (type == defaultValue) {
-        option.selected = true;
-    }
     dropdown.appendChild(option);
     });
+    $(dropdown).select2({
+        placeholder: 'เลือกการคำนวณ'
+    });
+    // Set default value if provided
+    if (default_value) {
+        $(dropdown).val(default_value).trigger('change');
+    }
 };
 
 function createDropdownSex(default_value, selector) {
@@ -47,11 +66,15 @@ function createDropdownSex(default_value, selector) {
     const defaultValue = default_value;
     option.value = s;
     option.text = s == 'male' ? "เพศชาย" : "เพศหญิง";
-    if (s == defaultValue) {
-        option.selected = true;
-    }
     dropdown.appendChild(option);
     });
+    $(dropdown).select2({
+        placeholder: 'เลือกเพศ'
+    });
+    // Set default value if provided
+    if (default_value) {
+        $(dropdown).val(default_value).trigger('change');
+    }
 };
 
 function createLineChart(data, pv, type, sex, metric, selector) {
@@ -168,21 +191,20 @@ createDropdownSex(filters.sex, 'sex-dd-trend-pv');
 createLineChart(pvData, filters.pv, filters.ageType, filters.sex, 'LE', 'le-trend-pv');
 createLineChart(pvData, filters.pv, filters.ageType, filters.sex, 'HALE', 'hale-trend-pv');
 
-const selectElement = document.getElementById('pv-dd-trend-pv');
-selectElement.addEventListener('change', (event) => {
-    filters.pv = Array.from(selectElement.selectedOptions).map(option => option.value);
+$('#pv-dd-trend-pv').on('change', function(e) {
+    filters.pv = $(this).val() || [];
     createLineChart(pvData, filters.pv, filters.ageType, filters.sex, 'LE', 'le-trend-pv');
     createLineChart(pvData, filters.pv, filters.ageType, filters.sex, 'HALE', 'hale-trend-pv');
 });
 
-document.getElementById('type-dd-trend-pv').addEventListener('change', (event) => {
-    filters.ageType = event.target.value;
+$('#type-dd-trend-pv').on('change', function(e) {
+    filters.ageType = $(this).val() || [];
     createLineChart(pvData, filters.pv, filters.ageType, filters.sex, 'LE', 'le-trend-pv');
     createLineChart(pvData, filters.pv, filters.ageType, filters.sex, 'HALE', 'hale-trend-pv');
 });
 
-document.getElementById('sex-dd-trend-pv').addEventListener('change', (event) => {
-    filters.sex = event.target.value;
+$('#sex-dd-trend-pv').on('change', function(e) {
+    filters.sex = $(this).val() || [];
     createLineChart(pvData, filters.pv, filters.ageType, filters.sex, 'LE', 'le-trend-pv');
     createLineChart(pvData, filters.pv, filters.ageType, filters.sex, 'HALE', 'hale-trend-pv');
 });

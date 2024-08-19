@@ -20,29 +20,44 @@ function createDropdownYear(data, default_value, selector) {
     const option = document.createElement('option');
     option.value = year;
     option.text = year;
-
-    if (year == defaultValue) {
-        option.selected = true;
-    }
     dropdown.appendChild(option);
     });
+    $(dropdown).select2({
+        placeholder: 'เลือกปี พ.ศ.'
+    });
+    // Set default value if provided
+    if (default_value) {
+        $(dropdown).val(default_value).trigger('change');
+    }
 };
 
 function createDropdownPV(data, default_value, selector) {
     const uniquePV = [...new Set(data.map(d => d.th_province))];
     const sortPV = uniquePV.sort();
     const dropdown = document.getElementById(selector);
-    const defaultValue = default_value;
+    
     sortPV.forEach(pv => {
-    const option = document.createElement('option');
-    option.value = pv;
-    option.text = pv;
-
-    if (pv == defaultValue) {
-        option.selected = true;
-    }
-    dropdown.appendChild(option);
+        const option = document.createElement('option');
+        option.value = pv;
+        option.text = pv;
+        dropdown.appendChild(option);
     });
+
+    // Initialize Select2
+    $(dropdown).select2({
+        placeholder: 'เลือกจังหวัด',
+        maximumSelectionLength: 5,
+        language: {
+            maximumSelected: function (e) {
+                return "คุณสามารถเลือกได้สูงสุด " + e.maximum + " จังหวัด";
+            }
+        }
+    });
+
+    // Set default value if provided
+    if (default_value) {
+        $(dropdown).val(default_value).trigger('change');
+    }
 };
 
 function createDropdownType(default_value, selector) {
@@ -53,11 +68,15 @@ function createDropdownType(default_value, selector) {
     const option = document.createElement('option');
     option.value = type;
     option.text = type == 0 ? "เมื่อแรกเกิด (at birth)" : "เมื่ออายุ 60 ปี";
-    if (type == defaultValue) {
-        option.selected = true;
-    }
     dropdown.appendChild(option);
     });
+    $(dropdown).select2({
+        placeholder: 'เลือกการคำนวณ'
+    });
+    // Set default value if provided
+    if (default_value) {
+        $(dropdown).val(default_value).trigger('change');
+    }
 };
 
 function updateBarChart(data, year, pv, type, sex, colorLeft, colorRight, selector) {
@@ -363,9 +382,11 @@ updateHBarChartPV(pvData, filters.year, filters.intPV, filters.ageType, 'female'
 updateHBarChartPVCP(pvData, filters.year, filters.cpPV, filters.ageType, 'male', m_cl_dark, m_cl_light, 'pv-cp-male-pv');
 updateHBarChartPVCP(pvData, filters.year, filters.cpPV, filters.ageType, 'female', fm_cl_dark, fm_cl_light, 'pv-cp-female-pv');
 
-document.getElementById('year-dd-pv').addEventListener('change', (event) => {
-    filters.year = event.target.value;
-    document.getElementById("section-name-pv").innerHTML = "อายุคาดเฉลี่ย (LE) และอายุคาดเฉลี่ยของการมีสุขภาวะ (HALE) ระดับประเทศปี พ.ศ. " + event.target.value + " (หน่วย: ปี)";
+
+$('#year-dd-pv').on('change', function(e) {
+    filters.year = $(this).val() || [];
+    var selectedText = $(this).find(':selected').text();
+    document.getElementById("section-name-pv").innerHTML = "อายุคาดเฉลี่ย (LE) และอายุคาดเฉลี่ยของการมีสุขภาวะ (HALE) ระดับประเทศปี พ.ศ. " + selectedText + " (หน่วย: ปี)";
     updateBarChart(pvData, filters.year, filters.intPV, 0, 'male', m_cl_dark, m_cl_light, "pv-1-male-at-birth");
     updateBarChart(pvData, filters.year, filters.intPV, 60, 'male', m_cl_dark, m_cl_light, "pv-1-male-at-60");
     updateBarChart(pvData, filters.year, filters.intPV, 0, 'female', fm_cl_dark, fm_cl_light, "pv-1-female-at-birth");
@@ -384,8 +405,8 @@ document.getElementById('year-dd-pv').addEventListener('change', (event) => {
     updateHBarChartPVCP(pvData, filters.year, filters.cpPV, filters.ageType, 'female', fm_cl_dark, fm_cl_light, 'pv-cp-female-pv');
 });
 
-document.getElementById('pv-dd').addEventListener('change', (event) => {
-    filters.intPV = event.target.value;
+$('#pv-dd').on('change', function(e) {
+    filters.intPV = $(this).val() || [];
     document.getElementById("content-name-1-pv").innerHTML = "ภาพรวมจังหวัด " + event.target.value;
     updateBarChart(pvData, filters.year, filters.intPV, 0, 'male', m_cl_dark, m_cl_light, "pv-1-male-at-birth");
     updateBarChart(pvData, filters.year, filters.intPV, 60, 'male', m_cl_dark, m_cl_light, "pv-1-male-at-60");
@@ -403,37 +424,28 @@ document.getElementById('pv-dd').addEventListener('change', (event) => {
     updateHBarChartPV(pvData, filters.year, filters.intPV, filters.ageType, 'female', fm_cl_dark, fm_cl_light, 'pv-1-female-pv');
 });
 
-const selectElement = document.getElementById('pv-cp-dd');
-selectElement.addEventListener('change', (event) => {
-    filters.cpPV = Array.from(selectElement.selectedOptions).map(option => option.value);
-    // limitOption('pv-cp-dd');
+
+$('#pv-cp-dd').on('change', function(e) {
+    filters.cpPV = $(this).val() || [];
     updateHBarChartPVCP(pvData, filters.year, filters.cpPV, filters.ageType, 'male', m_cl_dark, m_cl_light, 'pv-cp-male-pv');
     updateHBarChartPVCP(pvData, filters.year, filters.cpPV, filters.ageType, 'female', fm_cl_dark, fm_cl_light, 'pv-cp-female-pv');
 });
 
-document.getElementById('type-dd-pv').addEventListener('change', (event) => {
-    filters.ageType = event.target.value;
-    document.getElementById("content-name-2-pv").innerHTML = "เปรียบเทียบระหว่างจังหวัด - " + event.target.options[event.target.selectedIndex].text;
+$('#type-dd-pv').on('change', function(e) {
+    filters.ageType = $(this).val() || [];
+    var selectedText = $(this).find(':selected').text();
+    document.getElementById("content-name-2-pv").innerHTML = "เปรียบเทียบระหว่างจังหวัด - " + selectedText;
     updateHBarChartPV(pvData, filters.year, filters.intPV, filters.ageType, 'male', m_cl_dark, m_cl_light, 'pv-1-male-pv');
     updateHBarChartPV(pvData, filters.year, filters.intPV, filters.ageType, 'female', fm_cl_dark, fm_cl_light, 'pv-1-female-pv');
     updateHBarChartPVCP(pvData, filters.year, filters.cpPV, filters.ageType, 'male', m_cl_dark, m_cl_light, 'pv-cp-male-pv');
     updateHBarChartPVCP(pvData, filters.year, filters.cpPV, filters.ageType, 'female', fm_cl_dark, fm_cl_light, 'pv-cp-female-pv');
 });
 
-// var test = document.getElementById("pv-cp-dd");
-// for (let i = 0; i < test.options.length; i++) {       
-//     if (test.options[i].value == 'น่าน') {
-//         console.log(test.options[i].value);
-//         test.options[i].disabled = true;
-//     } else {
-//     }
-//   } 
-
 const image = document.getElementById('download-image');
-  const dropdown = document.getElementById('download-dd');
+const dropdown = document.getElementById('download-dd');
 
-  image.addEventListener('click', function() {
-      dropdown.classList.toggle('show');
+image.addEventListener('click', function() {
+    dropdown.classList.toggle('show');
 });
 
   // Close the dropdown if the user clicks outside of it

@@ -5,12 +5,14 @@
     <link rel="stylesheet" href="../css/page-2-province.css"> </head>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/multi-select-tag.css">
+    <link href="../css/select2.min.css" rel="stylesheet" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
     <script src="../scripts/plotly-2.34.0.min.js"></script>
     <script src="../scripts/html2canvas.min.js"></script>
     <script src="../scripts/xlsx.full.min.js"></script>
-    <script src="../scripts/multiselect-dropdown.js"></script>
+    <script src="../scripts/jquery-3.7.1.min.js"></script>
+    <script src="../scripts/select2.min.js"></script>
 </head>
 <body>
     <h1 class="header">อายุคาดเฉลี่ย และอายุคาดเฉลี่ยของการมีสุขภาวะของประชากรไทย พ.ศ. - ระดับประเทศและจังหวัด</h1>
@@ -85,8 +87,7 @@
                     </div>
                     <div id="pv-cp-filter">
                         <h4 class="filter-name">จังหวัดเปรียบเทียบ (ไม่เกิน 5 จังหวัด)</h4>
-                        <select class="filter" id="pv-cp-dd" multiple multiselect-search="true" 
-                        multiselect-max-item="5"></select>
+                        <select class="filter" id="pv-cp-dd" multiple></select>
                     </div>
                     <div id="type-filter-pv">
                         <h4 class="filter-name">การคำนวณ</h4>

@@ -12,33 +12,38 @@ const filters = {
 function createDropdownYear(data, default_value, selector) {
     const uniqueYears = [...new Set(data.map(d => d.year))];
     const dropdown = document.getElementById(selector);
-    const defaultValue = default_value;
     uniqueYears.forEach(year => {
     const option = document.createElement('option');
     option.value = year;
     option.text = year;
-
-    if (year == defaultValue) {
-        option.selected = true;
-    }
     dropdown.appendChild(option);
     });
+    $(dropdown).select2({
+        placeholder: 'เลือกปี พ.ศ.'
+    });
+    // Set default value if provided
+    if (default_value) {
+        $(dropdown).val(default_value).trigger('change');
+    }
 };
 
 function createDropdownDt(data, default_value, selector) {
     const uniqueDT = [0, ...new Set(data.map(d => d.area_code))];
     const sortDT = uniqueDT.map(Number).sort(function(a, b){return a-b});
     const dropdown = document.getElementById(selector);
-    const defaultValue = default_value;
     sortDT.forEach(dt => {
     const option = document.createElement('option');
     option.value = dt;
     option.text = dt != 0 ? "เขตสุขภาพที่ " + dt : "ทุกเขตสุขภาพ";
-    if (dt == defaultValue) {
-        option.selected = true;
-    }
     dropdown.appendChild(option);
     });
+    $(dropdown).select2({
+        placeholder: 'เลือกเขตสุขภาพ'
+    });
+    // Set default value if provided
+    if (default_value) {
+        $(dropdown).val(default_value).trigger('change');
+    }
 };
 
 function createDropdownMetric(default_value, selector) {
@@ -46,29 +51,35 @@ function createDropdownMetric(default_value, selector) {
     const dropdown = document.getElementById(selector);
     uniqueMetric.forEach(m => {
     const option = document.createElement('option');
-    const defaultValue = default_value;
     option.value = m;
     option.text = m;
-    if (m == defaultValue) {
-        option.selected = true;
-    }
     dropdown.appendChild(option);
     });
+    $(dropdown).select2({
+        placeholder: 'เลือกประเภทอายุคาดเฉลี่ย'
+    });
+    // Set default value if provided
+    if (default_value) {
+        $(dropdown).val(default_value).trigger('change');
+    }
 };
 
 function createDropdownType(data, default_value, selector) {
     const uniqueTypes = [...new Set(data.map(d => d.type))];
     const dropdown = document.getElementById(selector);
-    const defaultValue = default_value;
     uniqueTypes.forEach(type => {
     const option = document.createElement('option');
     option.value = type;
     option.text = type == 0 ? "เมื่อแรกเกิด (at birth)" : "เมื่ออายุ 60 ปี";
-    if (type == defaultValue) {
-        option.selected = true;
-    }
     dropdown.appendChild(option);
     });
+    $(dropdown).select2({
+        placeholder: 'เลือกการคำนวณ'
+    });
+    // Set default value if provided
+    if (default_value) {
+        $(dropdown).val(default_value).trigger('change');
+    }
 };
 
 function createDropdownSex(default_value, selector) {
@@ -76,14 +87,17 @@ function createDropdownSex(default_value, selector) {
     const dropdown = document.getElementById(selector);
     uniqueSex.forEach(s => {
     const option = document.createElement('option');
-    const defaultValue = default_value;
     option.value = s;
     option.text = s == 'male' ? "เพศชาย" : "เพศหญิง";
-    if (s == defaultValue) {
-        option.selected = true;
-    }
     dropdown.appendChild(option);
     });
+    $(dropdown).select2({
+        placeholder: 'เลือกเพศ'
+    });
+    // Set default value if provided
+    if (default_value) {
+        $(dropdown).val(default_value).trigger('change');
+    }
 };
 
 function interpolateColor(value, valueMin, valueMax, colorMin, colorMax) {
@@ -283,8 +297,8 @@ function updateTable(data, year, dt, metric, type, sex, selector) {
         const cell2 = document.createElement('td');
         cell1.textContent = pvList[i];
         cell2.textContent = valueList[i];
-        if (valueList[i] == '') {
-            row.classList.add('indented-row');
+        if (pvList[i].startsWith('เขต')) {
+            cell1.classList.add('indented-row');
         }
         row.appendChild(cell1);
         row.appendChild(cell2);
@@ -336,32 +350,35 @@ createDropdownSex('male', 'sex-dd-map');
 updateLeafletMap(pvData, filters.year, filters.dt, filters.metric, filters.ageType, filters.sex, 'map');
 updateTable(pvData, filters.year, filters.dt, filters.metric, filters.ageType, filters.sex, 'map-table');
 
-document.getElementById('year-dd-map').addEventListener('change', (event) => {
-    filters.year = event.target.value;
+
+$('#year-dd-map').on('change', function(e) {
+    filters.year = $(this).val() || [];
+    var selectedText = $(this).find(':selected').text();
+    document.getElementById("section-name-map").innerHTML = "อายุคาดเฉลี่ย (LE) และอายุคาดเฉลี่ยของการมีสุขภาวะ (HALE) ปี พ.ศ. " + selectedText + " (หน่วย: ปี)";
     updateLeafletMap(pvData, filters.year, filters.dt, filters.metric, filters.ageType, filters.sex, 'map');
     updateTable(pvData, filters.year, filters.dt, filters.metric, filters.ageType, filters.sex, 'map-table');
 });
 
-document.getElementById('dt-dd-map').addEventListener('change', (event) => {
-    filters.dt = event.target.value;
+$('#dt-dd-map').on('change', function(e) {
+    filters.dt = $(this).val() || [];
     updateLeafletMap(pvData, filters.year, filters.dt, filters.metric, filters.ageType, filters.sex, 'map');
     updateTable(pvData, filters.year, filters.dt, filters.metric, filters.ageType, filters.sex, 'map-table');
 });
 
-document.getElementById('metric-dd-map').addEventListener('change', (event) => {
-    filters.metric = event.target.value;
+$('#metric-dd-map').on('change', function(e) {
+    filters.metric = $(this).val() || [];
     updateLeafletMap(pvData, filters.year, filters.dt, filters.metric, filters.ageType, filters.sex, 'map');
     updateTable(pvData, filters.year, filters.dt, filters.metric, filters.ageType, filters.sex, 'map-table');
 });
 
-document.getElementById('type-dd-map').addEventListener('change', (event) => {
-    filters.ageType = event.target.value;
+$('#type-dd-map').on('change', function(e) {
+    filters.ageType = $(this).val() || [];
     updateLeafletMap(pvData, filters.year, filters.dt, filters.metric, filters.ageType, filters.sex, 'map');
     updateTable(pvData, filters.year, filters.dt, filters.metric, filters.ageType, filters.sex, 'map-table');
 });
 
-document.getElementById('sex-dd-map').addEventListener('change', (event) => {
-    filters.sex = event.target.value;
+$('#sex-dd-map').on('change', function(e) {
+    filters.sex = $(this).val() || [];
     updateLeafletMap(pvData, filters.year, filters.dt, filters.metric, filters.ageType, filters.sex, 'map');
     updateTable(pvData, filters.year, filters.dt, filters.metric, filters.ageType, filters.sex, 'map-table');
 });

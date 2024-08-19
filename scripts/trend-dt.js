@@ -15,11 +15,15 @@ function createDropdownDt(data, default_value, selector) {
     const option = document.createElement('option');
     option.value = dt;
     option.text = "เขตสุขภาพที่ " + dt;
-    if (dt == defaultValue) {
-        option.selected = true;
-    }
     dropdown.appendChild(option);
     });
+    $(dropdown).select2({
+        placeholder: 'เลือกเขตสุขภาพ'
+    });
+    // Set default value if provided
+    if (default_value) {
+        $(dropdown).val(default_value).trigger('change');
+    }
 };
 
 function createDropdownType(data, default_value, selector) {
@@ -30,11 +34,15 @@ function createDropdownType(data, default_value, selector) {
     const option = document.createElement('option');
     option.value = type;
     option.text = type == 0 ? "เมื่อแรกเกิด (at birth)" : "เมื่ออายุ 60 ปี";
-    if (type == defaultValue) {
-        option.selected = true;
-    }
     dropdown.appendChild(option);
     });
+    $(dropdown).select2({
+        placeholder: 'เลือกการคำนวณ'
+    });
+    // Set default value if provided
+    if (default_value) {
+        $(dropdown).val(default_value).trigger('change');
+    }
 };
 
 function createDropdownSex(default_value, selector) {
@@ -45,11 +53,15 @@ function createDropdownSex(default_value, selector) {
     const defaultValue = default_value;
     option.value = s;
     option.text = s == 'male' ? "เพศชาย" : "เพศหญิง";
-    if (s == defaultValue) {
-        option.selected = true;
-    }
     dropdown.appendChild(option);
     });
+    $(dropdown).select2({
+        placeholder: 'เลือกปีเพศ'
+    });
+    // Set default value if provided
+    if (default_value) {
+        $(dropdown).val(default_value).trigger('change');
+    }
 };
 
 function createLineChart(data, dt, type, sex, metric, selector) {
@@ -139,20 +151,21 @@ createDropdownSex(filters.sex, 'sex-dd-trend-dt');
 createLineChart(pvData, filters.dt, filters.ageType, filters.sex, 'LE', 'le-trend-dt');
 createLineChart(pvData, filters.dt, filters.ageType, filters.sex, 'HALE', 'hale-trend-dt');
 
-document.getElementById('dt-dd-trend-dt').addEventListener('change', (event) => {
-    filters.dt = event.target.value;
+
+$('#dt-dd-trend-dt').on('change', function(e) {
+    filters.dt = $(this).val() || [];
     createLineChart(pvData, filters.dt, filters.ageType, filters.sex, 'LE', 'le-trend-dt');
     createLineChart(pvData, filters.dt, filters.ageType, filters.sex, 'HALE', 'hale-trend-dt');
 });
 
-document.getElementById('type-dd-trend-dt').addEventListener('change', (event) => {
-    filters.ageType = event.target.value;
+$('#type-dd-trend-dt').on('change', function(e) {
+    filters.ageType = $(this).val() || [];
     createLineChart(pvData, filters.dt, filters.ageType, filters.sex, 'LE', 'le-trend-dt');
     createLineChart(pvData, filters.dt, filters.ageType, filters.sex, 'HALE', 'hale-trend-dt');
 });
 
-document.getElementById('sex-dd-trend-dt').addEventListener('change', (event) => {
-    filters.sex = event.target.value;
+$('#sex-dd-trend-dt').on('change', function(e) {
+    filters.sex = $(this).val() || [];
     createLineChart(pvData, filters.dt, filters.ageType, filters.sex, 'LE', 'le-trend-dt');
     createLineChart(pvData, filters.dt, filters.ageType, filters.sex, 'HALE', 'hale-trend-dt');
 });

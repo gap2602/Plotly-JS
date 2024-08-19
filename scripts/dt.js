@@ -21,28 +21,34 @@ function createDropdownYear(data, default_value, selector) {
     const option = document.createElement('option');
     option.value = year;
     option.text = year;
-
-    if (year == defaultValue) {
-        option.selected = true;
-    }
     dropdown.appendChild(option);
     });
+    $(dropdown).select2({
+        placeholder: 'เลือกปี พ.ศ.'
+    });
+    // Set default value if provided
+    if (default_value) {
+        $(dropdown).val(default_value).trigger('change');
+    }
 };
 
 function createDropdownDt(data, default_value, selector) {
     const uniqueDts = [...new Set(data.map(d => d.dt_num))];
     const sortDts = uniqueDts.map(Number).sort(function(a, b){return a-b});
     const dropdown = document.getElementById(selector);
-    const defaultValue = default_value;
     sortDts.forEach(dt => {
     const option = document.createElement('option');
     option.value = dt;
     option.text = "เขตสุขภาพที่ " + dt;
-    if (dt == defaultValue) {
-        option.selected = true;
-    }
     dropdown.appendChild(option);
     });
+    $(dropdown).select2({
+        placeholder: 'เลือกเขตสุขภาพ'
+    });
+    // Set default value if provided
+    if (default_value) {
+        $(dropdown).val(default_value).trigger('change');
+    }
 };
 
 function createDropdownType(default_value, selector) {
@@ -53,11 +59,15 @@ function createDropdownType(default_value, selector) {
     const option = document.createElement('option');
     option.value = type;
     option.text = type == 0 ? "เมื่อแรกเกิด (at birth)" : "เมื่ออายุ 60 ปี";
-    if (type == defaultValue) {
-        option.selected = true;
-    }
     dropdown.appendChild(option);
     });
+    $(dropdown).select2({
+        placeholder: 'เลือกการคำนวณ'
+    });
+    // Set default value if provided
+    if (default_value) {
+        $(dropdown).val(default_value).trigger('change');
+    }
 }
 
 function updateBarChart(data, year, dt, type, sex, colorLeft, colorRight, selector) {
@@ -327,9 +337,10 @@ updateHBarChart(dtData, filters.year, filters.dt, filters.ageType, 'female', fm_
 updateHBarChartPV(pvData, filters.year, filters.dt, filters.ageType, 'male', m_cl_dark, m_cl_light, 'pv-male-pv');
 updateHBarChartPV(pvData, filters.year, filters.dt, filters.ageType, 'female', fm_cl_dark, fm_cl_light, 'pv-female-pv');
 
-document.getElementById('year-dd-dt').addEventListener('change', (event) => {
-    filters.year = event.target.value;
-    document.getElementById("section-name-dt").innerHTML = "อายุคาดเฉลี่ย (LE) และอายุคาดเฉลี่ยของการมีสุขภาวะ (HALE) ระดับประเทศปี พ.ศ. " + event.target.value + " (หน่วย: ปี)";
+$('#year-dd-dt').on('change', function(e) {
+    filters.year = $(this).val() || [];
+    var selectedText = $(this).find(':selected').text();
+    document.getElementById("section-name-dt").innerHTML = "อายุคาดเฉลี่ย (LE) และอายุคาดเฉลี่ยของการมีสุขภาวะ (HALE) ระดับประเทศปี พ.ศ. " + selectedText + " (หน่วย: ปี)";
     updateBarChart(dtData, filters.year, filters.dt, 0, 'male', m_cl_dark, m_cl_light, "dt-male-at-birth");
     updateBarChart(dtData, filters.year, filters.dt, 60, 'male', m_cl_dark, m_cl_light, "dt-male-at-60");
     updateBarChart(dtData, filters.year, filters.dt, 0, 'female', fm_cl_dark, fm_cl_light, "dt-female-at-birth");
@@ -348,9 +359,10 @@ document.getElementById('year-dd-dt').addEventListener('change', (event) => {
     updateHBarChartPV(pvData, filters.year, filters.dt, filters.ageType, 'female', fm_cl_dark, fm_cl_light, 'pv-female-pv');
 });
 
-document.getElementById('dt-dd').addEventListener('change', (event) => {
-    filters.dt = event.target.value;
-    document.getElementById("content-name-1-dt").innerHTML = "ภาพรวมเขตสุขภาพ " + event.target.value;
+$('#dt-dd').on('change', function(e) {
+    filters.dt = $(this).val() || [];
+    var selectedText = $(this).find(':selected').text();
+    document.getElementById("content-name-1-dt").innerHTML = "ภาพรวม" + selectedText;
     updateBarChart(dtData, filters.year, filters.dt, 0, 'male', m_cl_dark, m_cl_light, "dt-male-at-birth");
     updateBarChart(dtData, filters.year, filters.dt, 60, 'male', m_cl_dark, m_cl_light, "dt-male-at-60");
     updateBarChart(dtData, filters.year, filters.dt, 0, 'female', fm_cl_dark, fm_cl_light, "dt-female-at-birth");
@@ -369,9 +381,10 @@ document.getElementById('dt-dd').addEventListener('change', (event) => {
     updateHBarChartPV(pvData, filters.year, filters.dt, filters.ageType, 'female', fm_cl_dark, fm_cl_light, 'pv-female-pv');
 });
 
-document.getElementById('type-dd').addEventListener('change', (event) => {
-    filters.ageType = event.target.value;
-    document.getElementById("content-name-2-dt").innerHTML = "เปรียบเทียบจังหวัดภายในเขตสุขภาพ - " + event.target.options[event.target.selectedIndex].text;
+$('#type-dd').on('change', function(e) {
+    filters.ageType = $(this).val() || [];
+    var selectedText = $(this).find(':selected').text();
+    document.getElementById("content-name-2-dt").innerHTML = "เปรียบเทียบจังหวัดภายในเขตสุขภาพ - " + selectedText;
     updateHBarChart(dtData, filters.year, filters.dt, filters.ageType, 'male', m_cl_dark, m_cl_light, 'pv-male-dt');
     updateHBarChart(dtData, filters.year, filters.dt, filters.ageType, 'female', fm_cl_dark, fm_cl_light, 'pv-female-dt');
     updateHBarChartPV(pvData, filters.year, filters.dt, filters.ageType, 'male', m_cl_dark, m_cl_light, 'pv-male-pv');

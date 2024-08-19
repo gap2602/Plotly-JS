@@ -52,17 +52,19 @@ d3.csv(ct_path).then(function(ctData) {
     const uniqueYears = [...new Set(data.map(d => d.year))];
     const sortYear = uniqueYears.map(Number).sort(function(a, b){return a-b});
     const dropdown = document.getElementById(selector);
-    const defaultValue = default_value;
     sortYear.forEach(year => {
     const option = document.createElement('option');
     option.value = year;
     option.text = year;
-
-    if (year == defaultValue) {
-        option.selected = true;
-    }
     dropdown.appendChild(option);
     });
+    $(dropdown).select2({
+      placeholder: 'เลือกปี พ.ศ.'
+    });
+    // Set default value if provided
+    if (default_value) {
+        $(dropdown).val(default_value).trigger('change');
+    }
   }
 
   function createBarChart(data, year, type, sex, colorLeft, colorRight, selector) {
@@ -168,8 +170,9 @@ d3.csv(ct_path).then(function(ctData) {
   updateCardValue(data, filters.year, 60, 'female', 'LE', fm_cl_dark, 'female-at-60-le');
   updateCardValue(data, filters.year, 60, 'female', 'HALE', fm_cl_dark, 'female-at-60-hale');
 
-  document.getElementById('year-dd-th').addEventListener('change', (event) => {
-    filters.year = event.target.value;
+  $('#year-dd-th').on('change', function(e) {
+    filters.year = $(this).val() || [];
+    var selectedText = $(this).find(':selected').text();
     document.getElementById("section-name-thailand").innerHTML = "อายุคาดเฉลี่ย (LE) และอายุคาดเฉลี่ยของการมีสุขภาวะ (HALE) ระดับประเทศปี พ.ศ. " + filters.year + " (หน่วย: ปี)";
     createBarChart(data, filters.year, 0, 'bothsex', b_cl_dark, b_cl_light, 'both-at-birth');
     createBarChart(data, filters.year, 60, 'bothsex', b_cl_dark, b_cl_light, 'both-at-60');

@@ -7,16 +7,19 @@ const filters = {
 function createDropdownType(data, default_value, selector) {
     const uniqueTypes = [...new Set(data.map(d => d.type))];
     const dropdown = document.getElementById(selector);
-    const defaultValue = default_value;
     uniqueTypes.forEach(type => {
     const option = document.createElement('option');
     option.value = type;
     option.text = type == 0 ? "เมื่อแรกเกิด (at birth)" : "เมื่ออายุ 60 ปี";
-    if (type == defaultValue) {
-        option.selected = true;
-    }
     dropdown.appendChild(option);
     });
+    $(dropdown).select2({
+        placeholder: 'เลือกการคำนวณ'
+    });
+    // Set default value if provided
+    if (default_value) {
+        $(dropdown).val(default_value).trigger('change');
+    }
 };
 
 function createLineChart(data, type, metric, selector) {
@@ -104,8 +107,8 @@ createDropdownType(ctData, filters.ageType, 'type-dd-trend-ct');
 createLineChart(ctData, filters.ageType, 'LE', 'le-trend-ct');
 createLineChart(ctData, filters.ageType, 'HALE', 'hale-trend-ct');
 
-document.getElementById('type-dd-trend-ct').addEventListener('change', (event) => {
-    filters.ageType = event.target.value;
+$('#type-dd-trend-ct').on('change', function(e) {
+  filters.ageType = $(this).val() || [];
     createLineChart(ctData, filters.ageType, 'LE', 'le-trend-ct');
     createLineChart(ctData, filters.ageType, 'HALE', 'hale-trend-ct');
 });

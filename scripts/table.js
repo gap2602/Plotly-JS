@@ -14,12 +14,16 @@ function createDropdownYear(data, default_value, selector) {
     const option = document.createElement('option');
     option.value = year;
     option.text = year;
-
-    if (year == defaultValue) {
-        option.selected = true;
-    }
     dropdown.appendChild(option);
     });
+    $(dropdown).select2({
+        placeholder: 'เลือกปี พ.ศ.',
+    });
+
+    // Set default value if provided
+    if (default_value) {
+        $(dropdown).val(default_value).trigger('change');
+    }
 };
 
 function createDropdownDt(data, default_value, selector) {
@@ -36,23 +40,51 @@ function createDropdownDt(data, default_value, selector) {
     }
     dropdown.appendChild(option);
     });
+
+    // Initialize Select2
+    $(dropdown).select2({
+        placeholder: 'เลือกเขตสุขภาพ',
+        maximumSelectionLength: 5,
+        language: {
+            maximumSelected: function (e) {
+                return "คุณสามารถเลือกได้สูงสุด " + e.maximum + " เขตสุขภาพ";
+            }
+        }
+    });
+
+    // Set default value if provided
+    if (default_value) {
+        $(dropdown).val(default_value).trigger('change');
+    }
 };
 
 function createDropdownPV(data, default_value, selector) {
     const uniquePV = [...new Set(data.map(d => d.th_province))];
     const sortPV = uniquePV.sort();
     const dropdown = document.getElementById(selector);
-    const defaultValue = default_value;
+    
     sortPV.forEach(pv => {
-    const option = document.createElement('option');
-    option.value = pv;
-    option.text = pv;
-
-    if (defaultValue.includes(pv)) {
-        option.selected = true;
-    }
-    dropdown.appendChild(option);
+        const option = document.createElement('option');
+        option.value = pv;
+        option.text = pv;
+        dropdown.appendChild(option);
     });
+
+    // Initialize Select2
+    $(dropdown).select2({
+        placeholder: 'เลือกจังหวัด',
+        maximumSelectionLength: 5,
+        language: {
+            maximumSelected: function (e) {
+                return "คุณสามารถเลือกได้สูงสุด " + e.maximum + " จังหวัด";
+            }
+        }
+    });
+
+    // Set default value if provided
+    if (default_value) {
+        $(dropdown).val(default_value).trigger('change');
+    }
 };
 
 function updateTable(data, year, dtList, pvList, selector) {
@@ -173,20 +205,18 @@ createDropdownPV(pvData, filters.pv, 'pv-dd-table');
 
 updateTable(pvData, filters.year, filters.dt, filters.pv, 'table-block');
 
-document.getElementById('year-dd-table').addEventListener('change', (event) => {
-    filters.year = event.target.value;
+$('#year-dd-table').on('change', function(e) {
+    filters.year = $(this).val() || [];
     updateTable(pvData, filters.year, filters.dt, filters.pv, 'table-block');
 });
 
-const selectElementDT = document.getElementById('dt-dd-table');
-selectElementDT.addEventListener('change', (event) => {
-    filters.dt = Array.from(selectElementDT.selectedOptions).map(option => option.value);
+$('#dt-dd-table').on('change', function(e) {
+    filters.dt = $(this).val() || [];
     updateTable(pvData, filters.year, filters.dt, filters.pv, 'table-block');
 });
 
-const selectElementPV = document.getElementById('pv-dd-table');
-selectElementPV.addEventListener('change', (event) => {
-    filters.pv = Array.from(selectElementPV.selectedOptions).map(option => option.value);
+$('#pv-dd-table').on('change', function(e) {
+    filters.pv = $(this).val() || [];
     updateTable(pvData, filters.year, filters.dt, filters.pv, 'table-block');
 
 });
