@@ -1,4 +1,8 @@
 const ctData = JSON.parse(sessionStorage.getItem("ctData"));
+var minYear = Math.min(...ctData.map(d => d.year));
+var maxYear = Math.max(...ctData.map(d => d.year));
+document.getElementById("header").innerHTML = 'อายุคาดเฉลี่ย และอายุคาดเฉลี่ยของการมีสุขภาวะของประชากรไทย พ.ศ. '+minYear+'-'+maxYear+' ระดับประเทศและจังหวัด';
+
 
 const filters = {
     ageType: 0

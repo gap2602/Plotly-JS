@@ -36,7 +36,7 @@ fetch(pv_map).then(response => response.json()).then(mapData => {
 let filters;
 d3.csv(ct_path).then(function(ctData) {
   sessionStorage.setItem('ctData', JSON.stringify(ctData));
-
+  
   const b_cl_dark = "#84b81a";
   const b_cl_light = "#a3e025";
   const m_cl_dark = "#1a84b8";
@@ -44,9 +44,13 @@ d3.csv(ct_path).then(function(ctData) {
   const fm_cl_dark = "#b81a84";
   const fm_cl_light = "#e025a3";
 
+
   filters = { year: 2562};
 
   const data = JSON.parse(sessionStorage.getItem('ctData'));
+  var minYear = Math.min(...data.map(d => d.year));
+  var maxYear = Math.max(...data.map(d => d.year));
+  document.getElementById("header").innerHTML = 'อายุคาดเฉลี่ย และอายุคาดเฉลี่ยของการมีสุขภาวะของประชากรไทย พ.ศ. '+minYear+'-'+maxYear+' ระดับประเทศและจังหวัด';
 
   function createDropdown(data, default_value, selector) {
     const uniqueYears = [...new Set(data.map(d => d.year))];

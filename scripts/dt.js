@@ -1,5 +1,8 @@
 const dtData = JSON.parse(sessionStorage.getItem("dtData"));
 const pvData = JSON.parse(sessionStorage.getItem("pvData"));
+var minYear = Math.min(...dtData.map(d => d.year));
+var maxYear = Math.max(...dtData.map(d => d.year));
+document.getElementById("header").innerHTML = 'อายุคาดเฉลี่ย และอายุคาดเฉลี่ยของการมีสุขภาวะของประชากรไทย พ.ศ. '+minYear+'-'+maxYear+' ระดับประเทศและจังหวัด';
 
 const filters = {
     year: '2562',
