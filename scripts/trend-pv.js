@@ -313,8 +313,8 @@ document.getElementById('download-csv').addEventListener('click', function(e) {
 });
 
 document.getElementById('capture-button-jpg').addEventListener('click', function() {
-downloadImage('jpg', 'line-chart-block');
+downloadImage('jpg', 'content');
 });
 document.getElementById('capture-button-png').addEventListener('click', function() {
-downloadImage('png', 'line-chart-block');
+downloadImage('png', 'content');
 });
