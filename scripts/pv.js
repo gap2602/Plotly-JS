@@ -19,7 +19,6 @@ const fm_cl_light = "#e025a3";
 function createDropdownYear(data, default_value, selector) {
     const uniqueYears = [...new Set(data.map(d => d.year))];
     const dropdown = document.getElementById(selector);
-    const defaultValue = default_value;
     uniqueYears.forEach(year => {
     const option = document.createElement('option');
     option.value = year;
@@ -35,18 +34,29 @@ function createDropdownYear(data, default_value, selector) {
     }
 };
 
-function createDropdownPV(data, default_value, selector) {
-    const uniquePV = [...new Set(data.map(d => d.th_province))];
-    const sortPV = uniquePV.sort();
-    const dropdown = document.getElementById(selector);
-    
-    sortPV.forEach(pv => {
-        const option = document.createElement('option');
-        option.value = pv;
-        option.text = pv;
-        dropdown.appendChild(option);
-    });
 
+function createDropdownPV(data, default_value, disabledOption, selector) {
+    const groupedPV = data.reduce((acc, item) => {
+        const areaCode = item.area_code;
+        acc[areaCode] = acc[areaCode] || new Set();
+        acc[areaCode].add(item.th_province);
+        return acc;
+    }, {});
+    const dropdown = document.getElementById(selector);
+    for (const areaCode in groupedPV) {
+        const optgroup = document.createElement('optgroup');
+        optgroup.label = 'เขต ' + areaCode;
+    
+        groupedPV[areaCode].forEach(pv => {
+          const option = document.createElement('option');
+          option.value = pv; // You can set a different value if needed
+          option.text = pv;
+          if (pv == disabledOption) {option.disabled = true};
+          optgroup.appendChild(option);
+        });
+    
+        dropdown.appendChild(optgroup);
+      }
     // Initialize Select2
     $(dropdown).select2({
         placeholder: 'เลือกจังหวัด',
@@ -64,10 +74,16 @@ function createDropdownPV(data, default_value, selector) {
     }
 };
 
+function updateDropdownPV(pv, selector) {
+    const selectElement = document.getElementById(selector);
+    $(selectElement).find('option').prop('disabled', false);
+    $(selectElement).find(`option[value="${pv}"]`).prop('disabled', true);
+    $(selectElement).trigger('change.select2');
+}
+
 function createDropdownType(default_value, selector) {
     const uniqueTypes = [0, 60];
     const dropdown = document.getElementById(selector);
-    const defaultValue = default_value;
     uniqueTypes.forEach(type => {
     const option = document.createElement('option');
     option.value = type;
@@ -365,8 +381,8 @@ function updateCardValue(data, year, pv, type, sex, metric, color, selector) {
 };
 
 createDropdownYear(pvData, filters.year, 'year-dd-pv');
-createDropdownPV(pvData, filters.intPV, 'pv-dd');
-createDropdownPV(pvData, filters.cpPV, 'pv-cp-dd');
+createDropdownPV(pvData, filters.intPV, '', 'pv-dd');
+createDropdownPV(pvData, filters.cpPV, filters.intPV,'pv-cp-dd');
 createDropdownType(filters.ageType, 'type-dd-pv')
 
 updateBarChart(pvData, filters.year, filters.intPV, 0, 'male', m_cl_dark, m_cl_light, "pv-1-male-at-birth");
@@ -411,7 +427,9 @@ $('#year-dd-pv').on('change', function(e) {
 
 $('#pv-dd').on('change', function(e) {
     filters.intPV = $(this).val() || [];
-    document.getElementById("content-name-1-pv").innerHTML = "ภาพรวมจังหวัด " + event.target.value;
+    var selectedText = $(this).find(':selected').text();
+    updateDropdownPV(filters.intPV, 'pv-cp-dd');
+    document.getElementById("content-name-1-pv").innerHTML = "ภาพรวมจังหวัด " + selectedText;
     updateBarChart(pvData, filters.year, filters.intPV, 0, 'male', m_cl_dark, m_cl_light, "pv-1-male-at-birth");
     updateBarChart(pvData, filters.year, filters.intPV, 60, 'male', m_cl_dark, m_cl_light, "pv-1-male-at-60");
     updateBarChart(pvData, filters.year, filters.intPV, 0, 'female', fm_cl_dark, fm_cl_light, "pv-1-female-at-birth");

@@ -11,18 +11,26 @@ const filters = {
   };
 
   function createDropdownPV(data, default_value, selector) {
-    const uniquePV = [...new Set(data.map(d => d.th_province))];
-    const sortPV = uniquePV.sort();
+    const groupedPV = data.reduce((acc, item) => {
+        const areaCode = item.area_code;
+        acc[areaCode] = acc[areaCode] || new Set();
+        acc[areaCode].add(item.th_province);
+        return acc;
+    }, {});
     const dropdown = document.getElementById(selector);
-    const defaultValue = default_value;
-
-    sortPV.forEach(pv => {
-    const option = document.createElement('option');
-    option.value = pv;
-    option.text = pv;
-    dropdown.appendChild(option);
-    });
-
+    for (const areaCode in groupedPV) {
+        const optgroup = document.createElement('optgroup');
+        optgroup.label = 'เขต ' + areaCode;
+    
+        groupedPV[areaCode].forEach(pv => {
+          const option = document.createElement('option');
+          option.value = pv; // You can set a different value if needed
+          option.text = pv;
+          optgroup.appendChild(option);
+        });
+    
+        dropdown.appendChild(optgroup);
+      }
     // Initialize Select2
     $(dropdown).select2({
         placeholder: 'เลือกจังหวัด',
@@ -38,8 +46,6 @@ const filters = {
     if (default_value) {
         $(dropdown).val(default_value).trigger('change');
     }
-
-    
 };
 
 

@@ -309,6 +309,12 @@ body {
     box-sizing: border-box;
 }
 
+.select2-container--default .select2-selection--multiple .select2-search__field::placeholder, .select2-search__field {
+    font-family: 'IBM Plex Sans Thai' !important;
+    font-size: 14px;
+    color: #6c757d;
+}
+
 .filter-name {
     width: 100%;
     margin: 0 auto;
