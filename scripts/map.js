@@ -215,7 +215,7 @@ function updateLeafletMap(data, year, dt, metric, type, sex, selector) {
         map.remove();
     }
 
-    map = L.map(selector).setView([13,102], 5);  
+    map = L.map(selector, {renderer: L.canvas()}).setView([13,102], 5);  
     // L.tileLayer.provider('CartoDB.PositronNoLabels').addTo(map);
 
     function style(feature) {
@@ -491,8 +491,8 @@ document.getElementById('download-csv').addEventListener('click', function(e) {
 
   document.getElementById('capture-button-jpg').addEventListener('click', function() {
     map.invalidateSize();
-    downloadImage('jpg', 'map-table');
+    downloadImage('jpg', 'content');
   });
   document.getElementById('capture-button-png').addEventListener('click', function() {
-    downloadImage('png', 'map-table');
+    downloadImage('png', 'content');
   });

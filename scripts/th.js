@@ -1,9 +1,3 @@
-// const ct_path = "https://raw.githubusercontent.com/gap2602/Plotly-JS/main/data/country.csv";
-// const dt_path = "https://raw.githubusercontent.com/gap2602/Plotly-JS/main/data/district.csv";
-// const pv_path = "https://raw.githubusercontent.com/gap2602/Plotly-JS/main/data/province.csv";
-// const ac_path = "https://raw.githubusercontent.com/gap2602/Plotly-JS/main/data/area%20code.csv";
-// const ll_path = "https://raw.githubusercontent.com/gap2602/Plotly-JS/main/data/province_lat_lon.csv";
-// const pv_map = "https://raw.githubusercontent.com/gap2602/Plotly-JS/main/data/thailand_map.geojson";
 const ct_path = "https://raw.githubusercontent.com/Bodthailand/LEHALE/main/country.csv";
 const dt_path = "https://raw.githubusercontent.com/Bodthailand/LEHALE/main/district.csv";
 const pv_path = "https://raw.githubusercontent.com/Bodthailand/LEHALE/main/province.csv";
