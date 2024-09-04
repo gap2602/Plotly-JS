@@ -133,9 +133,14 @@ function createLineChart(data, pv, type, sex, metric, selector) {
             hovertemplate: '%{customdata[0]}<extra></extra><br>ปี พ.ศ. %{x}<br>%{customdata[1]}<br>'+metric+': %{y:.1f}'
         });
     });
-
+    let metricThaiAdj;
+    if (metric == 'HALE') {
+      metricThaiAdj = 'ของการมีสุขภาวะ'; 
+    } else {
+      metricThaiAdj = ''; 
+    }
     var layout = {
-        title: '<b>แนวโน้มอายุคาดเฉลี่ย ('+metric+')</b>',
+        title: '<b>แนวโน้มอายุคาดเฉลี่ย'+metricThaiAdj+' ('+metric+')</b>',
         yaxis: {
           range: yrange,
         },
