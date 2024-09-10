@@ -343,6 +343,7 @@ select {
 }
 
 #le-trend-ct, #hale-trend-ct {
+    position: relative;
     width: 50%;
     height: 470px;
     border: solid 2px #0874b0;
@@ -390,7 +391,35 @@ select {
     background-color: #f1f1f1;
 }
 
-.show {
+#download-dd-chart, #download-dd-chart-2 {
+   top: 20px;
+}
+
+#download-image-chart, #download-image-chart-2 {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 20px;
+    width: 20px;
+    opacity: 0;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+#le-trend-ct:hover #download-image-chart, #hale-trend-ct:hover #download-image-chart-2{
+    opacity: 0.1;
+}
+
+#le-trend-ct:hover #download-image-chart:hover, #hale-trend-ct:hover #download-image-chart-2:hover{
+    opacity: 0.8;
+}
+
+.capture-chart {
+    height: 16px;
+    font-size: 14px;
+}
+
+.show, .show-chart, .show-chart-2 {
     display: block;
 }
 

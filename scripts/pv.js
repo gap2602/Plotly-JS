@@ -350,29 +350,13 @@ function downloadImage(format, id) {
         };
         const link = document.createElement('a');
         link.href = dataUrl;
-        link.download = 'อายุคาดเฉลี่ยระดับประเทศ เขตสุขภาพที่ '+filters.dt +'.'+format;
+        link.download = 'อายุคาดเฉลี่ยระดับจังหวัดของจังหวัด'+filters.intPV+'.'+format;
         link.click();
         
     }).catch(error => {
         console.error('Error capturing element:', error);
     });
 };
-
-// function limitOption(selector) {
-//     var cpEle = document.getElementById(selector);
-//     var cpValue = Array.from(cpEle.selectedOptions).map(option => option.value);
-    
-//     if (cpValue.length == 5) {
-//         for (let i = 0; i < cpEle.options.length; i++) {
-            
-//             if (cpEle.options[i].selected) {
-//             } else {
-//                 cpEle.options[i].disabled = true;
-//             }
-//           } 
-//     }
-// };
-
 
 function updateCardValue(data, year, pv, type, sex, metric, color, selector) {
     const filteredData = data.filter(d => d.year == year && d.type == type && d.sex == sex && d.th_province == pv); 
@@ -429,7 +413,7 @@ $('#pv-dd').on('change', function(e) {
     filters.intPV = $(this).val() || [];
     var selectedText = $(this).find(':selected').text();
     updateDropdownPV(filters.intPV, 'pv-cp-dd');
-    document.getElementById("content-name-1-pv").innerHTML = "ภาพรวมจังหวัด " + selectedText;
+    document.getElementById("name-title-1").innerHTML = "ภาพรวมจังหวัด " + selectedText;
     updateBarChart(pvData, filters.year, filters.intPV, 0, 'male', m_cl_dark, m_cl_light, "pv-1-male-at-birth");
     updateBarChart(pvData, filters.year, filters.intPV, 60, 'male', m_cl_dark, m_cl_light, "pv-1-male-at-60");
     updateBarChart(pvData, filters.year, filters.intPV, 0, 'female', fm_cl_dark, fm_cl_light, "pv-1-female-at-birth");
@@ -456,7 +440,7 @@ $('#pv-cp-dd').on('change', function(e) {
 $('#type-dd-pv').on('change', function(e) {
     filters.ageType = $(this).val() || [];
     var selectedText = $(this).find(':selected').text();
-    document.getElementById("content-name-2-pv").innerHTML = "เปรียบเทียบระหว่างจังหวัด - " + selectedText;
+    document.getElementById("name-title-2").innerHTML = "เปรียบเทียบระหว่างจังหวัด - " + selectedText;
     updateHBarChartPV(pvData, filters.year, filters.intPV, filters.ageType, 'male', m_cl_dark, m_cl_light, 'pv-1-male-pv');
     updateHBarChartPV(pvData, filters.year, filters.intPV, filters.ageType, 'female', fm_cl_dark, fm_cl_light, 'pv-1-female-pv');
     updateHBarChartPVCP(pvData, filters.year, filters.cpPV, filters.ageType, 'male', m_cl_dark, m_cl_light, 'pv-cp-male-pv');
@@ -470,11 +454,37 @@ image.addEventListener('click', function() {
     dropdown.classList.toggle('show');
 });
 
+const imageChart = document.getElementById('download-image-chart');
+const dropdownChart = document.getElementById('download-dd-chart');
+
+imageChart.addEventListener('click', function() {
+    dropdownChart.classList.toggle('show-chart');
+});
+
+const imageChart2 = document.getElementById('download-image-chart-2');
+const dropdownChart2 = document.getElementById('download-dd-chart-2');
+
+imageChart2.addEventListener('click', function() {
+    dropdownChart2.classList.toggle('show-chart-2');
+});
+
   // Close the dropdown if the user clicks outside of it
 window.addEventListener('click', function(event) {
     if (!event.target.matches('#download-image')) {
         if (dropdown.classList.contains('show')) {
             dropdown.classList.remove('show');
+        }
+    }
+
+    if (!event.target.matches('#download-image-chart')) {
+        if (dropdownChart.classList.contains('show-chart')) {
+            dropdownChart.classList.remove('show-chart');
+        }
+    }
+
+    if (!event.target.matches('#download-image-chart-2')) {
+        if (dropdownChart2.classList.contains('show-chart-2')) {
+            dropdownChart2.classList.remove('show-chart-2');
         }
     }
 });
@@ -570,4 +580,16 @@ document.getElementById('download-csv').addEventListener('click', function(e) {
   });
   document.getElementById('capture-button-png').addEventListener('click', function() {
     downloadImage('png', 'content');
+  });
+  document.getElementById('capture-button-jpg-chart').addEventListener('click', function() {
+    downloadImage('jpg', 'pv-1-block');
+  });
+  document.getElementById('capture-button-png-chart').addEventListener('click', function() {
+    downloadImage('png', 'pv-1-block');
+  });
+  document.getElementById('capture-button-jpg-chart-2').addEventListener('click', function() {
+    downloadImage('jpg', 'pv-cp-block');
+  });
+  document.getElementById('capture-button-png-char-2').addEventListener('click', function() {
+    downloadImage('png', 'pv-cp-block');
   });

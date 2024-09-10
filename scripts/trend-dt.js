@@ -87,14 +87,12 @@ function createLineChart(data, dt, type, sex, metric, selector) {
             hovertemplate: '%{customdata[0]}<extra></extra><br>ปี พ.ศ. %{x}<br>%{customdata[1]}<br>'+metric+': %{y:.1f}'
         });
     });
-    let metricThaiAdj;
-    if (metric == 'HALE') {
-      metricThaiAdj = 'ของการมีสุขภาวะ'; 
-    } else {
-      metricThaiAdj = ''; 
-    }
+    const metricThaiAdj = metric == 'HALE' ? 'ของการมีสุขภาวะ':'';
+    const typeThaiAdj = type == 0 ? 'เมื่อแรกเกิด':'เมื่ออายุ 60 ปี';
+    const typeEngAdj = type == 0 ? 'at birth':'at 60 years';
+    const sexThaiAdj = sex == 'male' ? ' (เพศชาย)':' (เพศหญิง)';
     const layout = {
-        title: '<b>แนวโน้มอายุคาดเฉลี่ย'+metricThaiAdj+' ('+metric+')</b>',
+        title: '<b>แนวโน้มอายุคาดเฉลี่ย'+metricThaiAdj+typeThaiAdj+'<br>('+metric+' '+typeEngAdj+') เขตสุขภาพที่ '+dt+sexThaiAdj+'</b>',
         yaxis: {
           range: yrange,
         },
@@ -146,7 +144,7 @@ function downloadImage(format, id) {
         };
         const link = document.createElement('a');
         link.href = dataUrl;
-        link.download = 'แนวโน้มอายุคาดเฉลี่ยระดับเขตสุขภาพ';
+        link.download = 'แนวโน้มอายุคาดเฉลี่ยระดับเขตสุขภาพ'+'.'+format;
         link.click();
         
     }).catch(error => {
@@ -180,10 +178,24 @@ $('#sex-dd-trend-dt').on('change', function(e) {
 });
 
 const image = document.getElementById('download-image');
-  const dropdown = document.getElementById('download-dd');
+const dropdown = document.getElementById('download-dd');
 
-  image.addEventListener('click', function() {
+image.addEventListener('click', function() {
       dropdown.classList.toggle('show');
+});
+
+const imageChart = document.getElementById('download-image-chart');
+const dropdownChart = document.getElementById('download-dd-chart');
+
+imageChart.addEventListener('click', function() {
+      dropdownChart.classList.toggle('show-chart');
+});
+
+const imageChart2 = document.getElementById('download-image-chart-2');
+const dropdownChart2 = document.getElementById('download-dd-chart-2');
+
+imageChart2.addEventListener('click', function() {
+      dropdownChart2.classList.toggle('show-chart-2');
 });
 
   // Close the dropdown if the user clicks outside of it
@@ -192,6 +204,18 @@ window.addEventListener('click', function(event) {
         if (dropdown.classList.contains('show')) {
             dropdown.classList.remove('show');
         }
+    }
+
+    if (!event.target.matches('#download-image-chart')) {
+        if (dropdownChart.classList.contains('show-chart')) {
+            dropdownChart.classList.remove('show-chart');
+        }
+    }
+  
+    if (!event.target.matches('#download-image-chart-2')) {
+      if (dropdownChart2.classList.contains('show-chart-2')) {
+          dropdownChart2.classList.remove('show-chart-2');
+      }
     }
 });
 
@@ -264,3 +288,15 @@ downloadImage('jpg', 'content');
 document.getElementById('capture-button-png').addEventListener('click', function() {
 downloadImage('png', 'content');
 });
+document.getElementById('capture-button-jpg-chart').addEventListener('click', function() {
+    downloadImage('jpg', 'le-trend-dt');
+  });
+  document.getElementById('capture-button-png-chart').addEventListener('click', function() {
+    downloadImage('png', 'le-trend-dt');
+  });
+  document.getElementById('capture-button-jpg-chart-2').addEventListener('click', function() {
+    downloadImage('jpg', 'hale-trend-dt');
+  });
+  document.getElementById('capture-button-png-chart-2').addEventListener('click', function() {
+    downloadImage('png', 'hale-trend-dt');
+  });

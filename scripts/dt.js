@@ -365,7 +365,7 @@ $('#year-dd-dt').on('change', function(e) {
 $('#dt-dd').on('change', function(e) {
     filters.dt = $(this).val() || [];
     var selectedText = $(this).find(':selected').text();
-    document.getElementById("content-name-1-dt").innerHTML = "ภาพรวม" + selectedText;
+    document.getElementById("name-title-1").innerHTML = "ภาพรวม" + selectedText;
     updateBarChart(dtData, filters.year, filters.dt, 0, 'male', m_cl_dark, m_cl_light, "dt-male-at-birth");
     updateBarChart(dtData, filters.year, filters.dt, 60, 'male', m_cl_dark, m_cl_light, "dt-male-at-60");
     updateBarChart(dtData, filters.year, filters.dt, 0, 'female', fm_cl_dark, fm_cl_light, "dt-female-at-birth");
@@ -387,7 +387,7 @@ $('#dt-dd').on('change', function(e) {
 $('#type-dd').on('change', function(e) {
     filters.ageType = $(this).val() || [];
     var selectedText = $(this).find(':selected').text();
-    document.getElementById("content-name-2-dt").innerHTML = "เปรียบเทียบจังหวัดภายในเขตสุขภาพ - " + selectedText;
+    document.getElementById("name-title-2").innerHTML = "เปรียบเทียบจังหวัดภายในเขตสุขภาพ - " + selectedText;
     updateHBarChart(dtData, filters.year, filters.dt, filters.ageType, 'male', m_cl_dark, m_cl_light, 'pv-male-dt');
     updateHBarChart(dtData, filters.year, filters.dt, filters.ageType, 'female', fm_cl_dark, fm_cl_light, 'pv-female-dt');
     updateHBarChartPV(pvData, filters.year, filters.dt, filters.ageType, 'male', m_cl_dark, m_cl_light, 'pv-male-pv');
@@ -395,10 +395,24 @@ $('#type-dd').on('change', function(e) {
 });
 
 const image = document.getElementById('download-image');
-  const dropdown = document.getElementById('download-dd');
+const dropdown = document.getElementById('download-dd');
 
-  image.addEventListener('click', function() {
+image.addEventListener('click', function() {
       dropdown.classList.toggle('show');
+});
+
+const imageChart = document.getElementById('download-image-chart');
+const dropdownChart = document.getElementById('download-dd-chart');
+
+imageChart.addEventListener('click', function() {
+    dropdownChart.classList.toggle('show-chart');
+});
+
+const imageChart2 = document.getElementById('download-image-chart-2');
+const dropdownChart2 = document.getElementById('download-dd-chart-2');
+
+imageChart2.addEventListener('click', function() {
+    dropdownChart2.classList.toggle('show-chart-2');
 });
 
   // Close the dropdown if the user clicks outside of it
@@ -406,6 +420,18 @@ window.addEventListener('click', function(event) {
     if (!event.target.matches('#download-image')) {
         if (dropdown.classList.contains('show')) {
             dropdown.classList.remove('show');
+        }
+    }
+
+    if (!event.target.matches('#download-image-chart')) {
+        if (dropdownChart.classList.contains('show-chart')) {
+            dropdownChart.classList.remove('show-chart');
+        }
+    }
+
+    if (!event.target.matches('#download-image-chart-2')) {
+        if (dropdownChart2.classList.contains('show-chart-2')) {
+            dropdownChart2.classList.remove('show-chart-2');
         }
     }
 });
@@ -478,5 +504,17 @@ document.getElementById('download-csv').addEventListener('click', function(e) {
   });
   document.getElementById('capture-button-png').addEventListener('click', function() {
     downloadImage('png', 'content');
+  });
+  document.getElementById('capture-button-jpg-chart').addEventListener('click', function() {
+    downloadImage('jpg', 'dt-block');
+  });
+  document.getElementById('capture-button-png-chart').addEventListener('click', function() {
+    downloadImage('png', 'dt-block');
+  });
+  document.getElementById('capture-button-jpg-chart-2').addEventListener('click', function() {
+    downloadImage('jpg', 'pv-block');
+  });
+  document.getElementById('capture-button-png-char-2').addEventListener('click', function() {
+    downloadImage('png', 'pv-block');
   });
 
