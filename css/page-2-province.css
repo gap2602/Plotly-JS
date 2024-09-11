@@ -593,15 +593,11 @@ select {
     position: absolute;
     top: 0;
     right: 0;
-    height: 20px;
-    width: 20px;
-    opacity: 0;
+    height: 15px;
+    width: 15px;
+    opacity: 0.5;
     cursor: pointer;
     transition: opacity 0.3s ease;
-}
-
-#content-name-1-pv:hover #download-image-chart, #content-name-2-pv:hover #download-image-chart-2{
-    opacity: 0.1;
 }
 
 #content-name-1-pv:hover #download-image-chart:hover, #content-name-2-pv:hover #download-image-chart-2:hover{

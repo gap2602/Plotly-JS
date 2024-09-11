@@ -392,22 +392,18 @@ select {
 }
 
 #download-dd-chart, #download-dd-chart-2 {
-   top: 20px;
+   top: 15px;
 }
 
 #download-image-chart, #download-image-chart-2 {
     position: absolute;
     top: 0;
     right: 0;
-    height: 20px;
-    width: 20px;
-    opacity: 0;
+    height: 15px;
+    width: 15px;
+    opacity: 0.5;
     cursor: pointer;
     transition: opacity 0.3s ease;
-}
-
-#le-trend-ct:hover #download-image-chart, #hale-trend-ct:hover #download-image-chart-2{
-    opacity: 0.1;
 }
 
 #le-trend-ct:hover #download-image-chart:hover, #hale-trend-ct:hover #download-image-chart-2:hover{
